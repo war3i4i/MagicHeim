@@ -78,7 +78,20 @@ static class Player_PlacePiece_Patch
             MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "Debug Mode Please");
             return false;
         }
-
+ 
         return true;
+    }
+}
+
+[HarmonyPatch(typeof(Piece), nameof(Piece.CanBeRemoved))]
+static class Piece_CanBeRemoved_Patch
+{
+    static void Postfix(Piece __instance, ref bool __result)
+    {
+        if (global::Utils.GetPrefabName(__instance.gameObject) == "MH_Altar" && !Player.m_debugMode)
+        {
+            MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "Debug Mode Please");
+            __result = false;
+        }
     }
 }

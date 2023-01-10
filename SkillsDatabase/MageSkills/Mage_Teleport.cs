@@ -94,7 +94,7 @@ public sealed class Mage_Teleport : MH_Skill
         Vector3 startPos = p.transform.position;
         UnityEngine.Object.Instantiate(Teleport_Prefab, startPos, Quaternion.identity);
         p.m_nview.InvokeRPC(ZNetView.Everybody, "MH_HideCharacter", true);
-        p.m_nview.m_zdo.Set("MH_Flying_Nocharacter", true);
+        p.m_nview.m_zdo.Set("MH_HideCharacter", true);
         p.m_zanim.SetTrigger("emote_stop");
         p.m_collider.isTrigger = true;
         var distance = global::Utils.DistanceXZ(startPos, targetPos);
@@ -121,7 +121,7 @@ public sealed class Mage_Teleport : MH_Skill
         }
 
         p.m_collider.isTrigger = false;
-        p.m_nview.m_zdo.Set("MH_Flying_Nocharacter", false);
+        p.m_nview.m_zdo.Set("MH_HideCharacter", false);
         p.m_body.velocity = Vector3.zero;
         p.m_body.useGravity = true;
         p.m_lastGroundTouch = 0f;

@@ -83,7 +83,7 @@ public sealed class Druid_Eagle : MH_Skill
 
     private IEnumerator EagleForm()
     {
-        var manacost = this.CalculateSkillManacost();
+        var manacost = this.CalculateSkillManacost(); 
         Toggled = true;
         Player p = Player.m_localPlayer;
         p.m_nview.InvokeRPC(ZNetView.Everybody, "MH_HideCharacter", true);
@@ -98,6 +98,7 @@ public sealed class Druid_Eagle : MH_Skill
         go.transform.position = p.transform.position + Vector3.up;
         for (;;)
         {
+            if(!p) yield break;
             rbody.angularVelocity = Vector3.zero;
             rbody.velocity = Vector3.zero;
             go.transform.rotation = Quaternion.LookRotation(GameCamera.instance.transform.forward);
@@ -151,7 +152,7 @@ public sealed class Druid_Eagle : MH_Skill
             yield return null;
         }
     }
-
+    
 
     public override bool CanExecute()
     {

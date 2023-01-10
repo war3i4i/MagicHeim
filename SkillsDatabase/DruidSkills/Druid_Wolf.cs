@@ -90,6 +90,7 @@ public sealed class Druid_Wolf : MH_Skill
         UnityEngine.Object.Instantiate(Wolf_Explosion, p.transform.position, Quaternion.identity);
         for (;;)
         {
+            if(!p) yield break;
             var useMana = manacost * Time.deltaTime;
             if (!Toggled || p.IsDead() || !p.HaveEitr(useMana) || Utils.InWater())
             {
@@ -160,6 +161,7 @@ public sealed class Druid_Wolf : MH_Skill
         };
         p.m_collider.enabled = true;
         p.m_animator.SetBool(Wakeup, false);
+        p.m_animator.SetBool(Character.inWater, false);
     }
 
     private static void ReplacePlayerModel(Player p, string changedModel)

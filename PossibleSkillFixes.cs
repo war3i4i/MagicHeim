@@ -1,5 +1,6 @@
 ﻿using MagicHeim.UI_s;
 using Mono.Cecil.Cil;
+using Logger = MagicHeim_Logger.Logger;
 
 namespace MagicHeim;
 
@@ -56,13 +57,34 @@ public class PossibleSkillFixes
     {
         private static void Postfix(Character __instance)
         {
-            if (__instance == Player.m_localPlayer && __instance.m_nview.m_zdo.GetBool("MH_Flying_Nocharacter"))
+            if (__instance == Player.m_localPlayer && __instance.m_nview.m_zdo.GetBool("MH_HideCharacter"))
             {
                 __instance.m_body.useGravity = false;
                 __instance.m_body.velocity = Vector3.zero;
                 __instance.m_currentVel = Vector3.zero;
                 __instance.m_body.angularVelocity = Vector3.zero;
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.IsTeleportable))]
+    private static class TeleportDebugFix
+    {
+        private static void Postfix(Humanoid __instance, ref bool __result)
+        {
+            if (__instance != Player.m_localPlayer) return;
+            __result = __result && !__instance.m_nview.m_zdo.GetBool("MH_HideCharacter");
+        }
+    }
+
+    [HarmonyPatch(typeof(FootStep), nameof(FootStep.UpdateFootstep))]
+    private static class WalkCancelRaven2
+    {
+        private static bool Prefix(FootStep __instance)
+        {
+            if (__instance.m_character != Player.m_localPlayer) return true;
+            if (__instance.m_nview.m_zdo.GetBool("MH_HideCharacter")) return false;
+            return true;
         }
     }
 
@@ -90,7 +112,7 @@ public class PossibleSkillFixes
                 __instance.m_animator.SetBool(Wakeup, false);
             });
 
-            if (__instance.m_nview?.m_zdo?.GetBool("MH_Flying_Nocharacter") == true)
+            if (__instance.m_nview?.m_zdo?.GetBool("MH_HideCharacter") == true)
                 MagicHeim._thistype.StartCoroutine(DelayInvokeSMR(__instance));
         }
     }
