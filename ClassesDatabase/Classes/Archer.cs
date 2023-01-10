@@ -12,9 +12,8 @@ public class Archer : MH_ClassDefinition
     public override void Init()
     {
         ResetSkills();
-      
     }
-    
+
 
     protected internal override Color GetColor => Color.yellow;
 }

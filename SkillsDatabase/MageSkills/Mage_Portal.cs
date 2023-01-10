@@ -33,7 +33,7 @@ public sealed class Mage_Portal : MH_Skill
             $"MAX Lvl Manacost", 40f,
             "Manacost amount (Max Lvl)");
 
-        _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}", 
+        _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
             $"MIN Lvl Cooldown", 30f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
@@ -51,23 +51,23 @@ public sealed class Mage_Portal : MH_Skill
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 2,
             "Leveling Step");
-        
+
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_Portal_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_Portal.mp4";
         Portal_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_Portal_Prefab");
         Portal_Prefab.AddComponent<PortalComponent>();
         Teleport_RangeShowup = MagicHeim.asset.LoadAsset<GameObject>("Mage_AreaShowup");
         Teleport_TargetPoint = MagicHeim.asset.LoadAsset<GameObject>("Mage_TargetShowup");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
     {
-        static void Postfix(ZNetScene __instance) 
+        static void Postfix(ZNetScene __instance)
         {
             __instance.m_namedPrefabs[Portal_Prefab.name.GetStableHashCode()] = Portal_Prefab;
         }
@@ -82,14 +82,14 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             _znv = GetComponent<ZNetView>();
         }
 
-        public void SetTarget(Vector3 target) 
-        { 
+        public void SetTarget(Vector3 target)
+        {
             _znv.m_zdo.Set("target", target);
-        } 
+        }
 
         private void FixedUpdate()
         {
-            Quaternion rot =  Quaternion.LookRotation(Camera.main.transform.forward);
+            Quaternion rot = Quaternion.LookRotation(Camera.main.transform.forward);
             rot.x = 0;
             rot.z = 0;
             transform.rotation = rot;
@@ -99,7 +99,8 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         {
             Player.m_localPlayer.m_lastGroundTouch = 0f;
             Player.m_localPlayer.m_maxAirAltitude = 0f;
-            Player.m_localPlayer.transform.position = _znv.m_zdo.GetVec3("target", Player.m_localPlayer.transform.position);
+            Player.m_localPlayer.transform.position =
+                _znv.m_zdo.GetVec3("target", Player.m_localPlayer.transform.position);
             Instantiate(Mage_Teleport.Teleport_Explosion, Player.m_localPlayer.transform.position, Quaternion.identity);
             Player.m_localPlayer.m_lastGroundTouch = 0f;
             Player.m_localPlayer.m_maxAirAltitude = 0f;
@@ -107,7 +108,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         }
 
         public bool UseItem(Humanoid user, ItemDrop.ItemData item)
-        { 
+        {
             return false;
         }
 
@@ -121,8 +122,8 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             return "Portal";
         }
     }
-    
-    
+
+
     public override void Execute(Func<bool> Cond)
     {
         if (!Player.m_localPlayer) return;
@@ -133,7 +134,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         LayerMask.GetMask("terrain", "Default", "piece", "piece_nonsolid", "static_solid");
 
     private static Vector3 NON_Vector = new Vector3(-100000, 0, 0);
-    
+
     private IEnumerator Charge(Func<bool> Cond)
     {
         bool cancel = false;
@@ -147,13 +148,14 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         rangeShowup.GetComponent<CircleProjector>().m_radius = maxDistance;
         rangeShowup.GetComponent<CircleProjector>().Update();
         Vector3 target = NON_Vector;
-        while (Cond() && p && !p.IsDead()) 
+        while (Cond() && p && !p.IsDead())
         {
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                cancel = true; 
-                break; 
+                cancel = true;
+                break;
             }
+
             rangeShowup.transform.position = p.transform.position;
             bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out var raycast,
                 _definition.MaxLvlValue.Value + 10f,
@@ -165,8 +167,8 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                 targetPoint.transform.position = target;
             }
             else
-            { 
-                targetPoint.SetActive(false); 
+            {
+                targetPoint.SetActive(false);
                 target = NON_Vector;
             }
 
@@ -182,7 +184,8 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             p.transform.rotation = Quaternion.LookRotation(rot);
             StartCooldown(this.CalculateSkillCooldown());
             Vector3 dir = (target - p.transform.position).normalized;
-            var fromPortal = UnityEngine.Object.Instantiate(Portal_Prefab, p.transform.position + dir * 2f, Quaternion.identity);
+            var fromPortal =
+                UnityEngine.Object.Instantiate(Portal_Prefab, p.transform.position + dir * 2f, Quaternion.identity);
             var toPortal = UnityEngine.Object.Instantiate(Portal_Prefab, target, Quaternion.identity);
             fromPortal.GetComponent<PortalComponent>().SetTarget(target + dir * 2f + Vector3.up * 0.2f);
             toPortal.GetComponent<PortalComponent>().SetTarget(p.transform.position);
@@ -195,7 +198,6 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                 p.AddEitr(this.CalculateSkillManacost());
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "<color=cyan>Too far</color>");
             }
-            
         }
 
         UnityEngine.Object.Destroy(rangeShowup);
@@ -205,9 +207,9 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
 
     public override bool CanExecute()
     {
-        return !Utils.InWater(); 
+        return !Utils.InWater();
     }
-    
+
     public override string GetSpecialTags()
     {
         return "<color=red>Precast, Move Position, Portal Creation</color>";
@@ -243,12 +245,14 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Distance: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Distance: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }

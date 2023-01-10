@@ -8,16 +8,18 @@ namespace MagicHeim.SkillsDatabase;
 public static class SkillsDatabase
 {
     private static readonly Dictionary<int, MH_Skill> GLOBAL_SkillDefinitions = new();
+
     public static bool TryGetSkillDefinition(string skillID, out MH_Skill skill)
     {
         if (GLOBAL_SkillDefinitions.TryGetValue(skillID.GetStableHashCode(), out skill))
         {
             return true;
         }
+
         MagicHeim_Logger.Logger.Log($"Skill with ID {skillID} not found!");
         return false;
     }
-    
+
     public static List<MH_Skill> GetAllSkill()
     {
         return GLOBAL_SkillDefinitions.Values.ToList();
@@ -27,7 +29,7 @@ public static class SkillsDatabase
     {
         GLOBAL_SkillDefinitions.Add(skill.Key, skill);
     }
-    
+
     public static void Init()
     {
         AddSkill(new Mage_EnergyBlast());
@@ -36,7 +38,7 @@ public static class SkillsDatabase
         AddSkill(new Mage_ElementalKnowledge());
         AddSkill(new Mage_EitrControl());
         AddSkill(new Mage_ElementalResistance());
-        AddSkill(new Mage_MasterOfTime()); 
+        AddSkill(new Mage_MasterOfTime());
         AddSkill(new Mage_EitrEconomy());
         AddSkill(new Mage_ElementalTimescale());
         AddSkill(new Mage_ElementalVampirism());
@@ -65,7 +67,7 @@ public static class SkillsDatabase
         AddSkill(new Mage_WaveOfFlame());
         AddSkill(new Mage_ArcaneShield());
         AddSkill(new Mage_AncientTotem());
-        
+
         AddSkill(new Druid_Eagle());
         AddSkill(new Druid_Wolf());
         AddSkill(new Druid_Fish());

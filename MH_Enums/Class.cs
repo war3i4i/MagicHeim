@@ -2,5 +2,8 @@
 
 public enum Class
 {
-    None, Warrior, Mage, Druid
+    None,
+    Warrior,
+    Mage,
+    Druid
 }

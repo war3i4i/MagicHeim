@@ -47,7 +47,7 @@ public sealed class Mage_WaveOfFlame : MH_Skill
             $"Required Level To Learn",
             50, "Required Level");
 
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 2,
             "Leveling Step");
@@ -59,8 +59,8 @@ public sealed class Mage_WaveOfFlame : MH_Skill
         Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_WaveOfFlame_Prefab");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
 
@@ -153,12 +153,15 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedValueDiff = Math.Round(valueDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Damage: <color=red>Fire {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=yellow>Blunt {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Damage: <color=red>Fire {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=yellow>Blunt {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
+
         return builder.ToString();
     }
 

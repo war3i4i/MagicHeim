@@ -10,11 +10,11 @@ public class Mage : MH_ClassDefinition
     }
 
     public override void Init()
-    { 
+    {
         ResetSkills();
         AddSkill("Mage_Energyblast");
         AddSkill("Mage_Teleport");
-        AddSkill("Mage_Manaflow"); 
+        AddSkill("Mage_Manaflow");
         AddSkill("Mage_Elementalknowledge");
         AddSkill("Mage_Eitrcontrol");
         AddSkill("Mage_Elementalresistance");
@@ -24,9 +24,9 @@ public class Mage : MH_ClassDefinition
         AddSkill("Mage_Elementaltimescale");
         AddSkill("Mage_Elementalmastery");
         AddSkill("Mage_Bluntmastery");
-        AddSkill("Mage_Thunderwrath");   
-        AddSkill("Mage_Thundershock"); 
-        AddSkill("Mage_Frostbeam"); 
+        AddSkill("Mage_Thunderwrath");
+        AddSkill("Mage_Thundershock");
+        AddSkill("Mage_Frostbeam");
         AddSkill("Mage_Fireball");
         AddSkill("Mage_Frostball");
         AddSkill("Mage_Lightningball");
@@ -48,10 +48,8 @@ public class Mage : MH_ClassDefinition
         AddSkill("Mage_Waveofflame");
         AddSkill("Mage_Ancienttotem");
         SortSkills();
-    }  
-    
-    
-     
+    }
+
 
     protected internal override Color GetColor => Color.blue;
 }

@@ -29,14 +29,14 @@ public sealed class Mage_MasterOfTime : MH_Skill
             70, "Required Level");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_MasterOfTime");
         CachedKey = _definition.Key;
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 1,
             "Leveling Step");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     private static int CachedKey;
@@ -75,16 +75,16 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedValueDiff = Math.Round(valueDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Chance to reset skill cooldown: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine(
+                $"Chance to reset skill cooldown: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }
 
     //action
-    public static void TryToCheckSkill(ref float cd) 
+    public static void TryToCheckSkill(ref float cd)
     {
         if (ClassManager.CurrentClass == Class.None) return;
         var skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);

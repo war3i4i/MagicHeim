@@ -11,13 +11,13 @@ public sealed class Mage_ElementalVampirism : MH_Skill
 {
     public Mage_ElementalVampirism()
     {
-        _definition._InternalName = "Mage_Elementalvampirism"; 
+        _definition._InternalName = "Mage_Elementalvampirism";
         _definition.Name = "$mh_mage_elementalvampirism";
         _definition.Description = "$mh_mage_elementalvampirism_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
             $"MIN Elemental Damage Vamp (Percentage)", 1f,
-            "Value amount (Min Lvl)"); 
+            "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
             $"MAX Elemental Damage Vamp (Percentage)", 4f,
             "Value amount (Max Lvl)");
@@ -29,14 +29,14 @@ public sealed class Mage_ElementalVampirism : MH_Skill
             66, "Required Level");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_Elementalvampirism");
         CachedKey = _definition.Key;
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 2,
             "Leveling Step");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     public static int CachedKey;
@@ -75,19 +75,17 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedValueDiff = Math.Round(valueDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Elemental Damage Vamp: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine(
+                $"Elemental Damage Vamp: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }
 
-    
-
 
     //action
-    [HarmonyPatch(typeof(Character),nameof(Character.Damage))]
+    [HarmonyPatch(typeof(Character), nameof(Character.Damage))]
     static class Character_Damage_Patch
     {
         public static float SimulateDamageElemental(HitData other, Character c)
@@ -100,7 +98,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             hit.ApplyResistance(damageModifiers, out _);
             return hit.GetTotalDamage();
         }
-        
+
         static void Prefix(Character __instance, HitData hit)
         {
             if (hit.m_skill != Skills.SkillType.ElementalMagic || ClassManager.CurrentClass == Class.None) return;

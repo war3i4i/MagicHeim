@@ -29,14 +29,14 @@ public sealed class Mage_ElementalResistance : MH_Skill
             48, "Required Level");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_ElementalResistance");
         CachedKey = _definition.Key;
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 4,
             "Leveling Step");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     private static int CachedKey;
@@ -75,10 +75,10 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedValueDiff = Math.Round(valueDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Elemental Damage Damage Reduction: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine(
+                $"Elemental Damage Damage Reduction: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }
@@ -87,7 +87,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     //action
     [HarmonyPatch(typeof(SEMan), nameof(SEMan.OnDamaged))]
     static class ModifyDamage
-    { 
+    {
         static void Postfix(SEMan __instance, ref HitData hit)
         {
             if (ClassManager.CurrentClass == Class.None || __instance.m_character != Player.m_localPlayer) return;

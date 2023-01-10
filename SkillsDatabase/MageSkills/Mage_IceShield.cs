@@ -64,11 +64,11 @@ public sealed class Mage_IceShield : MH_Skill
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageWave];
         _definition.AnimationTime = 0.8f;
         IceShield_Buff = MagicHeim.asset.LoadAsset<GameObject>("Mage_IceShield_Prefab");
-        
-        
+
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     private static Sprite CachedIcon;
@@ -92,10 +92,11 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         var players = Player.GetAllPlayers()
             .Where(x => Vector3.Distance(x.transform.position, p.transform.position) <= 10f).ToList();
         foreach (var player in players)
-        { 
-            if(!Utils.IsPlayerInGroup(player)) continue;
+        {
+            if (!Utils.IsPlayerInGroup(player)) continue;
             player.GetSEMan().AddStatusEffect("Mage_IceShield_Buff", true, armorBonus, duration);
         }
+
         StartCooldown(this.CalculateSkillCooldown());
     }
 
@@ -154,7 +155,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                 $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
+
         return builder.ToString();
     }
 
@@ -189,13 +190,13 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             armorBonus = itemLevel;
         }
     }
-    
-    [HarmonyPatch(typeof(Player),nameof(Player.GetBodyArmor))]
+
+    [HarmonyPatch(typeof(Player), nameof(Player.GetBodyArmor))]
     static class Humanoid_GetBodyArmor_Patch
     {
         static void Postfix(Player __instance, ref float __result)
         {
-            if(__instance.m_seman.GetStatusEffect("Mage_IceShield_Buff") is SE_Mage_IceShield_Buff buff)
+            if (__instance.m_seman.GetStatusEffect("Mage_IceShield_Buff") is SE_Mage_IceShield_Buff buff)
             {
                 __result += buff.armorBonus;
             }

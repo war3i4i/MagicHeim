@@ -15,7 +15,7 @@ public sealed class Mage_BlackHole : MH_Skill
     private static GameObject Teleport_RangeShowup;
     private static GameObject Teleport_TargetPoint;
     private static GameObject BlackHole_Prefab;
-    
+
 
     public Mage_BlackHole()
     {
@@ -49,10 +49,10 @@ public sealed class Mage_BlackHole : MH_Skill
             $"Max Level", 10,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn", 
+            $"Required Level To Learn",
             30, "Required Level");
 
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 5,
             "Leveling Step");
@@ -63,10 +63,10 @@ public sealed class Mage_BlackHole : MH_Skill
         Teleport_TargetPoint = MagicHeim.asset.LoadAsset<GameObject>("Mage_BlackHole_TargetShowup");
         BlackHole_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_BlackHole_Prefab");
         BlackHole_Prefab.AddComponent<BlackHoleComponent>();
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
@@ -75,21 +75,21 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         static void Postfix(ZNetScene __instance)
         {
             __instance.m_namedPrefabs[BlackHole_Prefab.name.GetStableHashCode()] = BlackHole_Prefab;
-        } 
+        }
     }
-    
 
-    public class BlackHoleComponent : MonoBehaviour 
+
+    public class BlackHoleComponent : MonoBehaviour
     {
         private ZNetView _znv;
         private float counter;
-        private float _damage; 
+        private float _damage;
 
         static int m_rayMaskSolids = LayerMask.GetMask("Default", "static_solid", "Default_small", "piece",
             "piece_nonsolid", "terrain", "character", "character_net", "character_ghost", "hitbox", "character_noenv",
             "vehicle");
 
-        
+
         private void Awake()
         {
             _znv = GetComponent<ZNetView>();
@@ -104,7 +104,9 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         {
             List<Character> list = new();
             Character.GetCharactersInRange(transform.position, 8.4f, list);
-            list = list.Where(d => d.m_nview.IsValid() && d.m_nview.IsOwner() && d.GetHealth() > 0 && !d.IsTamed() && (d == Player.m_localPlayer || Utils.IsEnemy(d))).ToList();
+            list = list.Where(d =>
+                d.m_nview.IsValid() && d.m_nview.IsOwner() && d.GetHealth() > 0 && !d.IsTamed() &&
+                (d == Player.m_localPlayer || Utils.IsEnemy(d))).ToList();
             foreach (var VARIABLE in list)
             {
                 float distance = Vector3.Distance(transform.position, VARIABLE.transform.position);
@@ -112,13 +114,14 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                 Vector3 angle = (transform.position - VARIABLE.transform.position).normalized * multiplier;
                 VARIABLE.transform.position += angle;
             }
-            
-            if(!_znv.IsOwner() || !Player.m_localPlayer) return;
+
+            if (!_znv.IsOwner() || !Player.m_localPlayer) return;
             counter += Time.fixedDeltaTime;
-            if (counter >= 1f) 
-            { 
+            if (counter >= 1f)
+            {
                 counter = 0f;
-                Collider[] array = Physics.OverlapSphere(transform.position, 8f, m_rayMaskSolids, QueryTriggerInteraction.UseGlobal);
+                Collider[] array = Physics.OverlapSphere(transform.position, 8f, m_rayMaskSolids,
+                    QueryTriggerInteraction.UseGlobal);
                 HashSet<GameObject> hashSet = new HashSet<GameObject>();
                 foreach (Collider collider in array)
                 {
@@ -196,17 +199,19 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
 
             yield return null;
         }
- 
+
         SkillChargeUI.RemoveCharge(this);
-        if (!cancel && p && !p.IsDead() && target != NON_Vector && global::Utils.DistanceXZ(target, p.transform.position) <= maxDistance)
-        { 
-            Vector3 rot = (target - p.transform.position).normalized; 
+        if (!cancel && p && !p.IsDead() && target != NON_Vector &&
+            global::Utils.DistanceXZ(target, p.transform.position) <= maxDistance)
+        {
+            Vector3 rot = (target - p.transform.position).normalized;
             rot.y = 0;
             p.transform.rotation = Quaternion.LookRotation(rot);
             StartCooldown(this.CalculateSkillCooldown());
             var go = UnityEngine.Object.Instantiate(BlackHole_Prefab, target, Quaternion.identity);
             go.GetComponent<BlackHoleComponent>().Setup(this.CalculateSkillValue());
-            p.m_zanim.SetTrigger(ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon]);
+            p.m_zanim.SetTrigger(
+                ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon]);
         }
         else
         {
@@ -221,7 +226,6 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         UnityEngine.Object.Destroy(targetPoint);
     }
 
-    
 
     public override bool CanExecute()
     {
@@ -263,12 +267,14 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Damage (Per Second): <color=yellow>Blunt  {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Damage (Per Second): <color=yellow>Blunt  {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }

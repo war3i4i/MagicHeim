@@ -73,8 +73,8 @@ public sealed class Mage_WeaponEnchantLightning : MH_Skill
         VFX_Fist = MagicHeim.asset.LoadAsset<GameObject>("Mage_WeaponEnchantLightning_Fist");
         MH_WeaponEnchants_VFXs.WeaponEnchantVFXs.Add(MH_WeaponEnchant.Type.Lightning, VFX_NonRead);
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
@@ -100,7 +100,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
 
         var data = weapon.Data().GetOrCreate<MH_WeaponEnchant>();
         data.time = (long)EnvMan.instance.m_totalSeconds;
-        data.value = (int)this.CalculateSkillValue(); 
+        data.value = (int)this.CalculateSkillValue();
         data.type = MH_WeaponEnchant.Type.Lightning;
         data.duration = (int)this.CalculateSkillDuration();
         StartCooldown(this.CalculateSkillCooldown());
@@ -233,18 +233,22 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedValueDiff = Math.Round(valueDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Bonus Lightning Damage: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
-            builder.AppendLine($"Duration: {Math.Round(nextDuration, 1)} <color=green>({(roundedDurationDiff > 0 ? "+" : "")}{roundedDurationDiff})</color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Bonus Lightning Damage: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine(
+                $"Duration: {Math.Round(nextDuration, 1)} <color=green>({(roundedDurationDiff > 0 ? "+" : "")}{roundedDurationDiff})</color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
+
         return builder.ToString();
     }
 
     public override Class PreferableClass => Class.Mage;
     public override bool IsPassive => false;
-    public override CostType _costType => CostType.Eitr; 
+    public override CostType _costType => CostType.Eitr;
     public override Color SkillColor => new Color(0.05f, 0f, 1f);
 }

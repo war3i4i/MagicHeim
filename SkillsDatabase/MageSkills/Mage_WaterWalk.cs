@@ -11,7 +11,7 @@ public sealed class Mage_WaterWalk : MH_Skill
 {
     private static GameObject WaterWalk_Prefab;
     private static bool StaticBool_InWater;
-    
+
     public Mage_WaterWalk()
     {
         _definition._InternalName = "Mage_Waterwalk";
@@ -33,7 +33,7 @@ public sealed class Mage_WaterWalk : MH_Skill
             $"Required Level To Learn",
             40, "Required Level");
 
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 3,
             "Leveling Step");
@@ -41,10 +41,10 @@ public sealed class Mage_WaterWalk : MH_Skill
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_WaterWalk_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_WaterWalk.mp4";
         WaterWalk_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_WaterWalk_Prefab");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
@@ -62,7 +62,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         Player p = Player.m_localPlayer;
         if (!Toggled)
         {
-             MagicHeim._thistype.StartCoroutine(WWalk());
+            MagicHeim._thistype.StartCoroutine(WWalk());
         }
         else
         {
@@ -72,6 +72,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
 
     private static GameObject vfx;
     private static bool IsInWaterWalk;
+
     private IEnumerator WWalk()
     {
         var manacost = this.CalculateSkillManacost();
@@ -91,28 +92,29 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                 Toggled = false;
                 StaticBool_InWater = Toggled;
                 if (vfx) ZNetScene.instance.Destroy(vfx.gameObject);
-                yield break; 
+                yield break;
             }
+
             p.UseEitr(useMana);
             yield return null;
         }
     }
-    
+
     [HarmonyPatch(typeof(Character), "UpdateWater")]
     public static class Swim_Patch
-    { 
+    {
         private static void Postfix(Character __instance, float ___m_waterLevel, Vector3 ___m_moveDir)
         {
             if (StaticBool_InWater && __instance.IsPlayer() && Player.m_localPlayer == __instance &&
                 !__instance.IsDead())
-            { 
-                Player p = Player.m_localPlayer;  
+            {
+                Player p = Player.m_localPlayer;
                 float x, z;
                 if (___m_waterLevel + 0.08f > __instance.transform.position.y)
                 {
-                    IsInWaterWalk = true; 
+                    IsInWaterWalk = true;
                     p.m_flying = true;
-                    x = p.transform.transform.position.x; 
+                    x = p.transform.transform.position.x;
                     z = p.transform.transform.position.z;
                     p.transform.transform.position = new Vector3(x, ___m_waterLevel, z);
                     if (___m_moveDir.magnitude > 0.1f)
@@ -133,10 +135,10 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                 }
             }
         }
-    } 
-    
-    [HarmonyPatch(typeof(Character), "UpdateFlying")] 
-    public static class UpdateFlying_Patch 
+    }
+
+    [HarmonyPatch(typeof(Character), "UpdateFlying")]
+    public static class UpdateFlying_Patch
     {
         private static void Postfix(Character __instance)
         {
@@ -178,10 +180,10 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Manacost (Per Second): {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Manacost (Per Second): {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }

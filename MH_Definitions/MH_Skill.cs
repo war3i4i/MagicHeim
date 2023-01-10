@@ -43,28 +43,29 @@ public abstract class MH_Skill
     public float RequiredItemAmountToUpgrade_Step => _definition.RequiredItemFirstHalfAmountToUpgrade_Step != null
         ? _definition.RequiredItemFirstHalfAmountToUpgrade_Step.Value
         : 0;
-    
-    public string RequiredItemToUpgradeSecondHalf => _definition.RequiredItemSecondHalfToUpgrade != null 
-        ? _definition.RequiredItemSecondHalfToUpgrade.Value 
+
+    public string RequiredItemToUpgradeSecondHalf => _definition.RequiredItemSecondHalfToUpgrade != null
+        ? _definition.RequiredItemSecondHalfToUpgrade.Value
         : string.Empty;
-    
+
     public int RequiredItemAmountToUpgradeSecondHalf => _definition.RequiredItemSecondHalfAmountToUpgrade != null
         ? _definition.RequiredItemSecondHalfAmountToUpgrade.Value
         : 0;
-    
-    public float RequiredItemAmountToUpgradeSecondHalf_Step => _definition.RequiredItemSecondHalfAmountToUpgrade_Step != null
-        ? _definition.RequiredItemSecondHalfAmountToUpgrade_Step.Value
-        : 0;
-    
-    public string RequiredItemToUpgradeFinal =>  _definition.RequiredItemFinalToUpgrade != null
+
+    public float RequiredItemAmountToUpgradeSecondHalf_Step =>
+        _definition.RequiredItemSecondHalfAmountToUpgrade_Step != null
+            ? _definition.RequiredItemSecondHalfAmountToUpgrade_Step.Value
+            : 0;
+
+    public string RequiredItemToUpgradeFinal => _definition.RequiredItemFinalToUpgrade != null
         ? _definition.RequiredItemFinalToUpgrade.Value
         : string.Empty;
-    
+
     public int RequiredItemAmountToUpgradeFinal => _definition.RequiredItemFinalAmountToUpgrade != null
         ? _definition.RequiredItemFinalAmountToUpgrade.Value
         : 0;
-    
-    
+
+
     public string InternalName => _definition._InternalName;
 
     public string ExternalDescription()
@@ -73,7 +74,8 @@ public abstract class MH_Skill
         if (this.Level >= this.MaxLevel) return result;
         var requiredLevel = this.RequiredLevel + (this.LevelingStep * this.Level);
         bool canUpgrade = ClassManager.Level >= requiredLevel;
-        result += $"\n\nLeveling Step: <color=yellow>{this.LevelingStep}</color>\n(Can be {(this.Level > 0 ? "upgraded" : "learned")} on LVL: <color={(canUpgrade ? "green" : "red")}>{requiredLevel}</color>)";
+        result +=
+            $"\n\nLeveling Step: <color=yellow>{this.LevelingStep}</color>\n(Can be {(this.Level > 0 ? "upgraded" : "learned")} on LVL: <color={(canUpgrade ? "green" : "red")}>{requiredLevel}</color>)";
         return result;
     }
 

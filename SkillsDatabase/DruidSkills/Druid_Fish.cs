@@ -41,7 +41,7 @@ public sealed class Druid_Fish : MH_Skill
             $"Required Level To Learn",
             75, "Required Level");
 
-         
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 1,
             "Leveling Step");
@@ -82,10 +82,10 @@ public sealed class Druid_Fish : MH_Skill
             Toggled = false;
         }
     }
-    
+
     private IEnumerator ManaDrain()
     {
-        Toggled = true; 
+        Toggled = true;
         var manacost = this.CalculateSkillManacost();
         Player p = Player.m_localPlayer;
         var stamina = p.GetStamina();
@@ -104,15 +104,16 @@ public sealed class Druid_Fish : MH_Skill
                 pkg.Write("");
                 ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, "MH_Druid_FishForm_RPC", pkg);
                 UnityEngine.Object.Instantiate(Fish_Explosion, p.transform.position, Quaternion.identity);
-                yield break; 
+                yield break;
             }
+
             p.UseEitr(useMana);
             p.m_stamina = stamina;
-            if(p.m_stamina > p.m_maxStamina) p.m_stamina = p.m_maxStamina;
+            if (p.m_stamina > p.m_maxStamina) p.m_stamina = p.m_maxStamina;
             yield return null;
         }
     }
-    
+
 
     [HarmonyPatch(typeof(Player), "Start")]
     private static class PlayerStartPatch
@@ -222,7 +223,8 @@ public sealed class Druid_Fish : MH_Skill
         {
             if (IsDone())
             {
-                UnityEngine.Object.Instantiate(Fish_Explosion, this.m_character.transform.position + Vector3.up, Quaternion.identity);
+                UnityEngine.Object.Instantiate(Fish_Explosion, this.m_character.transform.position + Vector3.up,
+                    Quaternion.identity);
                 ZDOID zdoID = Player.m_localPlayer.GetZDOID();
                 ZPackage pkg = new();
                 pkg.Write(zdoID);
@@ -233,7 +235,7 @@ public sealed class Druid_Fish : MH_Skill
     }
 
     public static class Druid_Fish_DB_Patches
-    { 
+    {
         private static void Add_SE(ObjectDB odb)
         {
             if (ObjectDB.instance == null || ObjectDB.instance.m_items.Count == 0 ||
@@ -261,7 +263,7 @@ public sealed class Druid_Fish : MH_Skill
             }
         }
     }
-    
+
     [HarmonyPatch(typeof(Player), nameof(Player.InMinorAction))]
     static class Player_InMinorAction_Patch
     {
@@ -270,7 +272,7 @@ public sealed class Druid_Fish : MH_Skill
             return __instance.m_animator.gameObject.name != "KG_transform_DruidFish";
         }
     }
-    
+
     [HarmonyPatch(typeof(Player), nameof(Player.InMinorActionSlowdown))]
     static class Player_InMinorAction_Patch2
     {

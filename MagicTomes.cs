@@ -59,7 +59,7 @@ public static class MagicTomes
     [HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetTooltip), typeof(ItemDrop.ItemData),
         typeof(int),
         typeof(bool))]
-    public class GetTooltipPatch 
+    public class GetTooltipPatch
     {
         public static void Postfix(ItemDrop.ItemData item, bool crafting, ref string __result)
         {

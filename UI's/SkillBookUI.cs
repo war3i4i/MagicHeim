@@ -169,21 +169,23 @@ public static class SkillBookUI
                 skillData.transform.Find("LevelText/ReqIcon").gameObject.SetActive(false);
                 if (IsAltarClose && ClassManager.CanUpgradeSkill(list))
                 {
-
                     string requiredPrefab;
                     if (list.Level + 1 >= list.MaxLevel) requiredPrefab = list.RequiredItemToUpgradeFinal;
                     else if (list.Level > list.MaxLevel / 2) requiredPrefab = list.RequiredItemToUpgradeSecondHalf;
                     else requiredPrefab = list.RequiredItemToUpgrade;
-                    
+
                     int requiredAmount;
                     if (list.Level + 1 >= list.MaxLevel) requiredAmount = list.RequiredItemAmountToUpgradeFinal;
-                    else if (list.Level > list.MaxLevel / 2) requiredAmount = list.RequiredItemAmountToUpgradeSecondHalf; 
+                    else if (list.Level > list.MaxLevel / 2)
+                        requiredAmount = list.RequiredItemAmountToUpgradeSecondHalf;
                     else requiredAmount = list.RequiredItemAmountToUpgrade;
-                    
+
                     GameObject upradeItem = ObjectDB.instance.GetItemPrefab(requiredPrefab);
                     if (upradeItem && requiredAmount > 0)
                     {
-                        string name = Localization.instance.Localize(upradeItem.GetComponent<ItemDrop>().m_itemData.m_shared.m_name);
+                        string name =
+                            Localization.instance.Localize(upradeItem.GetComponent<ItemDrop>().m_itemData.m_shared
+                                .m_name);
                         bool hasItems = ClassManager.HaveEnoughItemsForSkillUpgrade(list, out int amount);
                         skillData.transform.Find("LevelText/Req").GetComponent<Text>().text =
                             $"Requires: <color={(hasItems ? "lime" : "red")}>{name}</color> <color=yellow>x{amount}</color>";

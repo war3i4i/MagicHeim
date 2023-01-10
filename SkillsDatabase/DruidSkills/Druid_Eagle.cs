@@ -9,7 +9,6 @@ namespace MagicHeim.SkillsDatabase.MageSkills;
 
 public sealed class Druid_Eagle : MH_Skill
 {
-
     public static int CachedKey;
     private static GameObject Eagle_Prefab;
     private static GameObject Eagle_Explosion;
@@ -26,8 +25,8 @@ public sealed class Druid_Eagle : MH_Skill
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
             $"MAX Lvl Manacost", 2f,
             "Manacost amount (Max Lvl)");
-        
-        _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}", 
+
+        _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
             $"MIN Lvl Cooldown", 12f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
@@ -42,7 +41,7 @@ public sealed class Druid_Eagle : MH_Skill
             $"Required Level To Learn",
             75, "Required Level");
 
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 1,
             "Leveling Step");
@@ -55,7 +54,7 @@ public sealed class Druid_Eagle : MH_Skill
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
-    { 
+    {
         static void Postfix(ZNetScene __instance)
         {
             __instance.m_namedPrefabs[Eagle_Prefab.name.GetStableHashCode()] = Eagle_Prefab;
@@ -80,7 +79,7 @@ public sealed class Druid_Eagle : MH_Skill
             Toggled = false;
         }
     }
-    
+
 
     private IEnumerator EagleForm()
     {
@@ -93,7 +92,8 @@ public sealed class Druid_Eagle : MH_Skill
         p.m_collider.isTrigger = true;
         UnityEngine.Object.Instantiate(Eagle_Explosion, p.transform.position + Vector3.up, Quaternion.identity);
         GameObject go;
-        go =  UnityEngine.Object.Instantiate(Eagle_Prefab, p.transform.position + Vector3.up, Quaternion.LookRotation(GameCamera.instance.transform.forward));
+        go = UnityEngine.Object.Instantiate(Eagle_Prefab, p.transform.position + Vector3.up,
+            Quaternion.LookRotation(GameCamera.instance.transform.forward));
         var rbody = go.GetComponent<Rigidbody>();
         go.transform.position = p.transform.position + Vector3.up;
         for (;;)
@@ -146,12 +146,11 @@ public sealed class Druid_Eagle : MH_Skill
                 StartCooldown(this.CalculateSkillCooldown());
                 yield break;
             }
+
             p.UseEitr(useMana);
             yield return null;
         }
     }
-
-   
 
 
     public override bool CanExecute()
@@ -186,7 +185,6 @@ public sealed class Druid_Eagle : MH_Skill
                 $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }

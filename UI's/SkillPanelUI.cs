@@ -107,7 +107,7 @@ public static class SkillPanelUI
     private static GameObject UI;
     private static GameObject SkillElement;
     private static Transform SkillsTransform;
- 
+
     private static ConfigEntry<int> MaxSlots;
     public static ConfigEntry<bool> UseAltHotkey;
     public static ConfigEntry<KeyCode>[] MH_Hotkeys;
@@ -143,11 +143,12 @@ public static class SkillPanelUI
         MaxSlots = MagicHeim.config("SkillPanel", "MaxSlots", 10, "Max slots in skill panel");
         UseAltHotkey = MagicHeim._thistype.Config.Bind("SkillPanel", "UseAltHotkey", true, "Use alt hotkey for skills");
         MH_Hotkeys = new ConfigEntry<KeyCode>[11];
-        for (int i = 0; i < 10; ++i) 
+        for (int i = 0; i < 10; ++i)
         {
             MH_Hotkeys[i] = MagicHeim._thistype.Config.Bind("SkillPanel", "SkillHotkey_" + (i + 1), DefaultHotkeys[i],
                 "Hotkey for skill " + (i + 1));
         }
+
         MH_Hotkeys[10] = MagicHeim._thistype.Config.Bind("SkillPanel", "Open Skillbook", DefaultHotkeys[10],
             "Hotkey for SkillBook");
 
@@ -223,7 +224,7 @@ public static class SkillPanelUI
             if (skill == null) return;
             SetSkill(index, skill.Key);
             SkillDrag.LastDragSkill = null;
-            SkillDrag.LastDragTime = 0; 
+            SkillDrag.LastDragTime = 0;
         }
         else
         {
@@ -237,9 +238,10 @@ public static class SkillPanelUI
         {
             skillSlot.Value.Skill = null;
         }
+
         Status = Change.NeedToChange;
     }
-    
+
     public static void SetSkill(int slot, int skill)
     {
         if (slot > _skillSlots.Count)
@@ -284,7 +286,6 @@ public static class SkillPanelUI
                             cond: () => Input.GetKey(MH_Hotkeys[button.Key].Value));
                     }
                 }
-                
             }
 
             //main update routine
@@ -314,13 +315,13 @@ public static class SkillPanelUI
 
                     if (Status == Change.NeedToChange)
                     {
-                        button.Value.Icon.enabled = true; 
-                        button.Value.Manacost.gameObject.SetActive(true); 
+                        button.Value.Icon.enabled = true;
+                        button.Value.Manacost.gameObject.SetActive(true);
                         button.Value.Manacost.color = button.Value.Skill._costType switch
-                        { 
-                            MH_Skill.CostType.Eitr => new Color(1f, 0f, 0.87f), 
+                        {
+                            MH_Skill.CostType.Eitr => new Color(1f, 0f, 0.87f),
                             MH_Skill.CostType.Stamina => Color.yellow,
-                            MH_Skill.CostType.Health => Color.red, 
+                            MH_Skill.CostType.Health => Color.red,
                             _ => Color.cyan
                         };
                         button.Value.Manacost.text = ((int)button.Value.Skill.CalculateSkillManacost()).ToString();

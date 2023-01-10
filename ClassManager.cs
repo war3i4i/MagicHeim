@@ -89,21 +89,21 @@ public static class ClassManager
         if (skill.Level + 1 >= skill.MaxLevel) prefab = skill.RequiredItemToUpgradeFinal;
         else if (skill.Level > skill.MaxLevel / 2) prefab = skill.RequiredItemToUpgradeSecondHalf;
         else prefab = skill.RequiredItemToUpgrade;
- 
+
         requiredAmount = 0;
         GameObject upradeItem = ObjectDB.instance.GetItemPrefab(prefab);
         if (!upradeItem) return true;
-        
+
         int initialAmount;
         float step;
         if (skill.Level + 1 >= skill.MaxLevel) initialAmount = skill.RequiredItemAmountToUpgradeFinal;
         else if (skill.Level > skill.MaxLevel / 2) initialAmount = skill.RequiredItemAmountToUpgradeSecondHalf;
         else initialAmount = skill.RequiredItemAmountToUpgrade;
-        
+
         if (skill.Level + 1 >= skill.MaxLevel) step = 1f;
         else if (skill.Level > skill.MaxLevel / 2) step = skill.RequiredItemAmountToUpgradeSecondHalf_Step;
         else step = skill.RequiredItemAmountToUpgrade_Step;
-      
+
         requiredAmount = Mathf.RoundToInt(initialAmount * Mathf.Pow(step, skill.Level));
         if (Player.m_debugMode) return true;
         var inventoryAmount = Utils.CountItems(upradeItem.name);

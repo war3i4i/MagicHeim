@@ -66,7 +66,7 @@ public sealed class Druid_NatureBuff : MH_Skill
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSlam];
         _definition.AnimationTime = 0.8f;
         Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_NatureBuff_Buff");
-        CachedIcon = _definition.Icon; 
+        CachedIcon = _definition.Icon;
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
         this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
         this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
@@ -97,6 +97,7 @@ public sealed class Druid_NatureBuff : MH_Skill
             player.m_seman.AddStatusEffect("Druid_NatureBuff_Buff", true, (int)this.CalculateSkillDuration(),
                 this.CalculateSkillValue());
         }
+
         StartCooldown(this.CalculateSkillCooldown());
     }
 

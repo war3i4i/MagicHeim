@@ -110,11 +110,12 @@ public static class Utils
         skill.Definition.RequiredItemFirstHalfAmountToUpgrade = MagicHeim.config($"{skill.Definition._InternalName}",
             $"Required Item Amount to Upgrade First Half", initialValue,
             "Required Item Amount to Upgrade");
-        skill.Definition.RequiredItemFirstHalfAmountToUpgrade_Step = MagicHeim.config($"{skill.Definition._InternalName}",
+        skill.Definition.RequiredItemFirstHalfAmountToUpgrade_Step = MagicHeim.config(
+            $"{skill.Definition._InternalName}",
             $"Required Item Amount to Upgrade Step First Half", step,
             "Required Item Amount to Upgrade Step");
     }
-    
+
     public static void InitRequiredItemSecondHalf(this MH_Skill skill, string prefab, int initialValue, float step)
     {
         skill.Definition.RequiredItemSecondHalfToUpgrade = MagicHeim.config($"{skill.Definition._InternalName}",
@@ -123,11 +124,12 @@ public static class Utils
         skill.Definition.RequiredItemSecondHalfAmountToUpgrade = MagicHeim.config($"{skill.Definition._InternalName}",
             $"Required Item Amount to Upgrade Second Half", initialValue,
             "Required Item Amount to Upgrade");
-        skill.Definition.RequiredItemSecondHalfAmountToUpgrade_Step = MagicHeim.config($"{skill.Definition._InternalName}",
+        skill.Definition.RequiredItemSecondHalfAmountToUpgrade_Step = MagicHeim.config(
+            $"{skill.Definition._InternalName}",
             $"Required Item Amount to Upgrade Step Second Half", step,
             "Required Item Amount to Upgrade Step");
     }
-    
+
     public static void InitRequiredItemFinal(this MH_Skill skill, string prefab, int initialValue)
     {
         skill.Definition.RequiredItemFinalToUpgrade = MagicHeim.config($"{skill.Definition._InternalName}",

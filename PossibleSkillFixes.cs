@@ -94,9 +94,9 @@ public class PossibleSkillFixes
                 MagicHeim._thistype.StartCoroutine(DelayInvokeSMR(__instance));
         }
     }
-    
-    
-    [HarmonyPatch(typeof(Player),nameof(Player.UseHotbarItem))]
+
+
+    [HarmonyPatch(typeof(Player), nameof(Player.UseHotbarItem))]
     static class Player_UseHotbarItem_Patch
     {
         static bool Prefix()
@@ -104,5 +104,4 @@ public class PossibleSkillFixes
             return !Input.GetKey(KeyCode.LeftAlt);
         }
     }
-    
 }

@@ -1,5 +1,4 @@
-﻿
-namespace MagicHeim;
+﻿namespace MagicHeim;
 
 public static class CustomMapPins
 {
@@ -17,33 +16,33 @@ public static class CustomMapPins
             pin.m_pos = transform.position;
             pin.m_icon = icon;
             pin.m_save = false;
-            pin.m_checked = false; 
+            pin.m_checked = false;
             pin.m_ownerID = 0;
             Minimap.instance?.m_pins?.Add(pin);
         }
 
         private void LateUpdate()
-        { 
+        {
             pin.m_checked = false;
             pin.m_pos = transform.position;
         }
 
         private void OnDestroy()
         {
-            if(pin.m_uiElement) Destroy(pin.m_uiElement.gameObject);
+            if (pin.m_uiElement) Destroy(pin.m_uiElement.gameObject);
             Minimap.instance?.m_pins?.Remove(pin);
         }
     }
 
     public static void RegisterCustomPin(GameObject go, string name, Sprite icon)
-    { 
+    {
         var comp = go.AddComponent<CustomPinhandler>();
         comp.pinName = name;
         comp.icon = icon;
     }
-    
-    
-    [HarmonyPatch(typeof(Minimap),nameof(Minimap.Awake))] 
+
+
+    [HarmonyPatch(typeof(Minimap), nameof(Minimap.Awake))]
     static class Minimap_Awake_Patch
     {
         static void Postfix(Minimap __instance)

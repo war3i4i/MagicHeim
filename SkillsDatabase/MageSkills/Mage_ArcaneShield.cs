@@ -44,7 +44,7 @@ public sealed class Mage_ArcaneShield : MH_Skill
             $"MIN Lvl Duration", 60f,
             "Duration amount (Min Lvl)");
         _definition.MaxLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Duration", 240f, 
+            $"MAX Lvl Duration", 240f,
             "Duration amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
@@ -54,7 +54,7 @@ public sealed class Mage_ArcaneShield : MH_Skill
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Required Level To Learn",
             12, "Required Level");
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 5,
             "Leveling Step");
@@ -68,8 +68,8 @@ public sealed class Mage_ArcaneShield : MH_Skill
         ArcaneShield_Buff = MagicHeim.asset.LoadAsset<GameObject>("Mage_ArcaneShield_Prefab");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     private static Sprite CachedIcon;
@@ -146,13 +146,17 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedValueDiff = Math.Round(valueDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Ranged Damage Resistance: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
-            builder.AppendLine($"Duration: {Math.Round(nextDuration, 1)} <color=green>({(roundedDurationDiff > 0 ? "+" : "")}{roundedDurationDiff})</color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Ranged Damage Resistance: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine(
+                $"Duration: {Math.Round(nextDuration, 1)} <color=green>({(roundedDurationDiff > 0 ? "+" : "")}{roundedDurationDiff})</color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
+
         return builder.ToString();
     }
 

@@ -82,7 +82,7 @@ public static class ClassAnimationReplace
                 FirstInit = true;
                 MH_Controller = MakeAOC(ReplacementMap, __instance.m_animator.runtimeAnimatorController);
                 VanillaController = MakeAOC(new(), __instance.m_animator.runtimeAnimatorController);
-            } 
+            }
         }
     }
 
@@ -103,23 +103,19 @@ public static class ClassAnimationReplace
             return emote == "sit";
         }
     }*/
-     
-    
-    
-    
+
+
     //wolf animator
-    
-    [HarmonyPatch(typeof(ZNetScene),nameof(ZNetScene.Awake))]
+
+    [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
     {
         static void Postfix(ZNetScene __instance)
         {
             var animation = MagicHeim.asset.LoadAsset<AnimationClip>("MH_Wolf_Jump");
             var wolf = __instance.GetPrefab("Wolf");
-            Dictionary<string, string> test = new(){ {"Jump", "MH_Wolf_Jump"} };
+            Dictionary<string, string> test = new() { { "Jump", "MH_Wolf_Jump" } };
             MH_WolfController = MakeAOC(test, wolf.GetComponentInChildren<Animator>().runtimeAnimatorController);
         }
     }
-    
-    
 }

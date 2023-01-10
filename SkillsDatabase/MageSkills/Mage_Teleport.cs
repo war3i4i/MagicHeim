@@ -34,7 +34,7 @@ public sealed class Mage_Teleport : MH_Skill
             $"MAX Lvl Manacost", 45f,
             "Manacost amount (Max Lvl)");
 
-        _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}", 
+        _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
             $"MIN Lvl Cooldown", 18f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
@@ -53,17 +53,17 @@ public sealed class Mage_Teleport : MH_Skill
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 6,
             "Leveling Step");
-        
+
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_Teleport_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_Teleport.mp4";
         Teleport_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_Teleport");
         Teleport_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Mage_Teleport_Explosion");
         Teleport_RangeShowup = MagicHeim.asset.LoadAsset<GameObject>("Mage_AreaShowup");
         Teleport_TargetPoint = MagicHeim.asset.LoadAsset<GameObject>("Mage_TargetShowup");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
@@ -75,7 +75,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             __instance.m_namedPrefabs[Teleport_Explosion.name.GetStableHashCode()] = Teleport_Explosion;
         }
     }
-    
+
 
     public override void Execute(Func<bool> Cond)
     {
@@ -143,13 +143,14 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         rangeShowup.GetComponent<CircleProjector>().m_radius = maxDistance;
         rangeShowup.GetComponent<CircleProjector>().Update();
         Vector3 target = NON_Vector;
-        while (Cond() && p && !p.IsDead()) 
+        while (Cond() && p && !p.IsDead())
         {
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                cancel = true; 
-                break; 
+                cancel = true;
+                break;
             }
+
             rangeShowup.transform.position = p.transform.position;
             bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out var raycast,
                 _definition.MaxLvlValue.Value + 10f,
@@ -161,8 +162,8 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                 targetPoint.transform.position = target;
             }
             else
-            { 
-                targetPoint.SetActive(false); 
+            {
+                targetPoint.SetActive(false);
                 target = NON_Vector;
             }
 
@@ -187,7 +188,6 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                 p.AddEitr(this.CalculateSkillManacost());
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "<color=cyan>Too far</color>");
             }
-            
         }
 
         UnityEngine.Object.Destroy(rangeShowup);
@@ -197,9 +197,9 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
 
     public override bool CanExecute()
     {
-        return !Utils.InWater(); 
+        return !Utils.InWater();
     }
-    
+
     public override string GetSpecialTags()
     {
         return "<color=red>Precast, Move Position</color>";
@@ -235,12 +235,14 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Distance: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Distance: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }

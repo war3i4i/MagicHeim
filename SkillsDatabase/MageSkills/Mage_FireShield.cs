@@ -59,20 +59,20 @@ public sealed class Mage_FireShield : MH_Skill
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 5,
             "Leveling Step");
-        
+
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_FireShield_Icon");
         CachedIcon = _definition.Icon;
         _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_FireShield.mp4";
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageWave];
         _definition.AnimationTime = 0.8f;
         FireShield_Buff = MagicHeim.asset.LoadAsset<GameObject>("Mage_FireShield_Prefab");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
-    private static Sprite CachedIcon; 
+    private static Sprite CachedIcon;
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
@@ -90,13 +90,14 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         Player p = Player.m_localPlayer;
         var armorBonus = (int)this.CalculateSkillValue();
         var duration = this.CalculateSkillDuration();
-        var players = Player.GetAllPlayers() 
+        var players = Player.GetAllPlayers()
             .Where(x => Vector3.Distance(x.transform.position, p.transform.position) <= 10f).ToList();
         foreach (var player in players)
-        { 
-            if(!Utils.IsPlayerInGroup(player)) continue;
+        {
+            if (!Utils.IsPlayerInGroup(player)) continue;
             player.GetSEMan().AddStatusEffect("Mage_FireShield_Buff", true, armorBonus, duration);
         }
+
         StartCooldown(this.CalculateSkillCooldown());
     }
 
@@ -145,13 +146,17 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedValueDiff = Math.Round(valueDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Elemental Damage Resistance: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
-            builder.AppendLine($"Duration: {Math.Round(nextDuration, 1)} <color=green>({(roundedDurationDiff > 0 ? "+" : "")}{roundedDurationDiff})</color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Elemental Damage Resistance: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine(
+                $"Duration: {Math.Round(nextDuration, 1)} <color=green>({(roundedDurationDiff > 0 ? "+" : "")}{roundedDurationDiff})</color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
+
         return builder.ToString();
     }
 
@@ -193,7 +198,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             hit.m_damage.m_frost *= Mathf.Clamp01(1 - armorBonus / 100f);
         }
     }
-    
+
     public static class Mage_ThunderSock_DB_Patches
     {
         private static void Add_SE(ObjectDB odb)

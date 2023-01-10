@@ -15,7 +15,8 @@ public sealed class Mage_Fireball : MH_Skill
     public Mage_Fireball()
     {
         _definition._InternalName = "Mage_Fireball";
-        _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageProjectile];
+        _definition.Animation =
+            ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageProjectile];
         _definition.Name = "$mh_mage_fireball";
         _definition.Description = "$mh_mage_fireball_desc";
 
@@ -31,7 +32,7 @@ public sealed class Mage_Fireball : MH_Skill
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
             $"MAX Lvl Manacost", 25f,
-            "Manacost amount (Max Lvl)"); 
+            "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
             $"MIN Lvl Cooldown", 12f,
@@ -39,12 +40,12 @@ public sealed class Mage_Fireball : MH_Skill
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
             $"MAX Lvl Cooldown", 6f,
             "Cooldown amount (Max Lvl)");
-        
+
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Max Level", 10,
             "Max Skill Level");
-        
+
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Required Level To Learn",
             1, "Required Level");
@@ -53,17 +54,17 @@ public sealed class Mage_Fireball : MH_Skill
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 6,
             "Leveling Step");
-        
+
         _definition.AnimationTime = 0.5f;
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_Fireball_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_Fireball.mp4";
         Fireball_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_Fireball_Prefab");
-        Fireball_Prefab.AddComponent<EnergyBlastComponent>(); 
+        Fireball_Prefab.AddComponent<EnergyBlastComponent>();
         Fireball_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Mage_Fireball_Explosion");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
@@ -97,7 +98,8 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         private void Explosion(float damage)
         {
             var explosion = Instantiate(Fireball_Explosion, transform.position, Quaternion.identity);
-            Collider[] array = Physics.OverlapSphere(transform.position, 4f, m_rayMaskSolids, QueryTriggerInteraction.UseGlobal);
+            Collider[] array = Physics.OverlapSphere(transform.position, 4f, m_rayMaskSolids,
+                QueryTriggerInteraction.UseGlobal);
             HashSet<GameObject> hashSet = new HashSet<GameObject>();
             foreach (Collider collider in array)
             {
@@ -170,14 +172,15 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         Vector3 rot = (target - p.transform.position).normalized;
         rot.y = 0;
         p.transform.rotation = Quaternion.LookRotation(rot);
-        var go = UnityEngine.Object.Instantiate(Fireball_Prefab, p.transform.position + Vector3.up * 1.2f + GameCamera.instance.transform.forward * 0.5f,
+        var go = UnityEngine.Object.Instantiate(Fireball_Prefab,
+            p.transform.position + Vector3.up * 1.2f + GameCamera.instance.transform.forward * 0.5f,
             GameCamera.instance.transform.rotation);
         var direction = (target - go.transform.position).normalized;
         float damage = this.CalculateSkillValue();
         go.GetComponent<EnergyBlastComponent>().Setup(direction, damage);
-        StartCooldown(cooldown); 
+        StartCooldown(cooldown);
     }
-    
+
 
     public override bool CanExecute()
     {
@@ -220,12 +223,14 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Damage: <color=red>Fire {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=yellow>Blunt {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Damage: <color=red>Fire {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=yellow>Blunt {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }

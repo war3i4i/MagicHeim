@@ -51,7 +51,7 @@ public sealed class Mage_AncientTotem : MH_Skill
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Required Level To Learn",
             26, "Required Level");
- 
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 6,
             "Leveling Step");

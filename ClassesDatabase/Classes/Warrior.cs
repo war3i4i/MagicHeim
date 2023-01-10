@@ -13,7 +13,7 @@ public class Warrior : MH_ClassDefinition
     {
         ResetSkills();
     }
-    
+
 
     protected internal override Color GetColor => Color.red;
 }

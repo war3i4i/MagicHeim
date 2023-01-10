@@ -91,7 +91,7 @@ public sealed class Druid_Heal : MH_Skill
             .ToList();
         foreach (var character in list)
         {
-            if(character.IsPlayer() && !Utils.IsPlayerInGroup((Player)character)) continue;
+            if (character.IsPlayer() && !Utils.IsPlayerInGroup((Player)character)) continue;
             var go = UnityEngine.Object.Instantiate(Prefab, p.transform.position + Vector3.up, Quaternion.identity);
             var kvp = new KeyValuePair<Character, Vector3>(character, go.transform.position);
             data.Add(go, kvp);
@@ -128,7 +128,7 @@ public sealed class Druid_Heal : MH_Skill
 
             yield return null;
         }
-        
+
         foreach (var go in instance)
         {
             if (go.Value.Key)
@@ -175,7 +175,7 @@ public sealed class Druid_Heal : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
             float valueDiff = nextValue - currentValue;
-            
+
             var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
             var roundedValueDiff = Math.Round(valueDiff, 1);

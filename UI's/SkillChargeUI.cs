@@ -34,11 +34,11 @@ public static class SkillChargeUI
             _toFill = go.transform.Find("Fill").GetComponent<Image>(),
             _maxTime = maxTime,
             _time = 0
-        };  
+        };
         _cData._toFill.color = skill.SkillColor;
         _cData._toFill.fillAmount = 0;
         Data[skill.Key] = _cData;
-        if(_routine != null) MagicHeim._thistype.StopCoroutine(_routine);
+        if (_routine != null) MagicHeim._thistype.StopCoroutine(_routine);
         _routine = MagicHeim._thistype.StartCoroutine(UpdateCharges());
     }
 
@@ -56,12 +56,13 @@ public static class SkillChargeUI
                 UnityEngine.Object.Destroy(data.Value._go);
                 toRemove.Add(data.Key);
             }
+
             toRemove.ForEach(x => Data.Remove(x));
             toRemove.Clear();
             yield return null;
-        } 
+        }
     }
- 
+
     private static void Init()
     {
         UI = UnityEngine.Object.Instantiate(MagicHeim.asset.LoadAsset<GameObject>("SkillChargeUI"));
@@ -74,7 +75,7 @@ public static class SkillChargeUI
 
     public static void ShowCharge(MH_Skill skill, float maxTime = 99999999f)
     {
-        if(maxTime <= 0 || Data.ContainsKey(skill.Key)) return;
+        if (maxTime <= 0 || Data.ContainsKey(skill.Key)) return;
         GameObject go = UnityEngine.Object.Instantiate(Element, Content);
         SetupElement(go, skill, maxTime);
     }
@@ -92,10 +93,11 @@ public static class SkillChargeUI
         {
             UnityEngine.Object.Destroy(data.Value._go);
         }
+
         Data.Clear();
     }
-    
-    [HarmonyPatch(typeof(Player),nameof(Player.OnDeath))]
+
+    [HarmonyPatch(typeof(Player), nameof(Player.OnDeath))]
     static class Player_OnDeath_Patch
     {
         static void Postfix()
@@ -103,5 +105,4 @@ public static class SkillChargeUI
             RemoveAllCharges();
         }
     }
-
 }

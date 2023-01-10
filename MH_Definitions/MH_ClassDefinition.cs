@@ -11,11 +11,11 @@ public abstract class MH_ClassDefinition
     }
 
     public string Name { get; }
- 
+
     public string Description { get; }
 
     protected void ResetSkills() => _currentSkillDefinitions.Clear();
-    
+
     private void AddSkill(MH_Skill skill) => _currentSkillDefinitions[skill.Key] = skill.Clone();
 
     protected void AddSkill(string key) =>
@@ -31,13 +31,13 @@ public abstract class MH_ClassDefinition
     protected internal abstract Color GetColor { get; }
     public GameObject OnSelect_VFX { get; set; }
 
- 
+
     protected void SortSkills()
     {
-        var sortedSkills = _currentSkillDefinitions.Values.OrderBy(skill => skill.IsPassive).ThenBy(skill => skill.RequiredLevel).ToList();
+        var sortedSkills = _currentSkillDefinitions.Values.OrderBy(skill => skill.IsPassive)
+            .ThenBy(skill => skill.RequiredLevel).ToList();
         _currentSkillDefinitions.Clear();
         foreach (var skill in sortedSkills)
             _currentSkillDefinitions[skill.Key] = skill;
     }
-    
 }

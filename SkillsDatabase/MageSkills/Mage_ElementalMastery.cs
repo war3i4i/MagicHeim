@@ -14,7 +14,7 @@ public sealed class Mage_ElementalMastery : MH_Skill
         _definition._InternalName = "Mage_Elementalmastery";
         _definition.Name = "$mh_mage_elementalmastery";
         _definition.Description = "$mh_mage_elementalmastery_desc";
- 
+
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
             $"MIN Skill Level Bonus", 10f,
             "Value amount (Min Lvl)");
@@ -29,14 +29,14 @@ public sealed class Mage_ElementalMastery : MH_Skill
             58, "Required Level");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_ElementalMastery");
         CachedKey = _definition.Key;
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 3,
             "Leveling Step");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     private static int CachedKey;
@@ -79,7 +79,6 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                 $"Elemental Magic Skill Level Bonus: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }

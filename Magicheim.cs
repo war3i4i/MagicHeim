@@ -21,7 +21,7 @@ namespace MagicHeim
         public static GameObject MH_Altar;
         public static ConfigFile MH_SyncedConfig;
         private static FileSystemWatcher FSW;
-        
+
         private void Awake()
         {
             Localizer.Load();
@@ -42,7 +42,7 @@ namespace MagicHeim
 
             asset = GetAssetBundle("magicheim");
             SkillsDatabase.SkillsDatabase.Init();
-            ClassesDatabase.ClassesDatabase.Init(); 
+            ClassesDatabase.ClassesDatabase.Init();
             ClassSelectionUI.Init();
             SkillPanelUI.Init();
             SkillBookUI.Init();
@@ -53,7 +53,7 @@ namespace MagicHeim
                 MH_Altar.GetComponent<Piece>().m_icon);
             MH_Altar.AddComponent<MH_Altar>();
             Exp_Configs.Init();
-            Type.GetType("Groups.Initializer, Magicheim").GetMethod("Init").Invoke(null,null);
+            Type.GetType("Groups.Initializer, Magicheim").GetMethod("Init").Invoke(null, null);
 
             FSW = new FileSystemWatcher(BepInEx.Paths.ConfigPath)
             {
@@ -63,20 +63,18 @@ namespace MagicHeim
                 SynchronizingObject = ThreadingHelper.SynchronizingObject
             };
             FSW.Changed += ConfigChanged;
-            
-            new Harmony(GUID).PatchAll();
-            
-        }
-        
-        
 
-        private void ConfigChanged(object sender, FileSystemEventArgs e) 
+            new Harmony(GUID).PatchAll();
+        }
+
+
+        private void ConfigChanged(object sender, FileSystemEventArgs e)
         {
             if (Path.GetFileName(e.Name) != "kg.magicheim_synced.cfg") return;
             MagicHeim_Logger.Logger.Log($"Reloading Config");
             DelayedReload(MH_SyncedConfig);
         }
-        
+
         private static IEnumerator DelayedReloadRoutine(ConfigFile config)
         {
             yield return new WaitForSecondsRealtime(3f);

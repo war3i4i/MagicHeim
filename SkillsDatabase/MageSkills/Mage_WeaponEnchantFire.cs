@@ -73,8 +73,8 @@ public sealed class Mage_WeaponEnchantFire : MH_Skill
         VFX_Fist = MagicHeim.asset.LoadAsset<GameObject>("Mage_WeaponEnchantFire_Fist");
         MH_WeaponEnchants_VFXs.WeaponEnchantVFXs.Add(MH_WeaponEnchant.Type.Fire, VFX_NonRead);
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
@@ -121,7 +121,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         if (weapon != null && Player.m_localPlayer.m_inventory.ContainsItem(weapon))
             Player.m_localPlayer?.EquipItem(weapon);
     }
-    
+
     [HarmonyPatch(typeof(VisEquipment), nameof(VisEquipment.SetLeftHandEquiped))]
     private static class MockLeft
     {
@@ -143,7 +143,9 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             {
                 if (__instance.m_nview.m_zdo.GetInt("mh_mage_weaponenchantLeft") == (int)MH_WeaponEnchant.Type.Fire)
                 {
-                    GameObject go = UnityEngine.Object.Instantiate(Utils.IsMeshReadable(__instance.m_leftItemInstance) ? VFX : VFX_NonRead, __instance.m_leftItemInstance.transform);
+                    GameObject go = UnityEngine.Object.Instantiate(
+                        Utils.IsMeshReadable(__instance.m_leftItemInstance) ? VFX : VFX_NonRead,
+                        __instance.m_leftItemInstance.transform);
                     PSMeshRendererUpdater update = go.GetComponent<PSMeshRendererUpdater>();
                     update.MeshObject = __instance.m_leftItemInstance;
                     update.UpdateMeshEffect();
@@ -230,13 +232,17 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedValueDiff = Math.Round(valueDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Bonus Fire Damage: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
-            builder.AppendLine($"Duration: {Math.Round(nextDuration, 1)} <color=green>({(roundedDurationDiff > 0 ? "+" : "")}{roundedDurationDiff})</color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Bonus Fire Damage: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine(
+                $"Duration: {Math.Round(nextDuration, 1)} <color=green>({(roundedDurationDiff > 0 ? "+" : "")}{roundedDurationDiff})</color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
+
         return builder.ToString();
     }
 

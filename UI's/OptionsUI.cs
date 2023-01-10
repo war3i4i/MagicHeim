@@ -28,7 +28,7 @@ public static class OptionsUI
         toDropColor.ForEach(x => x.color = Color.white);
         toDropColor[index].color = Color.green;
         CurrentChoosenButton = index;
-    } 
+    }
 
     public static void ButtonPressed(KeyCode key)
     {
@@ -40,8 +40,8 @@ public static class OptionsUI
         UpdateValues();
         SkillPanelUI.Status = SkillPanelUI.Change.NeedToChange;
     }
-    
-    
+
+
     public static void UpdateValues()
     {
         if (!LatestUI) return;
@@ -52,6 +52,7 @@ public static class OptionsUI
             LatestUI.transform.Find($"Keys/Key{i + 1}/Background/key").GetComponent<Text>().text =
                 hotkeys[i].Value.ToString().Replace("Alpha", "").Replace("Mouse", "M");
         }
+
         LatestUI.transform.Find($"Keys/Key{11}/Label").GetComponent<Text>().text = $"Open SkillBook";
         LatestUI.transform.Find($"Keys/Key{11}/Background/key").GetComponent<Text>().text =
             hotkeys[10].Value.ToString().Replace("Alpha", "").Replace("Mouse", "M");
@@ -75,7 +76,7 @@ public static class OptionsUI
                     .AddListener(() => SetCurrentActiveHotkeySwap(i1));
                 toDropColor.Add(MH.transform.Find($"Keys/Key{i + 1}/Background").GetComponent<Image>());
             }
-            
+
             MH.transform.Find($"Keys/Key{11}/Label").GetComponent<Text>().text = $"Open Skillbook";
             MH.transform.Find($"Keys/Key{11}/Background/key").GetComponent<Text>().text =
                 hotkeys[10].Value.ToString().Replace("Alpha", "").Replace("Mouse", "M");
@@ -86,7 +87,7 @@ public static class OptionsUI
 
             MH.transform.Find("Ok").GetComponent<Button>().onClick.AddListener(() =>
             {
-                ClassSelectionUI.AUsrc.Play(); 
+                ClassSelectionUI.AUsrc.Play();
                 __instance.OnOk();
             });
             MH.transform.Find("UseAlt/Background/Checkmark").gameObject.SetActive(SkillPanelUI.UseAltHotkey.Value);
@@ -107,7 +108,7 @@ public static class OptionsUI
     static class Menu_Start_Patch
     {
         private static bool firstInit = true;
-        
+
         static void Postfix(FejdStartup __instance)
         {
             if (!firstInit) return;

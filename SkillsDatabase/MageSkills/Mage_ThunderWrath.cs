@@ -48,7 +48,7 @@ public sealed class Mage_ThunderWrath : MH_Skill
             $"Required Level To Learn",
             64, "Required Level");
 
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 1,
             "Leveling Step");
@@ -60,10 +60,10 @@ public sealed class Mage_ThunderWrath : MH_Skill
         Thunder_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_ThunderWrath_Thunder");
         Teleport_RangeShowup = MagicHeim.asset.LoadAsset<GameObject>("Mage_AreaShowup");
         Thunder_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Mage_ThunderWrath_Explosion");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
@@ -129,7 +129,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
 
             count += Time.deltaTime;
             if (count >= 1)
-            { 
+            {
                 if (maxUsages < 5 && !TryUseCost())
                 {
                     break;
@@ -210,17 +210,20 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1); 
+            var roundedValueDiff = Math.Round(valueDiff, 1);
             var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Damage: <color=blue>Lightning {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Damage: <color=blue>Lightning {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
+
         return builder.ToString();
     }
 

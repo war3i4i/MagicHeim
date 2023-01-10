@@ -54,7 +54,7 @@ public sealed class Mage_ThunderShock : MH_Skill
             $"Required Level To Learn",
             62, "Required Level");
 
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 1,
             "Leveling Step");
@@ -66,14 +66,14 @@ public sealed class Mage_ThunderShock : MH_Skill
         _definition.AnimationTime = 0.8f;
         Thunder_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_ThunderShock_Prefab");
         Thunder_Debuff = MagicHeim.asset.LoadAsset<GameObject>("Mage_ThunderShock_Debuff");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     private static Sprite CachedIcon;
- 
+
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
     {
@@ -109,12 +109,12 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                 if (component != null && !hashSet.Contains(gameObject))
                 {
                     hashSet.Add(gameObject);
-                    if (component is Character character) 
+                    if (component is Character character)
                     {
                         if (!Utils.IsEnemy(character)) continue;
                         HitData hit = new();
                         hit.m_skill = Skills.SkillType.ElementalMagic;
-                        hit.m_damage.m_lightning = damage; 
+                        hit.m_damage.m_lightning = damage;
                         hit.m_point = collider.ClosestPoint(target);
                         hit.m_ranged = true;
                         hit.SetAttacker(Player.m_localPlayer);
@@ -123,6 +123,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                     }
                 }
             }
+
             UnityEngine.Object.Instantiate(Thunder_Prefab, target, Quaternion.identity);
             StartCooldown(this.CalculateSkillCooldown());
         }
@@ -157,7 +158,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
 
-        
+
         builder.AppendLine($"Damage: <color=blue>Lightning {Math.Round(currentValue, 1)}</color>");
         builder.AppendLine($"Duration: {Math.Round(currentDuration, 1)}");
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
@@ -174,20 +175,24 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             float manacostDiff = nextManacost - currentManacost;
             float valueDiff = nextValue - currentValue;
 
-            
+
             var roundedDurationDiff = Math.Round(durationDiff, 1);
             var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
             var roundedValueDiff = Math.Round(valueDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Damage: <color=blue>Lightning {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
-            builder.AppendLine($"Duration: {Math.Round(nextDuration, 1)} <color=green>({(roundedDurationDiff > 0 ? "+" : "")}{roundedDurationDiff})</color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Damage: <color=blue>Lightning {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
+            builder.AppendLine(
+                $"Duration: {Math.Round(nextDuration, 1)} <color=green>({(roundedDurationDiff > 0 ? "+" : "")}{roundedDurationDiff})</color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
+
         return builder.ToString();
     }
 

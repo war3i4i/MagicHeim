@@ -41,7 +41,7 @@ public sealed class Mage_FrostBeam : MH_Skill
             "Cooldown amount (Max Lvl)");
 
 
-        _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}", 
+        _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Max Level", 10,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
@@ -52,7 +52,7 @@ public sealed class Mage_FrostBeam : MH_Skill
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 3,
             "Leveling Step");
-        
+
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_FrostBeam_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_FrostBeam.mp4";
         _definition.Animation = "staff_shield";
@@ -60,15 +60,15 @@ public sealed class Mage_FrostBeam : MH_Skill
         Thunder_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_FrostBeam_Beam");
         Thunder_Prepare = MagicHeim.asset.LoadAsset<GameObject>("Mage_FrostBeam_Prefab2");
         Thunder_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Mage_FrostBeam_Explosion");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
-    [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))] 
+    [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
-    {  
+    {
         static void Postfix(ZNetScene __instance)
         {
             __instance.m_namedPrefabs[Thunder_Prefab.name.GetStableHashCode()] = Thunder_Prefab;
@@ -123,17 +123,18 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         count = 0;
         float damage = this.CalculateSkillValue() / 4f;
         float damageCounter = 0;
-        GameObject beam = UnityEngine.Object.Instantiate(Thunder_Prefab, p.m_visEquipment.m_rightHand.transform.position, p.transform.rotation);
+        GameObject beam = UnityEngine.Object.Instantiate(Thunder_Prefab,
+            p.m_visEquipment.m_rightHand.transform.position, p.transform.rotation);
         while (Cond() && count <= maxTime)
         {
             damageCounter += Time.deltaTime;
             if (damageCounter >= 0.25f)
             {
                 if (!TryUseCost())
-                    break; 
+                    break;
             }
 
-            Vector3 target = Utils.GetPerfectEyePosition() + p.GetLookDir() * 100f; 
+            Vector3 target = Utils.GetPerfectEyePosition() + p.GetLookDir() * 100f;
             bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out var raycast,
                 _definition.MaxLvlValue.Value + 50f, Script_Layermask2);
             if (castHit && raycast.collider && Vector3.Distance(raycast.point, p.transform.position) <= 30f)
@@ -146,7 +147,8 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                 if (damageCounter >= 0.25f)
                 {
                     UnityEngine.Object.Instantiate(Thunder_Explosion, target, Quaternion.identity);
-                    Collider[] array = Physics.OverlapSphere(target, 3f, Script_Layermask2, QueryTriggerInteraction.UseGlobal);
+                    Collider[] array = Physics.OverlapSphere(target, 3f, Script_Layermask2,
+                        QueryTriggerInteraction.UseGlobal);
                     HashSet<GameObject> hashSet = new HashSet<GameObject>();
                     foreach (Collider collider in array)
                     {
@@ -233,14 +235,15 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Damage (Per Second): <color=cyan>Frost  {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
+            builder.AppendLine(
+                $"Damage (Per Second): <color=cyan>Frost  {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
             builder.AppendLine(
                 $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
             builder.AppendLine(
                 $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
+
         return builder.ToString();
     }
 

@@ -15,4 +15,4 @@ global using BepInEx.Configuration;
 global using HarmonyLib;
 global using ServerSync;
 global using UnityEngine;
-global using UnityEngine.UI; 
+global using UnityEngine.UI;

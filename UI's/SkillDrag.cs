@@ -35,6 +35,7 @@ public static class SkillDrag
         {
             SkillPanelUI.SetSkill(button, -1);
         }
+
         Routine = MagicHeim._thistype.StartCoroutine(Drag());
     }
 
@@ -43,14 +44,16 @@ public static class SkillDrag
     {
         while (DragObject && Cursor.visible)
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Escape)) 
+            if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Escape))
             {
                 break;
             }
+
             DragObject.transform.Find("Canvas/icon").position = Input.mousePosition;
             LastDragTime = Time.unscaledTime;
             yield return null;
         }
+
         if (DragObject) UnityEngine.Object.DestroyImmediate(DragObject);
     }
 }

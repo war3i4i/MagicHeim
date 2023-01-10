@@ -15,7 +15,7 @@ public static class ConfirmationUI
     private static Action OnConfirm;
 
     public static bool IsVisible() => UI && UI.activeSelf;
-    
+
     private static void Init()
     {
         UI = UnityEngine.Object.Instantiate(MagicHeim.asset.LoadAsset<GameObject>("ConfirmationUI"));
@@ -57,16 +57,16 @@ public static class ConfirmationUI
         RectTransform rect = UI.transform.Find("Canvas/MainTab").GetComponent<RectTransform>();
         float RectY = rect.sizeDelta.y;
         rect.anchoredPosition = new Vector2(0, RectY / 2f);
-    } 
+    }
 
     private static void UpdateCanvases()
-    { 
+    {
         Canvas.ForceUpdateCanvases();
         var sizeFillers = UI.GetComponentsInChildren<ContentSizeFitter>().ToList();
         sizeFillers.ForEach(filter => filter.enabled = false);
         sizeFillers.ForEach(filter => filter.enabled = true);
     }
-    
+
     [HarmonyPatch(typeof(Menu), nameof(Menu.IsVisible))]
     static class Menu_IsVisible_Patch
     {

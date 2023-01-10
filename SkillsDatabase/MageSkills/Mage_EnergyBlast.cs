@@ -11,7 +11,7 @@ namespace MagicHeim.SkillsDatabase.MageSkills;
 public sealed class Mage_EnergyBlast : MH_Skill
 {
     private static GameObject Energyblast_Prefab;
-    private static GameObject Energyblast_Explosion; 
+    private static GameObject Energyblast_Explosion;
 
     public Mage_EnergyBlast()
     {
@@ -21,7 +21,7 @@ public sealed class Mage_EnergyBlast : MH_Skill
         _definition.Description = "$mh_mage_energyblast_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Damage", 65f, 
+            $"MIN Lvl Damage", 65f,
             "Damage amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
             $"MAX Lvl Damage", 115f,
@@ -61,15 +61,15 @@ public sealed class Mage_EnergyBlast : MH_Skill
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Required Level To Learn",
             43, "Required Level");
- 
-        
+
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 3,
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
 
         _definition.AnimationTime = 0.6f;
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_EnergyBlast_Icon");
@@ -92,7 +92,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
 
     private static readonly LayerMask mask = LayerMask.GetMask("Default", "static_solid", "Default_small", "piece",
         "piece_nonsolid", "terrain", "character", "character_net", "character_ghost", "hitbox", "character_noenv",
-        "vehicle"); 
+        "vehicle");
 
 
     public class EnergyBlastComponent : MonoBehaviour
@@ -214,7 +214,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         var go = UnityEngine.Object.Instantiate(Energyblast_Prefab,
             p.transform.position + Vector3.up * 1.2f + GameCamera.instance.transform.forward * 2f,
             GameCamera.instance.transform.rotation);
-        while (Cond() && charge < maxCharge && p && !p.IsDead()) 
+        while (Cond() && charge < maxCharge && p && !p.IsDead())
         {
             var dt = Time.deltaTime;
             charge += dt;
@@ -239,7 +239,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         SkillChargeUI.RemoveCharge(this);
         if (!p || p.IsDead())
         {
-            ZNetScene.instance.Destroy(go); 
+            ZNetScene.instance.Destroy(go);
             yield break;
         }
 
@@ -274,7 +274,8 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
 
-        builder.AppendLine($"Damage: <color=red>Fire {Math.Round(currentValue / 2f, 1)}</color> + <color=blue>Lightning {Math.Round(currentValue / 2f, 1)}</color>");
+        builder.AppendLine(
+            $"Damage: <color=red>Fire {Math.Round(currentValue / 2f, 1)}</color> + <color=blue>Lightning {Math.Round(currentValue / 2f, 1)}</color>");
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
         builder.AppendLine($"Area of Effect: {Math.Round(currentAoe, 1)}");
@@ -300,14 +301,18 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Damage: <color=red>Fire {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=blue>Lightning {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
-            builder.AppendLine($"Area of Effect: {Math.Round(nextAoe, 1)} <color=green>({(roundedAoeDiff > 0 ? "+" : "")}{roundedAoeDiff})</color>");
-            builder.AppendLine($"Charge Time: {Math.Round(nextChargeTime, 1)} <color=green>({(roundedChargeTimeDiff > 0 ? "+" : "")}{roundedChargeTimeDiff})</color>");
+            builder.AppendLine(
+                $"Damage: <color=red>Fire {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=blue>Lightning {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Area of Effect: {Math.Round(nextAoe, 1)} <color=green>({(roundedAoeDiff > 0 ? "+" : "")}{roundedAoeDiff})</color>");
+            builder.AppendLine(
+                $"Charge Time: {Math.Round(nextChargeTime, 1)} <color=green>({(roundedChargeTimeDiff > 0 ? "+" : "")}{roundedChargeTimeDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }

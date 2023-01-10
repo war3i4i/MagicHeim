@@ -62,7 +62,7 @@ public sealed class Mage_RandomStrike : MH_Skill
             $"Required Level To Learn",
             33, "Required Level");
 
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 4,
             "Leveling Step");
@@ -78,10 +78,10 @@ public sealed class Mage_RandomStrike : MH_Skill
         Ice_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Mage_RandomStrike_IceExplosion");
         Lightning_Preload = MagicHeim.asset.LoadAsset<GameObject>("Mage_RandomStrike_LightningPreload");
         Lightning_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Mage_RandomStrike_LightningExplosion");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
@@ -113,18 +113,18 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
 
     private IEnumerator Charge(Func<bool> Cond)
     {
-        bool cancel = false; 
+        bool cancel = false;
         SkillChargeUI.ShowCharge(this);
         Player p = Player.m_localPlayer;
         float maxDistance = 40f;
         GameObject rangeShowup =
-            UnityEngine.Object.Instantiate(Teleport_RangeShowup, p.transform.position, Quaternion.identity); 
+            UnityEngine.Object.Instantiate(Teleport_RangeShowup, p.transform.position, Quaternion.identity);
         GameObject targetPoint =
             UnityEngine.Object.Instantiate(Teleport_TargetPoint, p.transform.position, Quaternion.identity);
         rangeShowup.GetComponent<CircleProjector>().m_radius = maxDistance;
-        rangeShowup.GetComponent<CircleProjector>().Update(); 
+        rangeShowup.GetComponent<CircleProjector>().Update();
         Vector3 target = NON_Vector;
-        while (Cond() && p && !p.IsDead()) 
+        while (Cond() && p && !p.IsDead())
         {
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
@@ -159,7 +159,8 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             rot.y = 0;
             p.transform.rotation = Quaternion.LookRotation(rot);
             StartCooldown(this.CalculateSkillCooldown());
-            p.m_zanim.SetTrigger(ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon]);
+            p.m_zanim.SetTrigger(
+                ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon]);
             p.StartCoroutine(DelayExplosion(target));
         }
         else
@@ -212,7 +213,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             {
                 hashSet.Add(gameObject);
                 if (component is Character character)
-                { 
+                {
                     if (!Utils.IsEnemy(character)) continue;
                     HitData hit = new();
                     hit.m_skill = Skills.SkillType.ElementalMagic;
@@ -220,7 +221,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                     if (random == RandomType.Fire)
                         hit.m_damage.m_fire = damage / 2f;
                     else if (random == RandomType.Ice)
-                        hit.m_damage.m_frost = damage / 2f; 
+                        hit.m_damage.m_frost = damage / 2f;
                     else if (random == RandomType.Lightning)
                         hit.m_damage.m_lightning = damage / 2f;
                     hit.m_point = collider.ClosestPoint(pos);
@@ -271,14 +272,16 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedValueDiff = Math.Round(valueDiff, 1);
             var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
- 
+
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Damage (Random Element): {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Damage (Random Element): {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }

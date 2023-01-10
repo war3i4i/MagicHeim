@@ -30,18 +30,18 @@ public sealed class Mage_ManaFlow : MH_Skill
         Level = 1;
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_ManaFlow");
         CachedKey = _definition.Key;
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 10,
             "Leveling Step");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     private static int CachedKey;
-    
+
     public override void Execute(Func<bool> Cond)
     {
     }
@@ -76,29 +76,29 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedValueDiff = Math.Round(valueDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Max Eitr Bonus: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine(
+                $"Max Eitr Bonus: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }
 
-    
+
     //action
-    [HarmonyPatch(typeof(Player),nameof(Player.GetTotalFoodValue))]
+    [HarmonyPatch(typeof(Player), nameof(Player.GetTotalFoodValue))]
     static class Player_GetTotalFoodValue_Patch
     {
         static void Postfix(ref float eitr)
         {
-            if(ClassManager.CurrentClass == Class.None) return;
+            if (ClassManager.CurrentClass == Class.None) return;
             var skill = ClassManager.CurrentClassDef.GetSkill(CachedKey);
-            if(skill == null || skill.Level <= 0) return;
+            if (skill == null || skill.Level <= 0) return;
             eitr += skill.Value;
         }
     }
-    
-    
+
+
     public override Class PreferableClass => Class.Mage;
     public override bool IsPassive => true;
     public override CostType _costType => CostType.None;

@@ -15,7 +15,8 @@ public sealed class Mage_Lightningball : MH_Skill
     public Mage_Lightningball()
     {
         _definition._InternalName = "Mage_Lightningball";
-        _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageProjectile];
+        _definition.Animation =
+            ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageProjectile];
         _definition.Name = "$mh_mage_lightningball";
         _definition.Description = "$mh_mage_lightningball_desc";
 
@@ -31,7 +32,7 @@ public sealed class Mage_Lightningball : MH_Skill
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
             $"MAX Lvl Manacost", 25f,
-            "Manacost amount (Max Lvl)"); 
+            "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
             $"MIN Lvl Cooldown", 12f,
@@ -48,22 +49,22 @@ public sealed class Mage_Lightningball : MH_Skill
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Required Level To Learn",
             4, "Required Level");
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 6,
             "Leveling Step");
-        
-        
+
+
         _definition.AnimationTime = 0.5f;
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_Lightningball_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_Lightningball.mp4";
         Lightningball_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_Lightningball_Prefab");
         Lightningball_Prefab.AddComponent<EnergyBlastComponent>();
         Lightningball_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Mage_Lightningball_Explosion");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
@@ -125,7 +126,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
 
         private IEnumerator Move(Vector3 dir, float damage)
         {
-            bool didhit = false; 
+            bool didhit = false;
             float speed = 40f;
             float count = 0;
             while (count <= 1f)
@@ -230,7 +231,6 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                 $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }

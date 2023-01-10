@@ -40,7 +40,7 @@ public sealed class Druid_Wolf : MH_Skill
             $"Required Level To Learn",
             75, "Required Level");
 
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 1,
             "Leveling Step");
@@ -78,10 +78,9 @@ public sealed class Druid_Wolf : MH_Skill
         else
         {
             Toggled = false;
-            
         }
     }
-    
+
     private IEnumerator ManaDrain()
     {
         Toggled = true;
@@ -102,8 +101,9 @@ public sealed class Druid_Wolf : MH_Skill
                 pkg.Write("");
                 ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, "MH_Druid_WolfForm_RPC", pkg);
                 UnityEngine.Object.Instantiate(Wolf_Explosion, p.transform.position, Quaternion.identity);
-                yield break; 
+                yield break;
             }
+
             p.UseEitr(useMana);
             yield return null;
         }
@@ -168,7 +168,8 @@ public sealed class Druid_Wolf : MH_Skill
         if (p.m_nview.IsOwner()) p.m_nview.m_zdo.Set("MH_Druid_WolfForm", changedModel);
         GameObject gameObject = ZNetScene.instance.GetPrefab(changedModel);
         if (!gameObject || !gameObject.GetComponent<Character>()) return;
-        p.m_visual = UnityEngine.Object.Instantiate(gameObject.GetComponentInChildren<Animator>().gameObject, p.transform);
+        p.m_visual =
+            UnityEngine.Object.Instantiate(gameObject.GetComponentInChildren<Animator>().gameObject, p.transform);
         p.m_visual.layer = LayerMask.NameToLayer("character");
         p.m_visual.transform.SetSiblingIndex(0);
         p.m_visual.transform.name = "KG_transform_DruidWolf";
@@ -195,7 +196,7 @@ public sealed class Druid_Wolf : MH_Skill
     public class SE_Druid_WolfForm : StatusEffect
     {
         public SE_Druid_WolfForm()
-        { 
+        {
             name = "Druid_WolfForm";
             m_tooltip = "Transform Into Wolf";
             m_icon = CachedIcon;
@@ -203,7 +204,7 @@ public sealed class Druid_Wolf : MH_Skill
             m_ttl = 0;
         }
 
-        public override void ModifySpeed(float baseSpeed, ref float speed) 
+        public override void ModifySpeed(float baseSpeed, ref float speed)
         {
             speed *= 1.5f;
         }
@@ -222,7 +223,8 @@ public sealed class Druid_Wolf : MH_Skill
         {
             if (IsDone())
             {
-                UnityEngine.Object.Instantiate(Wolf_Explosion, this.m_character.transform.position + Vector3.up, Quaternion.identity);
+                UnityEngine.Object.Instantiate(Wolf_Explosion, this.m_character.transform.position + Vector3.up,
+                    Quaternion.identity);
                 ZDOID zdoID = Player.m_localPlayer.GetZDOID();
                 ZPackage pkg = new();
                 pkg.Write(zdoID);
@@ -233,7 +235,7 @@ public sealed class Druid_Wolf : MH_Skill
     }
 
     public static class Druid_Wolf_DB_Patches
-    { 
+    {
         private static void Add_SE(ObjectDB odb)
         {
             if (ObjectDB.instance == null || ObjectDB.instance.m_items.Count == 0 ||
@@ -261,7 +263,7 @@ public sealed class Druid_Wolf : MH_Skill
             }
         }
     }
-    
+
     [HarmonyPatch(typeof(Player), nameof(Player.InMinorAction))]
     static class Player_InMinorAction_Patch
     {
@@ -270,7 +272,7 @@ public sealed class Druid_Wolf : MH_Skill
             return __instance.m_animator.gameObject.name != "KG_transform_DruidWolf";
         }
     }
-    
+
     [HarmonyPatch(typeof(Player), nameof(Player.InMinorActionSlowdown))]
     static class Player_InMinorAction_Patch2
     {

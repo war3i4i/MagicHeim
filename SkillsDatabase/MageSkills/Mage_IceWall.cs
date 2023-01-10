@@ -47,21 +47,21 @@ public sealed class Mage_IceWall : MH_Skill
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Required Level To Learn",
             46, "Required Level");
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 3,
             "Leveling Step");
-        
+
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_IceWall_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_IceWall.mp4";
         Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_IceWall_Prefab");
         RangeShowup = MagicHeim.asset.LoadAsset<GameObject>("Mage_IceWall_AreaShowup");
         TargetPoint = MagicHeim.asset.LoadAsset<GameObject>("Mage_IceWall_TargetShowup");
-        
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
@@ -118,7 +118,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                 targetPoint.transform.position = target;
 
                 Quaternion setRotation = Quaternion.LookRotation(p.GetLookDir());
- 
+
                 targetPoint.transform.rotation = setRotation;
 
                 //rotate balls
@@ -126,12 +126,13 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
                 {
                     if (child.name != "Ball") continue;
                     Vector3 ballPos = child.position;
-                    ZoneSystem.instance.FindFloor(new Vector3(ballPos.x, target.y, ballPos.z) + Vector3.up * 3f, out var height);
+                    ZoneSystem.instance.FindFloor(new Vector3(ballPos.x, target.y, ballPos.z) + Vector3.up * 3f,
+                        out var height);
                     child.position = new Vector3(ballPos.x, height, ballPos.z);
                 }
             }
             else
-            { 
+            {
                 targetPoint.SetActive(false);
                 target = NON_Vector;
             }
@@ -143,20 +144,20 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         if (targetPoint && !cancel && p && !p.IsDead() && target != NON_Vector &&
             global::Utils.DistanceXZ(target, p.transform.position) <= maxDistance)
         {
-            Vector3 rot = (target - p.transform.position).normalized; 
-            rot.y = 0;  
-            p.transform.rotation = Quaternion.LookRotation(rot);   
-            StartCooldown(this.CalculateSkillCooldown());   
-            p.m_zanim.SetTrigger(ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon]);
-            foreach (Transform child in targetPoint.transform.Find("Scaler"))  
+            Vector3 rot = (target - p.transform.position).normalized;
+            rot.y = 0;
+            p.transform.rotation = Quaternion.LookRotation(rot);
+            StartCooldown(this.CalculateSkillCooldown());
+            p.m_zanim.SetTrigger(
+                ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon]);
+            foreach (Transform child in targetPoint.transform.Find("Scaler"))
             {
                 if (child.name != "Ball") continue;
                 Vector3 ballPos = child.position;
-                if(ballPos.y < 30) continue;
+                if (ballPos.y < 30) continue;
                 var wallRot = p.transform.rotation;
                 wallRot.y += UnityEngine.Random.Range(-0.5f, 0.5f);
                 var wall = UnityEngine.Object.Instantiate(Prefab, ballPos, wallRot);
-                
             }
         }
         else
@@ -210,12 +211,14 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Distance: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Distance: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }

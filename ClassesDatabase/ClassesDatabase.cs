@@ -18,7 +18,7 @@ public static class ClassesDatabase
         GLOBAL_ClassesDefinitions[@class] = classDefinition;
     }
 
- 
+
     public static void Init()
     {
         AddClass(Class.Warrior, new Warrior("Warrior", "Warrior Description"));
@@ -27,15 +27,16 @@ public static class ClassesDatabase
         //AddClass(Class.Assassin, new Assassin("Assassin", "Assassin Description"));
         AddClass(Class.Druid, new Druid("Druid", "Druid Description"));
     }
-    
-    [HarmonyPatch(typeof(ZNetScene),nameof(ZNetScene.Awake))]
+
+    [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
     {
-        static void Postfix(ZNetScene __instance) 
+        static void Postfix(ZNetScene __instance)
         {
             foreach (var classesDefinition in GLOBAL_ClassesDefinitions)
             {
-                __instance.m_namedPrefabs[classesDefinition.Value.OnSelect_VFX.name.GetStableHashCode()] = classesDefinition.Value.OnSelect_VFX;
+                __instance.m_namedPrefabs[classesDefinition.Value.OnSelect_VFX.name.GetStableHashCode()] =
+                    classesDefinition.Value.OnSelect_VFX;
             }
         }
     }

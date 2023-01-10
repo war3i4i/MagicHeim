@@ -62,14 +62,14 @@ public sealed class Mage_Meteor : MH_Skill
             $"Required Level To Learn",
             56, "Required Level");
 
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 2,
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
 
         _definition.AnimationTime = 0.6f;
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_Meteor_Icon");
@@ -103,7 +103,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
 
 
         public void Setup(Vector3 dir, float aoe, float damage)
-        {   
+        {
             StartCoroutine(Move(dir, aoe, damage));
         }
 
@@ -197,7 +197,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
 
     private static readonly int JumpMask =
         LayerMask.GetMask("terrain", "Default", "piece", "piece_nonsolid", "static_solid");
-    
+
     private IEnumerator Charge(Func<bool> Cond)
     {
         float charge = 0f;
@@ -219,6 +219,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         {
             target = Utils.GetPerfectEyePosition() + p.m_eye.transform.forward * 100f;
         }
+
         Vector3 rot = (target - p.transform.position).normalized;
         rot.y = 0;
         p.transform.rotation = Quaternion.LookRotation(rot);
@@ -227,7 +228,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             GameCamera.instance.transform.rotation);
         while (Cond() && charge < maxCharge && p && !p.IsDead())
         {
-            var dt = Time.deltaTime; 
+            var dt = Time.deltaTime;
             charge += dt;
             go.transform.localScale += Vector3.one * scaleAmount * Time.deltaTime;
             castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out raycast, 100f, JumpMask);
@@ -239,6 +240,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             {
                 target = Utils.GetPerfectEyePosition() + p.m_eye.transform.forward * 100f;
             }
+
             rot = (target - p.transform.position).normalized;
             rot.y = 0;
             p.transform.rotation = Quaternion.LookRotation(rot);
@@ -247,13 +249,13 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             animationTime -= dt;
             if (animationTime <= 0f)
             {
-                animationTime = _definition.AnimationTime * 1.1f; 
+                animationTime = _definition.AnimationTime * 1.1f;
                 SkillCastHelper.PlayAnimation(this);
             }
 
             yield return null;
         }
- 
+
         StartCooldown(cooldown);
         SkillChargeUI.RemoveCharge(this);
         if (!p || p.IsDead())
@@ -262,7 +264,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             yield break;
         }
 
-        var direction = (target - go.transform.position).normalized; 
+        var direction = (target - go.transform.position).normalized;
         float aoe = this.CalculateSkillAoe().CalculateValueCharged(maxCharge, charge, 25);
         float damage = this.CalculateSkillValue().CalculateValueCharged(maxCharge, charge, 25);
         go.GetComponent<MeteorComponent>().Setup(direction, aoe, damage);
@@ -291,9 +293,10 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         float currentAoe = this.CalculateSkillAoe(forLevel);
         float currentChargeTime = this.CalculateSkillChargeTime(forLevel);
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
-        float currentManacost = this.CalculateSkillManacost(forLevel); 
+        float currentManacost = this.CalculateSkillManacost(forLevel);
 
-        builder.AppendLine($"Damage: <color=yellow>Blunt {Math.Round(currentValue * 0.8f, 1)}</color> + <color=red>Fire {Math.Round(currentValue * 0.2f, 1)}</color>");
+        builder.AppendLine(
+            $"Damage: <color=yellow>Blunt {Math.Round(currentValue * 0.8f, 1)}</color> + <color=red>Fire {Math.Round(currentValue * 0.2f, 1)}</color>");
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
         builder.AppendLine($"Area of Effect: {Math.Round(currentAoe, 1)}");
@@ -319,14 +322,18 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Damage: <color=yellow>Blunt {Math.Round(nextValue * 0.8f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=red>Fire {Math.Round(nextValue * 0.2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
-            builder.AppendLine($"Area of Effect: {Math.Round(nextAoe, 1)} <color=green>({(roundedAoeDiff > 0 ? "+" : "")}{roundedAoeDiff})</color>");
-            builder.AppendLine($"Charge Time: {Math.Round(nextChargeTime, 1)} <color=green>({(roundedChargeTimeDiff > 0 ? "+" : "")}{roundedChargeTimeDiff})</color>");
+            builder.AppendLine(
+                $"Damage: <color=yellow>Blunt {Math.Round(nextValue * 0.8f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=red>Fire {Math.Round(nextValue * 0.2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Area of Effect: {Math.Round(nextAoe, 1)} <color=green>({(roundedAoeDiff > 0 ? "+" : "")}{roundedAoeDiff})</color>");
+            builder.AppendLine(
+                $"Charge Time: {Math.Round(nextChargeTime, 1)} <color=green>({(roundedChargeTimeDiff > 0 ? "+" : "")}{roundedChargeTimeDiff})</color>");
         }
 
-        
 
         return builder.ToString();
     }

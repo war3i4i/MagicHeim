@@ -18,7 +18,7 @@ public static class ClassSelectionUI
     private static Class SelectedClass;
     private static bool IsMale => Player.m_localPlayer.m_modelIndex == 0;
     private static Transform MaleClasses;
-    private static Transform FemaleClasses; 
+    private static Transform FemaleClasses;
     public static AudioSource AUsrc;
     private static Transform LOADING;
     private static readonly List<Transform> ResetColors = new List<Transform>();
@@ -119,9 +119,10 @@ public static class ClassSelectionUI
         var player = Player.m_localPlayer;
         if (!player) return;
         ClassManager.SetClass(SelectedClass);
-        UnityEngine.Object.Instantiate(ClassesDatabase.ClassesDatabase.GetClassDefinition(SelectedClass).OnSelect_VFX, Player.m_localPlayer.transform.position, Quaternion.identity);
+        UnityEngine.Object.Instantiate(ClassesDatabase.ClassesDatabase.GetClassDefinition(SelectedClass).OnSelect_VFX,
+            Player.m_localPlayer.transform.position, Quaternion.identity);
         Hide();
-    } 
+    }
 
     private static void Default()
     {
@@ -161,7 +162,8 @@ public static class ClassSelectionUI
         {
             FemaleClasses.gameObject.SetActive(true);
         }
-        if(classDefinition != ClassManager.CurrentClassDef) classDefinition.Init();
+
+        if (classDefinition != ClassManager.CurrentClassDef) classDefinition.Init();
         SelectedClass = @class;
         ClassDescription.gameObject.SetActive(true);
         ClassName.gameObject.SetActive(true);

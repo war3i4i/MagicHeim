@@ -15,7 +15,8 @@ public sealed class Mage_Frostball : MH_Skill
     public Mage_Frostball()
     {
         _definition._InternalName = "Mage_Frostball";
-        _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageProjectile];
+        _definition.Animation =
+            ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageProjectile];
         _definition.Name = "$mh_mage_frostball";
         _definition.Description = "$mh_mage_frostball_desc";
 
@@ -31,7 +32,7 @@ public sealed class Mage_Frostball : MH_Skill
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
             $"MAX Lvl Manacost", 25f,
-            "Manacost amount (Max Lvl)"); 
+            "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
             $"MIN Lvl Cooldown", 12f,
@@ -48,7 +49,7 @@ public sealed class Mage_Frostball : MH_Skill
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Required Level To Learn",
             2, "Required Level");
-        
+
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 6,
             "Leveling Step");
@@ -59,12 +60,11 @@ public sealed class Mage_Frostball : MH_Skill
         Frostball_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_Frostball_Prefab");
         Frostball_Prefab.AddComponent<EnergyBlastComponent>();
         Frostball_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Mage_Frostball_Explosion");
-        
-  
-        
+
+
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
-this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
-this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
+        this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
+        this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
@@ -98,7 +98,7 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         private void Explosion(float damage)
         {
             var explosion = Instantiate(Frostball_Explosion, transform.position, Quaternion.identity);
-            Collider[] array = Physics.OverlapSphere(transform.position, 4f, m_rayMaskSolids, 
+            Collider[] array = Physics.OverlapSphere(transform.position, 4f, m_rayMaskSolids,
                 QueryTriggerInteraction.UseGlobal);
             HashSet<GameObject> hashSet = new HashSet<GameObject>();
             foreach (Collider collider in array)
@@ -203,7 +203,8 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
 
-        builder.AppendLine($"Damage: <color=cyan>Frost {Math.Round(currentValue / 2f, 1)}</color> + <color=yellow>Blunt {Math.Round(currentValue / 2f, 1)}</color>");
+        builder.AppendLine(
+            $"Damage: <color=cyan>Frost {Math.Round(currentValue / 2f, 1)}</color> + <color=yellow>Blunt {Math.Round(currentValue / 2f, 1)}</color>");
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
@@ -221,13 +222,15 @@ this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Damage: <color=cyan>Frost {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=yellow>Blunt {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
-            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine(
+                $"Damage: <color=cyan>Frost {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=yellow>Blunt {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
+            builder.AppendLine(
+                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine(
+                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
-        
- 
+
         return builder.ToString();
     }
 

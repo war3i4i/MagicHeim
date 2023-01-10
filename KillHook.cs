@@ -78,7 +78,7 @@ namespace MagicHeim.KillHooks
 
             private static void OnExpGain(long sender, ZPackage pkg)
             {
-                if(ClassManager.CurrentClass == Class.None) return;
+                if (ClassManager.CurrentClass == Class.None) return;
                 int exp = pkg.ReadInt();
                 Vector3 pos = pkg.ReadVector3();
                 if (!Player.m_localPlayer) return;
