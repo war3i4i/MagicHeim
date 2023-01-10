@@ -1,0 +1,6 @@
+﻿bin
+obj
+/packages
+<ProjectName>.sln.DotSettings.user
+.idea
+.vs
