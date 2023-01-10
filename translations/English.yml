@@ -1,0 +1,92 @@
+mh_altar : <color=cyan>Magic</color><color=yellow>Heim</color> Altar
+mh_altar_desc : A magical altar that allows you to change your class
+mh_acceptclass : Change Class
+mh_mage_energyblast : Energy Blast
+mh_mage_energyblast_desc : Shoots a bolt of energy at the target location dealing massive AoE damage
+mh_mage_teleport : Teleport
+mh_mage_teleport_desc : Teleports you to the target location
+mh_mage_manaflow: Mana Flow
+mh_mage_manaflow_desc: Increases your max Eitr
+mh_mage_elementalknowledge : Elemental Knowledge
+mh_mage_elementalknowledge_desc : Increases Elemental Magic damage dealt
+mh_mage_eitrcontrol : Eitr Control
+mh_mage_eitrcontrol_desc : Increases your Eitr Regen
+mh_mage_elementalresistance : Elemental Resistance
+mh_mage_elementalresistance_desc : Increases your Elemental Damage resistance
+mh_mage_masteroftime: Master of Time
+mh_mage_masteroftime_desc: Every skill has a % chance to reset its cooldown
+mh_mage_elementaltimescale: Elemental Timescale
+mh_mage_elementaltimescale_desc: Decreases the cooldown of all skills by %
+mh_mage_eitreconomy: Eitr Economy
+mh_mage_eitreconomy_desc: Decreases the cost of all skills by %
+mh_mage_elementalvampirism: Elemental Vampirism
+mh_mage_elementalvampirism_desc: Heals you for % of the damage dealt from Elemental Magic skills
+mh_mage_bluntmastery: Blunt Mastery
+mh_mage_bluntmastery_desc: Increases the Clubs skill level
+mh_mage_elementalmastery: Elemental Mastery
+mh_mage_elementalmastery_desc: Increases the Elemental Magic skill level 
+mh_mage_thunderwrath: Thunder Wrath
+mh_mage_thunderwrath_desc: Calls lightning to strike the target location dealing massive AoE damage
+mh_mage_thundershock: Thunder Shock
+mh_mage_thundershock_desc: Blinds enemies in target location for few seconds. Blinded enemies do not deal damage
+mh_mage_frostbeam: Frost Beam
+mh_mage_frostbeam_desc: Shoots a beam of frost at the target location dealing massive damage
+mh_mage_fireball: Fireball
+mh_mage_fireball_desc: Shoots a fireball at the target location dealing massive AoE damage
+mh_mage_frostball: Frost Shard
+mh_mage_frostball_desc: Shoots a frozen shard at the target location dealing massive AoE damage
+mh_mage_lightningball: Lightning Strike
+mh_mage_lightningball_desc: Shoots a bolt of lightning at the target location dealing massive AoE damage
+mh_mage_waterwalk: Water Walk
+mh_mage_waterwalk_desc: Allows you to walk on water
+mh_mage_icewall: Ice Wall
+mh_mage_icewall_desc: Creates a wall of ice at the target location  
+mh_mage_iceshield: Ice Shield
+mh_mage_iceshield_desc: Buff that increases armor of all nearby players
+mh_mage_eitrsphere: Eitr Sphere
+mh_mage_eitrsphere_desc: Creates a sphere that restores Eitr of all players inside
+mh_mage_randomstrike: Random Strike
+mh_mage_randomstrike_desc: Summons a random elemental strike at the target location
+mh_mage_arcanespikes: Arcane Spikes
+mh_mage_arcanespikes_desc: Summons an arcane spikes in front of you dealing damage to enemies and staggering them
+mh_druid_eagle : Wtf is this skill doing here?
+mh_druid_eagle_desc : Lol
+mh_mage_portal : Portal
+mh_mage_portal_desc : Creates two portals. One at your location and one at the target location. Player can teleport between them
+mh_mage_blackhole : Black Hole
+mh_mage_blackhole_desc : Creates a black hole at the target location that pulls enemies towards it dealing damage
+mh_mage_weaponenchantfire : Weapon Fire Enchant
+mh_mage_weaponenchantfire_desc : Enchants your weapon with fire damage
+mh_mage_weaponenchantfrost : Weapon Frost Enchant
+mh_mage_weaponenchantfrost_desc : Enchants your weapon with frost damage 
+mh_mage_weaponenchantlightning : Weapon Lightning Enchant
+mh_mage_weaponenchantlightning_desc : Enchants your weapon with lightning damage
+mh_mage_meteor : Meteor  
+mh_mage_meteor_desc : Summons a meteor that flies to the target location and explodes dealing massive AoE damage
+mh_mage_fireshield : Fire Shield
+mh_mage_fireshield_desc : Buff that increases elemental resistance of all nearby players 
+mh_mage_energystorm : Energy Storm
+mh_mage_energystorm_desc : Summons a storm of energy in target area that deals massive AoE damage 
+mh_mage_waveofflame : Wave of Flame
+mh_mage_waveofflame_desc : Summons a wave of flame dealing damage to all nearby targets staggering them
+mh_mage_arcaneshield : Arcane Shield
+mh_mage_arcaneshield_desc : Buff that increases ranged attacks resistance
+mh_mage_ancienttotem : Ancient Totem
+mh_mage_ancienttotem_desc : Summons an ancient totem that increases all nearby enemies taken Elemental Magic damage
+mh_tome_blackforest : Black Forest Experience Tome
+mh_tome_meadows : Meadows Experience Tome
+mh_tome_swamps : Swamps Experience Tome
+mh_tome_mountains : Mountains Experience Tome
+mh_tome_plains : Plains Experience Tome
+mh_tome_mistlands : Mistlands Experience Tome
+mh_druid_wolf : Wolf Form
+mh_druid_wolf_desc : Transforms you into a wolf
+mh_druid_fish: Fish Form
+mh_druid_fish_desc: Transforms you into a fish
+mh_druid_manaflow: Mana Flow
+mh_druid_manaflow_desc: Increases your max Eitr
+mh_mage_weaponenchant_no_weapon : You need to have a weapon equipped to enchant it
+mh_druid_heal: Heal
+mh_druid_heal_desc: Heals you and nearby players for a small amount of health
+mh_druid_naturebuff : Nature Buff
+mh_druid_naturebuff_desc : Buff that increases your movement speed and decreases stamina usage for movement
