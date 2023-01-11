@@ -27,19 +27,19 @@ public static class MagicTomes
                 "EXP Gain for the Black Forest Tome"));
 
         MagicTomeDictionary.Add(new Item(MagicHeim.asset.LoadAsset<GameObject>("MH_Tome_Swamps")).Prefab,
-            MagicHeim.config("Magic Tomes", "Swamps", 300,
+            MagicHeim.config("Magic Tomes", "Swamps", 400,
                 "EXP Gain for the Swamp Tome"));
 
         MagicTomeDictionary.Add(new Item(MagicHeim.asset.LoadAsset<GameObject>("MH_Tome_Mountains")).Prefab,
-            MagicHeim.config("Magic Tomes", "Mountains", 600,
+            MagicHeim.config("Magic Tomes", "Mountains", 800,
                 "EXP Gain for the Mountains Tome"));
 
         MagicTomeDictionary.Add(new Item(MagicHeim.asset.LoadAsset<GameObject>("MH_Tome_Plains")).Prefab,
-            MagicHeim.config("Magic Tomes", "Plains", 1000,
+            MagicHeim.config("Magic Tomes", "Plains", 1500,
                 "EXP Gain for the Plains Tome"));
-
+ 
         MagicTomeDictionary.Add(new Item(MagicHeim.asset.LoadAsset<GameObject>("MH_Tome_Mistlands")).Prefab,
-            MagicHeim.config("Magic Tomes", "Mistlands", 1500,
+            MagicHeim.config("Magic Tomes", "Mistlands", 3000,
                 "EXP Gain for the Mistlands Tome"));
 
         DropChance = MagicHeim.config("Magic Tomes", "Drop Chance", 0.5f,

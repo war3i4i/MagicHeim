@@ -250,12 +250,12 @@ public static class SkillBookUI
         }
 
         UpdateCanvases();
-    }
+    } 
 
 
     public static void Show()
     {
-        IsAltarClose = Player.m_debugMode || MH_Altar.IsClose(Player.m_localPlayer.transform.position);
+        IsAltarClose = true;//Player.m_debugMode || MH_Altar.IsClose(Player.m_localPlayer.transform.position);
         if (ClassManager.CurrentClassDef == null)
         {
             MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "You don't have a class yet");

@@ -22,7 +22,7 @@ public static class ClassesDatabase
     public static void Init()
     {
         AddClass(Class.Warrior, new Warrior("Warrior", "Warrior Description"));
-        AddClass(Class.Mage, new Mage("Mage", "Mage Description"));
+        AddClass(Class.Mage, new Mage("Mage", "$mh_mageclass_description"));
         //AddClass(Class.Archer, new Archer("Archer", "Archer Description"));
         //AddClass(Class.Assassin, new Assassin("Assassin", "Assassin Description"));
         AddClass(Class.Druid, new Druid("Druid", "Druid Description"));

@@ -173,7 +173,7 @@ public static class ClassSelectionUI
         ClassName.text = classDefinition.Name;
         ClassName.GetComponent<Text>().color = classDefinition.GetColor;
         ClassIcon.sprite = toActivate.Find("Img").GetComponent<Image>().sprite;
-        ClassDescription.text = classDefinition.Description;
+        ClassDescription.text = Localization.instance.Localize(classDefinition.Description);
         var skills = classDefinition.GetSkills();
         foreach (var skill in skills)
         {

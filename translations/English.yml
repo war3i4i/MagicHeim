@@ -84,9 +84,10 @@ mh_druid_wolf_desc: Transforms you into a wolf
 mh_druid_fish: Fish Form
 mh_druid_fish_desc: Transforms you into a fish
 mh_druid_manaflow: Mana Flow
-mh_druid_manaflow_desc: Increases your max Eitr
+mh_druid_manaflow_desc: Increases your max Eitr 
 mh_mage_weaponenchant_no_weapon: You need to have a weapon equipped to enchant it
 mh_druid_heal: Heal
 mh_druid_heal_desc: Heals you and nearby players for a small amount of health
 mh_druid_naturebuff: Nature Buff
 mh_druid_naturebuff_desc: Buff that increases your movement speed and decreases stamina usage for movement
+mh_mageclass_description : "Mage is a class that uses elemental magic to deal damage to enemies.\nMage can also enchant his weapon with elemental damage.\nPretty mobile in combat but requires preparations ( Few skills need to be charged ).\nIrreplaceable in group fights.\nHas a lot of Area damage and can handle big group of enemies at once."
