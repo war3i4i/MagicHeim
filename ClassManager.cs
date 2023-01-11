@@ -225,6 +225,9 @@ public static class ClassManager
         {
             Player p = Player.m_localPlayer;
             if (!p) return;
+            _currentClass = Class.None;
+            Level = 0;
+            EXP = 0;
             InitLevelSystem();
             string SkillsData = null;
             string PanelData = null;

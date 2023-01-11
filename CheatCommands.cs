@@ -18,7 +18,7 @@ public class CheatCommands
         {
             var text = __instance.m_input.text;
             //non cheat
-
+ 
             if (text == showExp && ClassManager.CurrentClass != Class.None)
             {
                 __instance.AddString(
@@ -31,10 +31,10 @@ public class CheatCommands
 
             if (text.Trim() == testRoom)
             {
-                var room = UnityEngine.Object.Instantiate(MagicHeim.asset.LoadAsset<GameObject>("TestRoom"),
+                /*var room = UnityEngine.Object.Instantiate(MagicHeim.asset.LoadAsset<GameObject>("TestRoom"),
                     Player.m_localPlayer.transform.position + Vector3.up * 100f, Quaternion.identity);
                 var spawn = room.transform.Find("Spawn");
-                Player.m_localPlayer.transform.position = spawn.position;
+                Player.m_localPlayer.transform.position = spawn.position;*/
             }
 
             if (text.Trim() == resetSkills)
