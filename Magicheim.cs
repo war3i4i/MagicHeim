@@ -153,8 +153,6 @@ namespace MagicHeim
             }
 
             if (!Player.m_localPlayer) return;
-
-
             if (Input.GetKeyDown(SkillPanelUI.MH_Hotkeys[10].Value))
             {
                 if (!SkillBookUI.IsVisible())

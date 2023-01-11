@@ -82,7 +82,7 @@ public sealed class Mage_ArcaneSpikes : MH_Skill
     public class ArcaneSpikesComponent : MonoBehaviour
     {
         private float _damage;
-        private HashSet<Character> list = new();
+        private readonly HashSet<Character> list = new();
         private ZNetView znv;
 
         private void Awake()

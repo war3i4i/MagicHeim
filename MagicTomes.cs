@@ -74,7 +74,7 @@ public static class MagicTomes
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.OnRightClickItem))]
     private static class Player_ConsumeItem_PatchDItem
     {
-        private static DateTime LastActivation = default;
+        private static readonly DateTime LastActivation = default;
 
         private static bool Prefix(InventoryGrid grid, ItemDrop.ItemData item)
         {

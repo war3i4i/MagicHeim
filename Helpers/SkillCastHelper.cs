@@ -34,10 +34,9 @@ public class SkillCastHelper
         IsInDelayedInvoke = false;
     }
 
-    public static void InvokeDelayed(MH_Skill skill, Func<bool> cond)
+    public static void CastSkill(MH_Skill skill, Func<bool> cond)
     {
-        if (IsInDelayedInvoke || skill.GetCooldown() > 0 || !skill.CanExecute() || SkillChargeUI.IsCharging ||
-            !Player.m_localPlayer.TakeInput()) return;
+        if (IsInDelayedInvoke || skill.GetCooldown() > 0 || !skill.CanExecute() || SkillChargeUI.IsCharging || !Player.m_localPlayer.TakeInput()) return;
         if (skill.Toggled || (DEBUG_PreventUsages() && skill.TryUseCost()))
             MagicHeim._thistype.StartCoroutine(instance.DelayedInvoke(skill, cond));
     }
@@ -70,8 +69,7 @@ public class SkillCastHelper
                 return false;
             }
         }
-
-
-        return true;
+        
+        return API.API.CanUseAbilities();
     }
 }

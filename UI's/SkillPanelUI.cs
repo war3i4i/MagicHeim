@@ -112,7 +112,7 @@ public static class SkillPanelUI
     public static ConfigEntry<bool> UseAltHotkey;
     public static ConfigEntry<KeyCode>[] MH_Hotkeys;
 
-    private static List<KeyCode> DefaultHotkeys = new List<KeyCode>()
+    private static readonly List<KeyCode> DefaultHotkeys = new List<KeyCode>()
     {
         KeyCode.Alpha1,
         KeyCode.Alpha2,
@@ -273,7 +273,7 @@ public static class SkillPanelUI
                     if (!Input.GetKey(KeyCode.LeftAlt) || !Input.GetKeyDown(MH_Hotkeys[button.Key].Value)) continue;
                     if (button.Value.Skill != null && button.Value.Skill.Level > 0)
                     {
-                        SkillCastHelper.InvokeDelayed(button.Value.Skill,
+                        SkillCastHelper.CastSkill(button.Value.Skill,
                             cond: () => Input.GetKey(KeyCode.LeftAlt) && Input.GetKey(MH_Hotkeys[button.Key].Value));
                     }
                 }
@@ -282,7 +282,7 @@ public static class SkillPanelUI
                     if (!Input.GetKeyDown(MH_Hotkeys[button.Key].Value)) continue;
                     if (button.Value.Skill != null && button.Value.Skill.Level > 0)
                     {
-                        SkillCastHelper.InvokeDelayed(button.Value.Skill,
+                        SkillCastHelper.CastSkill(button.Value.Skill,
                             cond: () => Input.GetKey(MH_Hotkeys[button.Key].Value));
                     }
                 }

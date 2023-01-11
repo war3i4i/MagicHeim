@@ -16,7 +16,7 @@ public class Exp_Configs
         Exp_Configs.ExpMap = MagicHeim.config("ExpMap", "Exp Map", Exp_Configs.DefaultValue, "");
         Exp_Configs.MaxLevel = MagicHeim.config("LevelSystem", "Max Level", 85, "");
         Exp_Configs.StartExp = MagicHeim.config("LevelSystem", "Start EXP", 100, "");
-        Exp_Configs.Exp_Stepping = MagicHeim.config("LevelSystem", "EXP Stepping", 1.125f, "");
+        Exp_Configs.Exp_Stepping = MagicHeim.config("LevelSystem", "EXP Stepping", 1.120f, "");
         Exp_Configs.Exp_ProgressionType =
             MagicHeim.config("LevelSystem", "Progression Type", Exp_Configs.ProgressionType.Geometric, "");
         Exp_Configs.SkillpointsPerLevel = MagicHeim.config("LevelSystem", "Skillpoints Per Level", 2, "");

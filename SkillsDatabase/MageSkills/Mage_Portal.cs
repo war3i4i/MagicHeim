@@ -133,7 +133,7 @@ public sealed class Mage_Portal : MH_Skill
     private static readonly int JumpMask =
         LayerMask.GetMask("terrain", "Default", "piece", "piece_nonsolid", "static_solid");
 
-    private static Vector3 NON_Vector = new Vector3(-100000, 0, 0);
+    private static readonly Vector3 NON_Vector = new Vector3(-100000, 0, 0);
 
     private IEnumerator Charge(Func<bool> Cond)
     {

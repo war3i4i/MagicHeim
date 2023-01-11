@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -85,10 +85,10 @@
         <Reference Include="ServerSync">
             <HintPath>Libs\ServerSync.dll</HintPath>
         </Reference>
-        <Reference Include="System"/>
-        <Reference Include="System.Core"/>
-        <Reference Include="System.Data"/>
-        <Reference Include="System.Xml"/>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
         <Reference Include="UnityEngine">
             <HintPath>Libs\UnityEngine.dll</HintPath>
         </Reference>
@@ -286,108 +286,109 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="CheatCommands.cs"/>
-        <Compile Include="CustomMapPins.cs"/>
-        <Compile Include="ExpConfigs.cs"/>
-        <Compile Include="Helpers\ClassAnimationReplace.cs"/>
-        <Compile Include="Helpers\SkillCastHelper.cs"/>
-        <Compile Include="ClassesDatabase\ClassesDatabase.cs"/>
-        <Compile Include="ClassesDatabase\Classes\Archer.cs"/>
-        <Compile Include="ClassesDatabase\Classes\Assassin.cs"/>
-        <Compile Include="ClassesDatabase\Classes\Druid.cs"/>
-        <Compile Include="ClassesDatabase\Classes\Mage.cs"/>
-        <Compile Include="ClassesDatabase\Classes\Warrior.cs"/>
-        <Compile Include="ClassManager.cs"/>
-        <Compile Include="GlobalUsings.cs"/>
-        <Compile Include="KillHook.cs"/>
-        <Compile Include="MagicTomes.cs"/>
-        <Compile Include="MH_Altar.cs"/>
-        <Compile Include="MH_Definitions\MH_ClassDefinition.cs"/>
-        <Compile Include="MH_Definitions\MH_Skill.cs"/>
-        <Compile Include="PossibleSkillFixes.cs"/>
-        <Compile Include="SkillsDatabase\DruidSkills\Druid_Eagle.cs"/>
-        <Compile Include="SkillsDatabase\DruidSkills\Druid_Fish.cs"/>
-        <Compile Include="SkillsDatabase\DruidSkills\Druid_NatureBuff.cs"/>
-        <Compile Include="SkillsDatabase\DruidSkills\Druid_Wolf.cs"/>
-        <Compile Include="SkillsDatabase\DruidSkills\Druid_ManaFlow.cs"/>
-        <Compile Include="SkillsDatabase\DruidSkills\Druid_Heal.cs"/>
-        <Compile Include="SkillsDatabase\GlobalMechanics\MH_WeaponEnchant.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_AncientTotem.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_ArcaneShield.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_ArcaneSpikes.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_BlackHole.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_BluntMastery.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_EitrControl.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_EitrEconomy.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_EitrSphere.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_ElementalKnowledge.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_ElementalMastery.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_ElementalResistance.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_ElementalTimescale.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_ElementalVampirism.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_EnergyStorm.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_Fireball.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_FireShield.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_Frostball.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_IceShield.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_IceWall.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_Lightningball.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_ManaFlow.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_MasterOfTime.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_Meteor.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_Portal.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_RandomStrike.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_Teleport.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_FrostBeam.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_ThunderShock.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_ThunderWrath.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_WaterWalk.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_WaveOfFlame.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_WeaponEnchantFire.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_WeaponEnchantFrost.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_WeaponEnchantLightning.cs"/>
-        <Compile Include="UI's\ClassSelectionUI.cs"/>
-        <Compile Include="UI's\ConfirmationUI.cs"/>
-        <Compile Include="UI's\OptionsUI.cs"/>
-        <Compile Include="UI's\SkillBookUI.cs"/>
-        <Compile Include="UI's\SkillDrag.cs"/>
-        <Compile Include="UI's\SkillPanelUI.cs"/>
-        <Compile Include="UI's\SkillChargeUI.cs"/>
-        <Compile Include="Utils.cs"/>
-        <Compile Include="Logger\Logger.cs"/>
-        <Compile Include="Magicheim.cs"/>
-        <Compile Include="MH_Definitions\MH_SkillDefinition.cs"/>
-        <Compile Include="MH_Enums\Class.cs"/>
-        <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Compile Include="SkillsDatabase\MageSkills\Mage_EnergyBlast.cs"/>
-        <Compile Include="SkillsDatabase\SkillsDatabase.cs"/>
+        <Compile Include="API\API.cs" />
+        <Compile Include="CheatCommands.cs" />
+        <Compile Include="CustomMapPins.cs" />
+        <Compile Include="ExpConfigs.cs" />
+        <Compile Include="Helpers\ClassAnimationReplace.cs" />
+        <Compile Include="Helpers\SkillCastHelper.cs" />
+        <Compile Include="ClassesDatabase\ClassesDatabase.cs" />
+        <Compile Include="ClassesDatabase\Classes\Archer.cs" />
+        <Compile Include="ClassesDatabase\Classes\Assassin.cs" />
+        <Compile Include="ClassesDatabase\Classes\Druid.cs" />
+        <Compile Include="ClassesDatabase\Classes\Mage.cs" />
+        <Compile Include="ClassesDatabase\Classes\Warrior.cs" />
+        <Compile Include="ClassManager.cs" />
+        <Compile Include="GlobalUsings.cs" />
+        <Compile Include="Helpers\Utils.cs" />
+        <Compile Include="KillHook.cs" />
+        <Compile Include="MagicTomes.cs" />
+        <Compile Include="MH_Altar.cs" />
+        <Compile Include="MH_Definitions\MH_ClassDefinition.cs" />
+        <Compile Include="MH_Definitions\MH_Skill.cs" />
+        <Compile Include="PossibleSkillFixes.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_Eagle.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_Fish.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_NatureBuff.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_Wolf.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_ManaFlow.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_Heal.cs" />
+        <Compile Include="SkillsDatabase\GlobalMechanics\MH_WeaponEnchant.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_AncientTotem.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_ArcaneShield.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_ArcaneSpikes.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_BlackHole.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_BluntMastery.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_EitrControl.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_EitrEconomy.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_EitrSphere.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_ElementalKnowledge.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_ElementalMastery.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_ElementalResistance.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_ElementalTimescale.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_ElementalVampirism.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_EnergyStorm.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_Fireball.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_FireShield.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_Frostball.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_IceShield.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_IceWall.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_Lightningball.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_ManaFlow.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_MasterOfTime.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_Meteor.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_Portal.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_RandomStrike.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_Teleport.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_FrostBeam.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_ThunderShock.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_ThunderWrath.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_WaterWalk.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_WaveOfFlame.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_WeaponEnchantFire.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_WeaponEnchantFrost.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_WeaponEnchantLightning.cs" />
+        <Compile Include="UI's\ClassSelectionUI.cs" />
+        <Compile Include="UI's\ConfirmationUI.cs" />
+        <Compile Include="UI's\OptionsUI.cs" />
+        <Compile Include="UI's\SkillBookUI.cs" />
+        <Compile Include="UI's\SkillDrag.cs" />
+        <Compile Include="UI's\SkillPanelUI.cs" />
+        <Compile Include="UI's\SkillChargeUI.cs" />
+        <Compile Include="Logger\Logger.cs" />
+        <Compile Include="Magicheim.cs" />
+        <Compile Include="MH_Definitions\MH_SkillDefinition.cs" />
+        <Compile Include="MH_Enums\Class.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="SkillsDatabase\MageSkills\Mage_EnergyBlast.cs" />
+        <Compile Include="SkillsDatabase\SkillsDatabase.cs" />
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Asset\magicheim"/>
+        <EmbeddedResource Include="Asset\magicheim" />
     </ItemGroup>
     <ItemGroup>
-        <None Include="packages.config"/>
+        <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Asset\MagicHeimUnityCode.dll"/>
+        <EmbeddedResource Include="Asset\MagicHeimUnityCode.dll" />
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="translations\English.yml"/>
+        <EmbeddedResource Include="translations\English.yml" />
     </ItemGroup>
-    <UsingTask AssemblyFile="KeyManager.dll" TaskName="KeyManager.Seal"/>
+    <UsingTask AssemblyFile="KeyManager.dll" TaskName="KeyManager.Seal" />
     <Target Name="KeyManager" AfterTargets="ILRepack">
-        <Seal DLL="$(TargetPath)"/>
+        <Seal DLL="$(TargetPath)" />
     </Target>
     <Target Name="Copy" AfterTargets="KeyManager">
-        <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;D:\SteamLibrary\steamapps\common\Valheim\BepInEx\plugins\$(AssemblyName).dll&quot;"/>
+        <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;D:\SteamLibrary\steamapps\common\Valheim\BepInEx\plugins\$(AssemblyName).dll&quot;" />
     </Target>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
-    <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')"/>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" />
     <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
         <PropertyGroup>
             <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them. For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
         </PropertyGroup>
-        <Error Condition="!Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets'))"/>
+        <Error Condition="!Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets'))" />
     </Target>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.

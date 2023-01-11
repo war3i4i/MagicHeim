@@ -97,7 +97,7 @@ public sealed class Mage_Meteor : MH_Skill
 
     public class MeteorComponent : MonoBehaviour
     {
-        static int m_rayMaskSolids = LayerMask.GetMask("Default", "static_solid", "Default_small", "piece",
+        static readonly int m_rayMaskSolids = LayerMask.GetMask("Default", "static_solid", "Default_small", "piece",
             "piece_nonsolid", "terrain", "character", "character_net", "character_ghost", "hitbox", "character_noenv",
             "vehicle");
 

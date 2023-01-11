@@ -85,7 +85,7 @@ public sealed class Mage_Fireball : MH_Skill
 
     public class EnergyBlastComponent : MonoBehaviour
     {
-        static int m_rayMaskSolids = LayerMask.GetMask("Default", "static_solid", "Default_small", "piece",
+        static readonly int m_rayMaskSolids = LayerMask.GetMask("Default", "static_solid", "Default_small", "piece",
             "piece_nonsolid", "terrain", "character", "character_net", "character_ghost", "hitbox", "character_noenv",
             "vehicle");
 

@@ -89,7 +89,7 @@ public sealed class Mage_AncientTotem : MH_Skill
         private float counter;
         private float _value;
 
-        static int m_rayMaskSolids = LayerMask.GetMask("Default", "static_solid", "Default_small", "piece",
+        static readonly int m_rayMaskSolids = LayerMask.GetMask("Default", "static_solid", "Default_small", "piece",
             "piece_nonsolid", "terrain", "character", "character_net", "character_ghost", "hitbox", "character_noenv",
             "vehicle");
 
@@ -142,7 +142,7 @@ public sealed class Mage_AncientTotem : MH_Skill
     private static readonly int JumpMask =
         LayerMask.GetMask("terrain", "Default", "piece", "piece_nonsolid", "static_solid");
 
-    private static Vector3 NON_Vector = new Vector3(-100000, 0, 0);
+    private static readonly Vector3 NON_Vector = new Vector3(-100000, 0, 0);
 
 
     private IEnumerator Charge(Func<bool> Cond)
