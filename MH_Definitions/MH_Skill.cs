@@ -104,7 +104,7 @@ public abstract class MH_Skill
                 return true;
             }
         }
-
+        else
         if (costType == CostType.Stamina)
         {
             if (!p.HaveStamina(cost))
@@ -118,7 +118,7 @@ public abstract class MH_Skill
                 return true;
             }
         }
-
+        else
         if (costType == CostType.Health)
         {
             if (!p.HaveHealth(cost))

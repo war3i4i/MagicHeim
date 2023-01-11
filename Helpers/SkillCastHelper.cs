@@ -33,6 +33,7 @@ public class SkillCastHelper
         skill.Execute(cond);
         IsInDelayedInvoke = false;
     }
+    
 
     public static void CastSkill(MH_Skill skill, Func<bool> cond)
     {

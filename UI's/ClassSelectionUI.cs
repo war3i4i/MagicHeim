@@ -213,7 +213,7 @@ public static class ClassSelectionUI
     public static void Show()
     {
         Default();
-        var toChoose = ClassManager.CurrentClass == Class.None ? Class.Warrior : ClassManager.CurrentClass;
+        var toChoose = ClassManager.CurrentClass == Class.None ? Class.Mage : ClassManager.CurrentClass;
         if (IsMale)
         {
             MaleClasses.gameObject.SetActive(true);

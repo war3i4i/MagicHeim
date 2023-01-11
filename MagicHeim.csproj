@@ -375,6 +375,9 @@
     <ItemGroup>
         <EmbeddedResource Include="translations\English.yml" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="ThunderstorePackage" />
+    </ItemGroup>
     <UsingTask AssemblyFile="KeyManager.dll" TaskName="KeyManager.Seal" />
     <Target Name="KeyManager" AfterTargets="ILRepack">
         <Seal DLL="$(TargetPath)" />

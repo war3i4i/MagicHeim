@@ -52,7 +52,7 @@ public static class SkillChargeUI
             {
                 data.Value._time += dt;
                 data.Value._toFill.fillAmount = data.Value._time / data.Value._maxTime;
-                if (!(data.Value._time >= data.Value._maxTime)) continue;
+                if (Player.m_localPlayer && data.Value._time < data.Value._maxTime) continue;
                 UnityEngine.Object.Destroy(data.Value._go);
                 toRemove.Add(data.Key);
             }
