@@ -4,3 +4,9 @@ obj
 <ProjectName>.sln.DotSettings.user
 .idea
 .vs
+/ThunderstorePackage/
+dnlib.dll
+dnlib.xml
+dotnet_reactor_trial_removal.exe
+dotnet_reactor_trialremoval.zip
+MagicHeim.nrproj

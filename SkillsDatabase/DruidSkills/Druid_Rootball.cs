@@ -111,7 +111,7 @@ public sealed class Druid_Rootball : MH_Skill
                 IDestructible component = gameObject.GetComponent<IDestructible>();
                 if (component != null && !hashSet.Contains(gameObject))
                 {
-                    hashSet.Add(gameObject);
+                    hashSet.Add(gameObject); 
                     if (component is Character character)
                     {
                         if (!Utils.IsEnemy(character)) continue;
