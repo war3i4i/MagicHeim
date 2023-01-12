@@ -12,13 +12,14 @@ public class Druid : MH_ClassDefinition
     public override void Init()
     {
         ResetSkills();
-        /*AddSkill("Druid_Eagle");
+        AddSkill("Druid_Eagle");
         AddSkill("Druid_Wolf");
         AddSkill("Druid_Fish");
         AddSkill("Druid_Manaflow");
         AddSkill("Druid_Heal");
-        AddSkill("Druid_NatureBuff");
-        SortSkills();*/
+        AddSkill("Druid_NatureBuff"); 
+        AddSkill("Druid_Rootball"); 
+        SortSkills();
     }
 
 

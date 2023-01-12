@@ -5,7 +5,7 @@ using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
 using MagicHeim.UI_s;
 
-namespace MagicHeim.SkillsDatabase.MageSkills;
+namespace MagicHeim.SkillsDatabase.DruidSkills;
 
 public sealed class Druid_Eagle : MH_Skill
 {

@@ -310,6 +310,7 @@
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Eagle.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Fish.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_NatureBuff.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_Rootball.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Wolf.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_ManaFlow.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Heal.cs" />
@@ -386,7 +387,7 @@
     </Target>
     <Target Name="Copy" AfterTargets="KeyManager">
         <Exec Command="&quot;C:\Program Files (x86)\Eziriz\.NET Reactor\dotNET_Reactor.Console.exe&quot; -project &quot;C:\Users\Killing God\RiderProjects\MagicHeim\MagicHeim\MagicHeim.nrproj&quot; -targetfile &quot;$(ProjectDir)\ThunderstorePackage\$(AssemblyName).dll&quot;" />
-        <Exec Command="&quot;$(ProjectDir)\dotnet_reactor_trial_removal.exe&quot; &quot;$(ProjectDir)\ThunderstorePackage\$(AssemblyName).dll&quot;"/>
+        <Exec Command="&quot;$(ProjectDir)\dotnet_reactor_trial_removal.exe&quot; &quot;$(ProjectDir)\ThunderstorePackage\$(AssemblyName).dll&quot;" />
         <Exec Command="copy /Y &quot;$(ProjectDir)\ThunderstorePackage\$(AssemblyName).dll&quot; &quot;D:\SteamLibrary\steamapps\common\Valheim\BepInEx\plugins\$(AssemblyName).dll&quot;" />
     </Target>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

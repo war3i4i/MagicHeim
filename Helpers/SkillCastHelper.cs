@@ -1,4 +1,5 @@
 ﻿using MagicHeim.MH_Interfaces;
+using MagicHeim.SkillsDatabase.DruidSkills;
 using MagicHeim.SkillsDatabase.MageSkills;
 using MagicHeim.UI_s;
 using Logger = MagicHeim_Logger.Logger;
@@ -50,6 +51,8 @@ public class SkillCastHelper
 
     private static bool DEBUG_PreventUsages()
     {
+        if (!Player.m_localPlayer) return false;
+        if(Player.m_localPlayer.IsTeleporting()) return false;
         if (ClassManager.CurrentClassDef is { } cl)
         {
             if (cl.GetSkill(Druid_Eagle.CachedKey) is { Toggled: true })
@@ -63,7 +66,7 @@ public class SkillCastHelper
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"Can't use skills in Fish form");
                 return false;
             }
-
+ 
             if (cl.GetSkill(Druid_Wolf.CachedKey) is { Toggled: true })
             {
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"Can't use skills in Wolf form");

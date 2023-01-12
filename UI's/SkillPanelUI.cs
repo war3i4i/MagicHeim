@@ -58,10 +58,15 @@ public class DragUI : MonoBehaviour, IDragHandler, IEndDragHandler
 public class ResizeUI : MonoBehaviour, IDragHandler, IEndDragHandler
 {
     public RectTransform dragRect;
+    private static ConfigEntry<float> UI_X;
+    private static ConfigEntry<float> UI_Y;
 
     private void Awake()
     {
         dragRect = transform.parent.GetComponent<RectTransform>();
+        UI_X = MagicHeim._thistype.Config.Bind("UI", "UI_sizeX", 1f, "UI X size");
+        UI_Y = MagicHeim._thistype.Config.Bind("UI", "UI_sizeY", 1f, "UI Y size");
+        dragRect.localScale = new Vector3(UI_X.Value, UI_Y.Value, 1f);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -69,15 +74,17 @@ public class ResizeUI : MonoBehaviour, IDragHandler, IEndDragHandler
         var vec = eventData.delta;
         var sizeDelta = dragRect.sizeDelta;
         vec.x = vec.x / sizeDelta.x;
-        vec.y = vec.y / sizeDelta.y;
-        var resized = dragRect.localScale + new Vector3(vec.x, vec.y, 1);
+        var resized = dragRect.localScale + new Vector3(vec.x, vec.x, 1);
         resized.x = Mathf.Clamp(resized.x, 0.6f, 1.5f);
         resized.y = Mathf.Clamp(resized.y, 0.6f, 1.5f);
         dragRect.localScale = resized;
     }
-
+ 
     public void OnEndDrag(PointerEventData data)
     {
+        UI_X.Value = dragRect.localScale.x;
+        UI_Y.Value = dragRect.localScale.y;
+        MagicHeim._thistype.Config.Save();
     }
 }
 

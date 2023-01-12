@@ -104,6 +104,7 @@ namespace MagicHeim
             bool synchronizedSetting = true) =>
             _thistype.config(group, name, value, new ConfigDescription(description), synchronizedSetting);
 
+        
         private static AssetBundle GetAssetBundle(string filename)
         {
             Assembly execAssembly = Assembly.GetExecutingAssembly();

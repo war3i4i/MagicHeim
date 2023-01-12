@@ -17,7 +17,7 @@ public static class MagicTomes
     private static readonly Dictionary<Heightmap.Biome, GameObject> TomesByBiomes = new(10);
 
     public static void Init()
-    { 
+    {
         MagicTomeDictionary.Add(new Item(MagicHeim.asset.LoadAsset<GameObject>("MH_Tome_Meadows")).Prefab,
             MagicHeim.config("Magic Tomes", "Meadows", 100,
                 "EXP Gain for the Meadows Tome"));

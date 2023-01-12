@@ -6,7 +6,7 @@ using MagicHeim.MH_Interfaces;
 using MagicHeim.UI_s;
 using Logger = MagicHeim_Logger.Logger;
 
-namespace MagicHeim.SkillsDatabase.MageSkills;
+namespace MagicHeim.SkillsDatabase.DruidSkills;
 
 public sealed class Druid_Heal : MH_Skill
 {

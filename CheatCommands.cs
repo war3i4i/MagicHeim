@@ -11,6 +11,7 @@ public class CheatCommands
         const string setLevel = "/mh level ";
         const string addExp = "/mh exp ";
         const string testRoom = "/mh testroom";
+        const string setClass = "/mh class ";
 
         private const string showExp = "/exp";
 
@@ -89,8 +90,24 @@ public class CheatCommands
 
                 return false;
             }
+            
+            if (text.StartsWith(setClass))
+            {
+                var className = text.Substring(setClass.Length);
+                if (Enum.TryParse(className, true, out Class classEnum))
+                {
+                    ClassManager.SetClass(classEnum);
+                    __instance.AddString($"<color=lime>Class Set To {classEnum}</color>");
+                }
+                else
+                {
+                    __instance.AddString("Invalid class");
+                }
 
-
+                return false;
+            }
+            
+            
             return true;
         }
     }
