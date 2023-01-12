@@ -59,7 +59,7 @@ public sealed class Mage_Lightningball : MH_Skill
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_Lightningball_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_Lightningball.mp4";
         Lightningball_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_Lightningball_Prefab");
-        Lightningball_Prefab.AddComponent<EnergyBlastComponent>();
+        Lightningball_Prefab.AddComponent<LightningBallComponent>();
         Lightningball_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Mage_Lightningball_Explosion");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -83,7 +83,7 @@ public sealed class Mage_Lightningball : MH_Skill
         "vehicle");
 
 
-    public class EnergyBlastComponent : MonoBehaviour
+    public class LightningBallComponent : MonoBehaviour
     {
         static readonly int m_rayMaskSolids = LayerMask.GetMask("Default", "static_solid", "Default_small", "piece",
             "piece_nonsolid", "terrain", "character", "character_net", "character_ghost", "hitbox", "character_noenv",
@@ -177,7 +177,7 @@ public sealed class Mage_Lightningball : MH_Skill
             GameCamera.instance.transform.rotation);
         var direction = (target - go.transform.position).normalized;
         float damage = this.CalculateSkillValue();
-        go.GetComponent<EnergyBlastComponent>().Setup(direction, damage);
+        go.GetComponent<LightningBallComponent>().Setup(direction, damage);
         StartCooldown(cooldown);
     }
 

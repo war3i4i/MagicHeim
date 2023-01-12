@@ -48,7 +48,9 @@ public sealed class Druid_Fish : MH_Skill
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Fish_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/Mage_EnergyBlast.mp4";
-
+        _definition.Animation =
+            ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedTransform];
+        _definition.AnimationTime = 1f;
         CachedIcon = _definition.Icon;
         Fish_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Druid_Fish_Explosion");
         Fish_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_Fish_Prefab");
@@ -105,6 +107,7 @@ public sealed class Druid_Fish : MH_Skill
                 pkg.Write("");
                 ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, "MH_Druid_FishForm_RPC", pkg);
                 UnityEngine.Object.Instantiate(Fish_Explosion, p.transform.position, Quaternion.identity);
+                StartCooldown(1f);
                 yield break;
             }
 

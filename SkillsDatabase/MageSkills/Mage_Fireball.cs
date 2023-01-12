@@ -59,7 +59,7 @@ public sealed class Mage_Fireball : MH_Skill
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_Fireball_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_Fireball.mp4";
         Fireball_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_Fireball_Prefab");
-        Fireball_Prefab.AddComponent<EnergyBlastComponent>();
+        Fireball_Prefab.AddComponent<FireballComponent>();
         Fireball_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Mage_Fireball_Explosion");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -83,7 +83,7 @@ public sealed class Mage_Fireball : MH_Skill
         "vehicle");
 
 
-    public class EnergyBlastComponent : MonoBehaviour
+    public class FireballComponent : MonoBehaviour
     {
         static readonly int m_rayMaskSolids = LayerMask.GetMask("Default", "static_solid", "Default_small", "piece",
             "piece_nonsolid", "terrain", "character", "character_net", "character_ghost", "hitbox", "character_noenv",
@@ -177,7 +177,7 @@ public sealed class Mage_Fireball : MH_Skill
             GameCamera.instance.transform.rotation);
         var direction = (target - go.transform.position).normalized;
         float damage = this.CalculateSkillValue();
-        go.GetComponent<EnergyBlastComponent>().Setup(direction, damage);
+        go.GetComponent<FireballComponent>().Setup(direction, damage);
         StartCooldown(cooldown);
     }
 

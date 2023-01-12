@@ -46,6 +46,9 @@ public sealed class Druid_Eagle : MH_Skill
             $"Leveling Step", 1,
             "Leveling Step");
 
+        _definition.Animation =
+            ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedTransform];
+        _definition.AnimationTime = 1f;
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Eagle_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/Mage_EnergyBlast.mp4";
         Eagle_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_Eagle_Prefab");

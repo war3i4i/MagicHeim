@@ -11,12 +11,13 @@ public sealed class Druid_Rootball : MH_Skill
 {
     private static GameObject _Prefab;
     private static GameObject _PrefabDebuff;
+    private static GameObject _PrefabExplosion;
 
     public Druid_Rootball()
     {
         _definition._InternalName = "Druid_Rootball";
         _definition.Animation =
-            ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageProjectile];
+            ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedProjectile];
         _definition.Name = "$mh_druid_rootball";
         _definition.Description = "$mh_druid_rootball_desc";
 
@@ -41,6 +42,13 @@ public sealed class Druid_Rootball : MH_Skill
             $"MAX Lvl Cooldown", 6f,
             "Cooldown amount (Max Lvl)");
 
+        _definition.MinLvlDuration = MagicHeim.config($"{_definition._InternalName}",
+            $"MIN Lvl Duration", 2f,
+            "Duration amount (Min Lvl)");
+        
+        _definition.MaxLvlDuration = MagicHeim.config($"{_definition._InternalName}",
+            $"MAX Lvl Duration", 4f,
+            "Duration amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Max Level", 10,
@@ -55,11 +63,12 @@ public sealed class Druid_Rootball : MH_Skill
             $"Leveling Step", 6,
             "Leveling Step");
 
-        _definition.AnimationTime = 0.5f;
+        _definition.AnimationTime = 0.8f;
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Rootball_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/MH_Druid_Rootball.mp4";
         _Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_Rootball_Prefab");
         _PrefabDebuff = MagicHeim.asset.LoadAsset<GameObject>("Druid_Rootball_Debuff");
+        _PrefabExplosion = MagicHeim.asset.LoadAsset<GameObject>("Druid_Rootball_Explosion");
         _Prefab.AddComponent<RootballComponent>();
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -78,6 +87,7 @@ public sealed class Druid_Rootball : MH_Skill
         {
             __instance.m_namedPrefabs[_Prefab.name.GetStableHashCode()] = _Prefab;
             __instance.m_namedPrefabs[_PrefabDebuff.name.GetStableHashCode()] = _PrefabDebuff;
+            __instance.m_namedPrefabs[_PrefabExplosion.name.GetStableHashCode()] = _PrefabExplosion;
         }
     }
 
@@ -94,21 +104,21 @@ public sealed class Druid_Rootball : MH_Skill
             "vehicle");
 
 
-        public void Setup(Vector3 dir, float damage)
+        public void Setup(Vector3 dir, float damage, float duration)
         {
-            StartCoroutine(Move(dir, damage));
-        }
+            StartCoroutine(Move(dir, damage, duration));
+        } 
 
-        private void Explosion(float damage)
+        private void Explosion(float damage, float duration)
         {
-            //var explosion = Instantiate(_Prefab_Explosion, transform.position, Quaternion.identity);
+            Instantiate(_PrefabExplosion, transform.position, Quaternion.identity);
             Collider[] array = Physics.OverlapSphere(transform.position, 4f, m_rayMaskSolids,
                 QueryTriggerInteraction.UseGlobal);
             HashSet<GameObject> hashSet = new HashSet<GameObject>();
             foreach (Collider collider in array)
-            {
+            { 
                 GameObject gameObject = Projectile.FindHitObject(collider);
-                IDestructible component = gameObject.GetComponent<IDestructible>();
+                IDestructible component = gameObject.GetComponent<IDestructible>(); 
                 if (component != null && !hashSet.Contains(gameObject))
                 {
                     hashSet.Add(gameObject); 
@@ -117,6 +127,7 @@ public sealed class Druid_Rootball : MH_Skill
                         if (!Utils.IsEnemy(character)) continue;
                         HitData hit = new();
                         hit.m_statusEffect = "Druid_Rootball_Debuff";
+                        hit.m_skillLevel = duration;
                         hit.m_skill = Skills.SkillType.ElementalMagic;
                         hit.m_damage.m_blunt = damage / 2f;
                         hit.m_damage.m_poison = damage / 2f;
@@ -129,7 +140,7 @@ public sealed class Druid_Rootball : MH_Skill
             }
         }
 
-        private IEnumerator Move(Vector3 dir, float damage)
+        private IEnumerator Move(Vector3 dir, float damage, float duration)
         {
             bool didhit = false;
             float speed = 20f;
@@ -152,7 +163,7 @@ public sealed class Druid_Rootball : MH_Skill
                         GameObject go = raycastHit.collider ? Projectile.FindHitObject(raycastHit.collider) : null;
                         IDestructible destructible = go ? go.GetComponent<IDestructible>() : null;
                         if (destructible is Character c && !Utils.IsEnemy(c)) continue;
-                        Explosion(damage);
+                        Explosion(damage, duration);
                         didhit = true;
                         count = 100f;
                         break;
@@ -162,7 +173,7 @@ public sealed class Druid_Rootball : MH_Skill
                 yield return null; 
             }
 
-            if (!didhit) Explosion(damage);
+            if (!didhit) Explosion(damage, duration);
         }
     }
 
@@ -181,7 +192,7 @@ public sealed class Druid_Rootball : MH_Skill
             GameCamera.instance.transform.rotation);
         var direction = (target - go.transform.position).normalized;
         float damage = this.CalculateSkillValue();
-        go.GetComponent<RootballComponent>().Setup(direction, damage);
+        go.GetComponent<RootballComponent>().Setup(direction, damage, this.CalculateSkillDuration());
         StartCooldown(cooldown);
     }
 
@@ -193,7 +204,7 @@ public sealed class Druid_Rootball : MH_Skill
             m_tooltip = "Rooted";
             m_icon = CachedSprite;
             m_name = "Rooted";
-            m_ttl = 100;
+            m_ttl = 1;
             m_startEffects = new EffectList
             {
                 m_effectPrefabs = new[]
@@ -210,7 +221,7 @@ public sealed class Druid_Rootball : MH_Skill
 
         public override void SetLevel(int itemLevel, float skillLevel)
         {
-            m_ttl = itemLevel;
+            m_ttl = skillLevel;
         }
 
         public override void ModifySpeed(float baseSpeed, ref float speed)

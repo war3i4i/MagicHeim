@@ -48,6 +48,9 @@ public sealed class Druid_Wolf : MH_Skill
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Wolf_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/Mage_EnergyBlast.mp4";
 
+        _definition.Animation =
+            ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedTransform];
+        _definition.AnimationTime = 1f;
         CachedIcon = _definition.Icon;
         Wolf_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Druid_Wolf_Explosion");
     }
@@ -102,6 +105,7 @@ public sealed class Druid_Wolf : MH_Skill
                 pkg.Write("");
                 ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, "MH_Druid_WolfForm_RPC", pkg);
                 UnityEngine.Object.Instantiate(Wolf_Explosion, p.transform.position, Quaternion.identity);
+                StartCooldown(1f);
                 yield break;
             }
 

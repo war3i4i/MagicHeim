@@ -58,7 +58,7 @@ public sealed class Mage_Frostball : MH_Skill
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_Frostball_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_Frostball.mp4";
         Frostball_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_Frostball_Prefab");
-        Frostball_Prefab.AddComponent<EnergyBlastComponent>();
+        Frostball_Prefab.AddComponent<FrostballComponent>();
         Frostball_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Mage_Frostball_Explosion");
 
 
@@ -83,7 +83,7 @@ public sealed class Mage_Frostball : MH_Skill
         "vehicle");
 
 
-    public class EnergyBlastComponent : MonoBehaviour
+    public class FrostballComponent : MonoBehaviour
     {
         static readonly int m_rayMaskSolids = LayerMask.GetMask("Default", "static_solid", "Default_small", "piece",
             "piece_nonsolid", "terrain", "character", "character_net", "character_ghost", "hitbox", "character_noenv",
@@ -176,7 +176,7 @@ public sealed class Mage_Frostball : MH_Skill
             GameCamera.instance.transform.rotation);
         var direction = (target - go.transform.position).normalized;
         float damage = this.CalculateSkillValue();
-        go.GetComponent<EnergyBlastComponent>().Setup(direction, damage);
+        go.GetComponent<FrostballComponent>().Setup(direction, damage);
         StartCooldown(cooldown);
     }
 

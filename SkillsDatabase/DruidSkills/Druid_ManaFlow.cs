@@ -27,6 +27,14 @@ public sealed class Druid_ManaFlow : MH_Skill
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Required Level To Learn",
             1, "Required Level");
+
+        _definition.ExternalValues = new()
+        {
+            MagicHeim.config($"{_definition._InternalName}", $"MIN Lvl HP Bonus", 10f, "HP Bonus"),
+            MagicHeim.config($"{_definition._InternalName}", $"MAX Lvl HP Bonus", 100f, "HP Bonus")
+        };
+        
+        
         Level = 1;
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_ManaFlow_Icon");
         CachedKey = _definition.Key;
@@ -45,7 +53,7 @@ public sealed class Druid_ManaFlow : MH_Skill
     public override void Execute(Func<bool> Cond)
     {
     }
-
+ 
     public override bool CanExecute()
     {
         return false;
@@ -53,7 +61,7 @@ public sealed class Druid_ManaFlow : MH_Skill
 
     public override string GetSpecialTags()
     {
-        return "<color=red>Passive, Max Eitr Amount Bonus</color>";
+        return "<color=red>Passive, Max Eitr Amount Bonus, Max HP Bonus</color>";
     }
 
     public override string BuildDescription()
@@ -65,36 +73,44 @@ public sealed class Druid_ManaFlow : MH_Skill
         int maxLevel = this.MaxLevel;
         int forLevel = this.Level > 0 ? this.Level : 1;
         float currentValue = this.CalculateSkillValue(forLevel);
+        float externalValue = this.CalculateSkillExternalValue(0,forLevel);
 
         builder.AppendLine($"Max Eitr Bonus: {Math.Round(currentValue, 1)}");
+        builder.AppendLine($"HP Bonus: {Math.Round(externalValue, 1)}");
 
         if (this.Level < maxLevel && this.Level > 0)
         {
             float nextValue = this.CalculateSkillValue(forLevel + 1);
+            float nextExternalValue = this.CalculateSkillExternalValue(0, forLevel + 1);
             float valueDiff = nextValue - currentValue;
+            float externalValueDiff = nextExternalValue - externalValue;
 
             var roundedValueDiff = Math.Round(valueDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
             builder.AppendLine(
                 $"Max Eitr Bonus: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine(
+                $"HP Bonus: {Math.Round(nextExternalValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{Math.Round(externalValueDiff, 1)})</color>");
         }
 
 
         return builder.ToString();
     }
+ 
 
-
-    //action
+    //action 
     [HarmonyPatch(typeof(Player), nameof(Player.GetTotalFoodValue))]
     static class Player_GetTotalFoodValue_Patch
     {
-        static void Postfix(ref float eitr)
+        static void Postfix(ref float hp, ref float eitr)
         {
             if (ClassManager.CurrentClass == Class.None) return;
             var skill = ClassManager.CurrentClassDef.GetSkill(CachedKey);
             if (skill == null || skill.Level <= 0) return;
-            eitr += skill.Value;
+            
+            eitr += skill.CalculateSkillValue();
+            hp += skill.CalculateSkillExternalValue(0);
         }
     }
 

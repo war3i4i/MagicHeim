@@ -49,8 +49,8 @@ mh_mage_randomstrike: Random Strike
 mh_mage_randomstrike_desc: Summons a random elemental strike at the target location
 mh_mage_arcanespikes: Arcane Spikes
 mh_mage_arcanespikes_desc: Summons an arcane spikes in front of you dealing damage to enemies and staggering them
-mh_druid_eagle: Wtf is this skill doing here?
-mh_druid_eagle_desc: Lol
+mh_druid_eagle: Eagle Form
+mh_druid_eagle_desc: Transforms you into an eagle
 mh_mage_portal: Portal
 mh_mage_portal_desc: Creates two portals. One at your location and one at the target location. Player can teleport between them
 mh_mage_blackhole: Black Hole

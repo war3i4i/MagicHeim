@@ -29,6 +29,16 @@ public static class Utils
         float maxValue = skill.Definition.MaxLvlValue.Value;
         return Mathf.Lerp(minValue, maxValue, (float)currentLevel / maxLevel);
     }
+    
+    public static float CalculateSkillExternalValue(this MH_Skill skill, int index, int forLevel = -1)
+    {
+        if (skill.Definition.MaxLevel.Value <= 0) return skill.Definition.ExternalValues[index].Value;
+        int currentLevel = forLevel > 0 ? forLevel - 1 : skill.Level - 1;
+        int maxLevel = skill.Definition.MaxLevel.Value - 1;
+        float minValue = skill.Definition.ExternalValues[index].Value;
+        float maxValue = skill.Definition.ExternalValues[index+1].Value;
+        return Mathf.Lerp(minValue, maxValue, (float)currentLevel / maxLevel);
+    }
 
     public static float CalculateSkillCooldown(this MH_Skill skill, int forLevel = -1, bool skipChecks = false)
     {

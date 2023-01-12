@@ -81,7 +81,8 @@ public sealed class Mage_WaterWalk : MH_Skill
         Player p = Player.m_localPlayer;
         p.m_nview.m_zdo.Set("MOanticheat", true);
         if (vfx) ZNetScene.instance.Destroy(vfx.gameObject);
-        vfx = UnityEngine.Object.Instantiate(WaterWalk_Prefab, p.transform);
+        vfx = UnityEngine.Object.Instantiate(WaterWalk_Prefab, p.transform.position, Quaternion.identity);
+        vfx.transform.SetParent(p.transform);
         for (;;)
         {
             var useMana = manacost * Time.deltaTime;

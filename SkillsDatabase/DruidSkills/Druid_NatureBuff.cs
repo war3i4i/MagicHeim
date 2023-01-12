@@ -63,8 +63,8 @@ public sealed class Druid_NatureBuff : MH_Skill
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_NatureBuff_Icon");
         _definition.Video = "https://kg-dev.xyz/skills/MH_Druid_Heal.mp4";
-        _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSlam];
-        _definition.AnimationTime = 0.8f;
+        _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedSummon];
+        _definition.AnimationTime = 1.2f;
         Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_NatureBuff_Buff");
         CachedIcon = _definition.Icon;
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -74,11 +74,11 @@ public sealed class Druid_NatureBuff : MH_Skill
 
     private static Sprite CachedIcon;
 
-    [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
+    [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))] 
     static class ZNetScene_Awake_Patch
     {
         static void Postfix(ZNetScene __instance)
-        {
+        { 
             __instance.m_namedPrefabs[Prefab.name.GetStableHashCode()] = Prefab;
         }
     }
@@ -94,7 +94,7 @@ public sealed class Druid_NatureBuff : MH_Skill
 
         foreach (var player in list)
         {
-            player.m_seman.AddStatusEffect("Druid_NatureBuff_Buff", true, (int)this.CalculateSkillDuration(),
+            player.m_seman.AddStatusEffect("Druid_NatureBuff_Buff", false, (int)this.CalculateSkillDuration(),
                 this.CalculateSkillValue());
         }
 
@@ -211,7 +211,7 @@ public sealed class Druid_NatureBuff : MH_Skill
         if (this.Level < maxLevel && this.Level > 0)
         {
             float nextValue = this.CalculateSkillValue(forLevel + 1);
-            float nextCooldown = this.CalculateSkillCooldown(forLevel + 1);
+            float nextCooldown = this.CalculateSkillCooldown(forLevel + 1); 
             float nextManacost = this.CalculateSkillManacost(forLevel + 1);
             float nextDuration = this.CalculateSkillDuration(forLevel + 1);
             float cooldownDiff = nextCooldown - currentCooldown;

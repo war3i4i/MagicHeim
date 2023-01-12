@@ -31,6 +31,7 @@ public static class SkillDrag
         DragObject = UnityEngine.Object.Instantiate(UI);
         DragObject.transform.Find("Canvas/icon").GetComponent<Image>().sprite = skill.Icon;
         DragObject.transform.Find("Canvas/icon").GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+        DragObject.transform.Find("Canvas/icon").localScale = SkillPanelUI.Resizer.Scale;
         if (button >= 0)
         {
             SkillPanelUI.SetSkill(button, -1);

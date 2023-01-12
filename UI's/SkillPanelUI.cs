@@ -1,6 +1,7 @@
 ﻿using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Interfaces;
 using UnityEngine.EventSystems;
+using Logger = MagicHeim_Logger.Logger;
 
 namespace MagicHeim.UI_s;
 
@@ -60,7 +61,8 @@ public class ResizeUI : MonoBehaviour, IDragHandler, IEndDragHandler
     public RectTransform dragRect;
     private static ConfigEntry<float> UI_X;
     private static ConfigEntry<float> UI_Y;
-
+    public Vector3 Scale => new Vector3(dragRect.localScale.x, dragRect.localScale.y, 1f);
+    
     private void Awake()
     {
         dragRect = transform.parent.GetComponent<RectTransform>();
@@ -74,9 +76,10 @@ public class ResizeUI : MonoBehaviour, IDragHandler, IEndDragHandler
         var vec = eventData.delta;
         var sizeDelta = dragRect.sizeDelta;
         vec.x = vec.x / sizeDelta.x;
-        var resized = dragRect.localScale + new Vector3(vec.x, vec.x, 1);
+        var resized = dragRect.localScale + new Vector3(vec.x, vec.x, 0);
         resized.x = Mathf.Clamp(resized.x, 0.6f, 1.5f);
         resized.y = Mathf.Clamp(resized.y, 0.6f, 1.5f);
+        resized.z = 1f;
         dragRect.localScale = resized;
     }
  
@@ -118,6 +121,8 @@ public static class SkillPanelUI
     private static ConfigEntry<int> MaxSlots;
     public static ConfigEntry<bool> UseAltHotkey;
     public static ConfigEntry<KeyCode>[] MH_Hotkeys;
+
+    public static ResizeUI Resizer;
 
     private static readonly List<KeyCode> DefaultHotkeys = new List<KeyCode>()
     {
@@ -168,7 +173,7 @@ public static class SkillPanelUI
         SkillsTransform = UI.transform.Find("Canvas/Background/skills");
         Default();
         UI.transform.Find("Canvas/Background/move").gameObject.AddComponent<DragUI>();
-        UI.transform.Find("Canvas/Background/resize").gameObject.AddComponent<ResizeUI>();
+        Resizer = UI.transform.Find("Canvas/Background/resize").gameObject.AddComponent<ResizeUI>();
         ExpBar = UI.transform.Find("Canvas/Background/ExpBar/Image").GetComponent<Image>();
         LastEXP = -1;
     }
@@ -345,7 +350,7 @@ public static class SkillPanelUI
                         button.Value.CooldownText.text = ((int)(button.Value.Skill.GetCooldown())).ToString();
                     }
                     else
-                    {
+                    { 
                         button.Value.Cooldown.fillAmount = 0;
                         button.Value.CooldownText.text = "";
                     }

@@ -19,6 +19,13 @@ public class SkillCastHelper
 
     private IEnumerator DelayedInvoke(MH_Skill skill, Func<bool> cond)
     {
+        if (skill.Toggled)
+        {
+            skill.Execute(cond);
+            IsInDelayedInvoke = false;
+            yield break;
+        }
+
         float time = skill.AnimationTime / 1.5f;
         PlayAnimation(skill);
         if (time > 0)
@@ -31,14 +38,16 @@ public class SkillCastHelper
             }
         }
 
-        skill.Execute(cond);
+        if (Player.m_localPlayer && !Player.m_localPlayer.IsDead())
+            skill.Execute(cond);
         IsInDelayedInvoke = false;
     }
-    
+
 
     public static void CastSkill(MH_Skill skill, Func<bool> cond)
     {
-        if (IsInDelayedInvoke || skill.GetCooldown() > 0 || !skill.CanExecute() || SkillChargeUI.IsCharging || !Player.m_localPlayer.TakeInput()) return;
+        if (IsInDelayedInvoke || skill.GetCooldown() > 0 || !skill.CanExecute() || SkillChargeUI.IsCharging ||
+            !Player.m_localPlayer.TakeInput()) return;
         if (skill.Toggled || (DEBUG_PreventUsages() && skill.TryUseCost()))
             MagicHeim._thistype.StartCoroutine(instance.DelayedInvoke(skill, cond));
     }
@@ -52,7 +61,7 @@ public class SkillCastHelper
     private static bool DEBUG_PreventUsages()
     {
         if (!Player.m_localPlayer) return false;
-        if(Player.m_localPlayer.IsTeleporting()) return false;
+        if (Player.m_localPlayer.IsTeleporting()) return false;
         if (ClassManager.CurrentClassDef is { } cl)
         {
             if (cl.GetSkill(Druid_Eagle.CachedKey) is { Toggled: true })
@@ -66,14 +75,14 @@ public class SkillCastHelper
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"Can't use skills in Fish form");
                 return false;
             }
- 
+
             if (cl.GetSkill(Druid_Wolf.CachedKey) is { Toggled: true })
             {
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"Can't use skills in Wolf form");
                 return false;
             }
         }
-        
+
         return API.API.CanUseAbilities();
     }
 }

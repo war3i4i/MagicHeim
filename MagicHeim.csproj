@@ -28,10 +28,23 @@
         <DebugType>pdbonly</DebugType>
         <Optimize>true</Optimize>
         <OutputPath>bin\Release\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
+        <DefineConstants>TRACE;</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Tests|AnyCPU' ">
+      <OutputPath>bin\Tests\</OutputPath>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE;</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="0Harmony">
@@ -381,15 +394,23 @@
       <Content Include="ThunderstorePackage\manifest.json" />
       <Content Include="ThunderstorePackage\README.md" />
     </ItemGroup>
-    <UsingTask AssemblyFile="KeyManager.dll" TaskName="KeyManager.Seal" />
-    <Target Name="KeyManager" AfterTargets="ILRepack"> 
-        <Seal DLL="$(TargetPath)" /> 
-    </Target>
-    <Target Name="Copy" AfterTargets="KeyManager">
+    <UsingTask AssemblyFile="KeyManager.dll" TaskName="KeyManager.Seal" /> 
+    <Target Name="KeyManager" AfterTargets="ILRepack">  
+        <Seal DLL="$(TargetPath)" />   
+    </Target> 
+     
+    
+    <Target Name="AfterBuildStuff" AfterTargets="KeyManager" Condition=" '$(Configuration)' == 'Release' ">
         <Exec Command="&quot;C:\Program Files (x86)\Eziriz\.NET Reactor\dotNET_Reactor.Console.exe&quot; -project &quot;C:\Users\Killing God\RiderProjects\MagicHeim\MagicHeim\MagicHeim.nrproj&quot; -targetfile &quot;$(ProjectDir)\ThunderstorePackage\$(AssemblyName).dll&quot;" />
         <Exec Command="&quot;$(ProjectDir)\dotnet_reactor_trial_removal.exe&quot; &quot;$(ProjectDir)\ThunderstorePackage\$(AssemblyName).dll&quot;" />
         <Exec Command="copy /Y &quot;$(ProjectDir)\ThunderstorePackage\$(AssemblyName).dll&quot; &quot;D:\SteamLibrary\steamapps\common\Valheim\BepInEx\plugins\$(AssemblyName).dll&quot;" />
+    </Target> 
+    
+    <Target Name="AfterBuildStuffTest" AfterTargets="KeyManager" Condition=" '$(Configuration)' != 'Release' ">
+        <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;D:\SteamLibrary\steamapps\common\Valheim\BepInEx\plugins\$(AssemblyName).dll&quot;" />
     </Target>
+    
+    
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" />
     <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

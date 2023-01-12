@@ -21,7 +21,7 @@ namespace MagicHeim
         public static GameObject MH_Altar;
         public static ConfigFile MH_SyncedConfig;
         private static FileSystemWatcher FSW;
-
+        
         private void Awake()
         {
             Localizer.Load();
