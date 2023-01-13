@@ -61,7 +61,18 @@ public class SkillCastHelper
     private static bool DEBUG_PreventUsages()
     {
         if (!Player.m_localPlayer) return false;
-        if (Player.m_localPlayer.IsTeleporting()) return false;
+        if (Player.m_localPlayer.IsTeleporting())
+        {
+            MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"Can't use skills while teleporting");
+            return false;
+        }
+
+        if (Player.m_localPlayer.IsAttached())
+        {
+            MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"Can't use skills while attached");
+            return false;
+        }
+
         if (ClassManager.CurrentClassDef is { } cl)
         {
             if (cl.GetSkill(Druid_Eagle.CachedKey) is { Toggled: true })

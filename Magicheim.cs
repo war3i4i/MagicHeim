@@ -14,14 +14,14 @@ namespace MagicHeim
     {
         private const string GUID = "kg.magicheim";
         private const string PluginName = "MagicHeim";
-        private const string PluginVersion = "1.0.0";
+        private const string PluginVersion = "1.1.0";
         public static MagicHeim _thistype;
         private readonly ConfigSync configSync = new(GUID) { DisplayName = PluginName };
         public static AssetBundle asset;
         public static GameObject MH_Altar;
         public static ConfigFile MH_SyncedConfig;
         private static FileSystemWatcher FSW;
-        
+
         private void Awake()
         {
             Localizer.Load();
@@ -104,7 +104,7 @@ namespace MagicHeim
             bool synchronizedSetting = true) =>
             _thistype.config(group, name, value, new ConfigDescription(description), synchronizedSetting);
 
-        
+
         private static AssetBundle GetAssetBundle(string filename)
         {
             Assembly execAssembly = Assembly.GetExecutingAssembly();
@@ -189,5 +189,6 @@ namespace MagicHeim
                 Menu.instance?.OnClose();
             }
         }
+        
     }
 }
