@@ -19,6 +19,7 @@ public class Druid : MH_ClassDefinition
         AddSkill("Druid_Heal");
         AddSkill("Druid_NatureBuff"); 
         AddSkill("Druid_Rootball"); 
+        AddSkill("Druid_Moonfire"); 
         SortSkills();
     }
 

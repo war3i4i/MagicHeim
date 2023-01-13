@@ -185,10 +185,11 @@ namespace MagicHeim
 
             if (ConfirmationUI.IsVisible())
             {
-                ConfirmationUI.Hide();
+                ConfirmationUI.Hide(); 
                 Menu.instance?.OnClose();
             }
         }
+        
         
     }
 }

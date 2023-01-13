@@ -95,12 +95,16 @@
         <Reference Include="MonoMod.Utils">
             <HintPath>D:\SteamLibrary\steamapps\common\Valheim\BepInEx\core\MonoMod.Utils.dll</HintPath>
         </Reference>
+        <Reference Include="mscorlib" />
         <Reference Include="ServerSync">
             <HintPath>Libs\ServerSync.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
+        <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+        </Reference>
         <Reference Include="System.Xml" />
         <Reference Include="UnityEngine">
             <HintPath>Libs\UnityEngine.dll</HintPath>
@@ -322,11 +326,14 @@
         <Compile Include="PossibleSkillFixes.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Eagle.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Fish.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_Moonfire.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_SpiritWave.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_NatureBuff.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Rootball.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Wolf.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_ManaFlow.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Heal.cs" />
+        <Compile Include="SkillsDatabase\GlobalMechanics\MH_FollowTargetComponent.cs" />
         <Compile Include="SkillsDatabase\GlobalMechanics\MH_WeaponEnchant.cs" />
         <Compile Include="SkillsDatabase\MageSkills\Mage_AncientTotem.cs" />
         <Compile Include="SkillsDatabase\MageSkills\Mage_ArcaneShield.cs" />
