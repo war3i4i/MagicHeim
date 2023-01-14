@@ -95,3 +95,5 @@ mh_druid_moonfire: Moonfire
 mh_druid_moonfire_desc: Summons a moonfire that deals damage to target enemy
 mh_druid_rootball: Root Strike
 mh_druid_rootball_desc: Summons a projectile root strike that deals damage to target enemy and roots it
+mh_druid_spiritwave: Spirit Wave
+mh_druid_spiritwave_desc: Summons a spirit wave that deals damage to enemies on its way and healing allies

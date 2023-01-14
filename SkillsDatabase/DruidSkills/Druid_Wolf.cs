@@ -4,6 +4,7 @@ using MagicHeim.MH_Classes;
 using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
 using MagicHeim.UI_s;
+using Logger = MagicHeim_Logger.Logger;
 
 namespace MagicHeim.SkillsDatabase.DruidSkills;
 
@@ -86,9 +87,11 @@ public sealed class Druid_Wolf : MH_Skill
 
     private IEnumerator ManaDrain()
     {
+        int latestAttack = 1;
         Toggled = true;
         var manacost = this.CalculateSkillManacost();
         Player p = Player.m_localPlayer;
+        var stamina = p.GetStamina();
         p.m_seman.AddStatusEffect("Druid_WolfForm");
         UnityEngine.Object.Instantiate(Wolf_Explosion, p.transform.position, Quaternion.identity);
         for (;;)
@@ -109,7 +112,16 @@ public sealed class Druid_Wolf : MH_Skill
                 yield break;
             }
 
+            if (ZInput.GetButtonDown("Attack") && !p.InAttack())
+            {
+                p.m_zanim.SetTrigger("attack" + latestAttack);
+                latestAttack++; 
+                if (latestAttack > 3) latestAttack = 1;
+            }
+            
             p.UseEitr(useMana);
+            p.m_stamina = stamina;
+            if (p.m_stamina > p.m_maxStamina) p.m_stamina = p.m_maxStamina;
             yield return null;
         }
     }
@@ -269,7 +281,7 @@ public sealed class Druid_Wolf : MH_Skill
             }
         }
     }
-
+    
     [HarmonyPatch(typeof(Player), nameof(Player.InMinorAction))]
     static class Player_InMinorAction_Patch
     {

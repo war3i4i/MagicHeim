@@ -89,6 +89,7 @@ public sealed class Druid_Eagle : MH_Skill
         var manacost = this.CalculateSkillManacost(); 
         Toggled = true;
         Player p = Player.m_localPlayer;
+        float stamina = p.GetStamina();
         p.m_nview.InvokeRPC(ZNetView.Everybody, "MH_HideCharacter", true);
         p.m_nview.m_zdo.Set("MH_HideCharacter", true);
         p.m_zanim.SetTrigger("emote_stop");
@@ -152,6 +153,8 @@ public sealed class Druid_Eagle : MH_Skill
             }
 
             p.UseEitr(useMana);
+            p.m_stamina = stamina;
+            if (p.m_stamina > p.m_maxStamina) p.m_stamina = p.m_maxStamina;
             yield return null;
         }
     }
