@@ -128,7 +128,7 @@ namespace MagicHeim
                 ClassSelectionUI.AUsrc.outputAudioMixerGroup = __instance.m_masterMixer.outputAudioMixerGroup;
                 foreach (GameObject allAsset in MagicHeim.asset.LoadAllAssets<GameObject>())
                 {
-                    //if(allAsset.GetComponentInChildren<ZSFX>()) MagicHeim_Logger.Logger.Log($"Found {allAsset.name} with zsfx");
+                    if(allAsset.GetComponentInChildren<ZSFX>()) MagicHeim_Logger.Logger.Log($"Found {allAsset.name} with zsfx");
 
                     foreach (AudioSource audioSource in allAsset.GetComponentsInChildren<AudioSource>(true))
                     {

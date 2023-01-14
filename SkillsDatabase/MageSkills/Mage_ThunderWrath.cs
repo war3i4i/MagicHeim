@@ -153,6 +153,7 @@ public sealed class Mage_ThunderWrath : MH_Skill
                         hit.m_skill = Skills.SkillType.ElementalMagic;
                         if (c != Player.m_localPlayer) hit.SetAttacker(p);
                         hit.m_point = c.m_collider.ClosestPointOnBounds(go.transform.position) + Vector3.up;
+                        hit.m_ranged = true;
                         c.DamageMH(hit);
                     }
                 }

@@ -76,5 +76,6 @@ public static class SkillsDatabase
         AddSkill(new Druid_NatureBuff());
         AddSkill(new Druid_Rootball());
         AddSkill(new Druid_Moonfire());
+        AddSkill(new Druid_SpiritWave());
     }
 }

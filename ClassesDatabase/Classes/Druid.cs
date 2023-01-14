@@ -19,10 +19,11 @@ public class Druid : MH_ClassDefinition
         AddSkill("Druid_Heal");
         AddSkill("Druid_NatureBuff"); 
         AddSkill("Druid_Rootball"); 
+        AddSkill("Druid_Spiritwave"); 
         AddSkill("Druid_Moonfire"); 
         SortSkills();
     }
-
+ 
 
     protected internal override Color GetColor => Color.green;
 }
