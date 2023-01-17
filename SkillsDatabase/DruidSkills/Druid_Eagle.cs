@@ -88,10 +88,10 @@ public sealed class Druid_Eagle : MH_Skill
     {
         var manacost = this.CalculateSkillManacost(); 
         Toggled = true;
-        Player p = Player.m_localPlayer;
+        Player p = Player.m_localPlayer; 
         float stamina = p.GetStamina();
         p.m_nview.InvokeRPC(ZNetView.Everybody, "MH_HideCharacter", true);
-        p.m_nview.m_zdo.Set("MH_HideCharacter", true);
+        p.m_nview.m_zdo.Set("MH_HideCharacter", true); 
         p.m_zanim.SetTrigger("emote_stop");
         p.m_collider.isTrigger = true;
         UnityEngine.Object.Instantiate(Eagle_Explosion, p.transform.position + Vector3.up, Quaternion.identity);

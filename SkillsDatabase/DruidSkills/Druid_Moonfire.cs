@@ -90,10 +90,10 @@ public sealed class Druid_Moonfire : MH_Skill
             {
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
                     $"<color=cyan>Too</color><color=yellow> far</color>");
+                p.AddEitr(this.CalculateSkillManacost());
                 return;
             }
             if(!Utils.IsEnemy(enemy)) return;
-            
             var vfx = UnityEngine.Object.Instantiate(_Prefab, enemy.transform.position, Quaternion.identity);
             vfx.GetComponent<MH_FollowTargetComponent>().Setup(enemy);
             HitData hit = new();
@@ -105,10 +105,10 @@ public sealed class Druid_Moonfire : MH_Skill
             enemy.DamageMH(hit);
             p.m_zanim.SetTrigger(ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageWave]);
             StartCooldown(cooldown);
-            
         }
         else
         {
+            p.AddEitr(this.CalculateSkillManacost());
             MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
                 $"<color=cyan>No</color><color=yellow> target</color>");
         }

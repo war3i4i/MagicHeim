@@ -65,7 +65,7 @@ public sealed class Mage_AncientTotem : MH_Skill
         TotemDebuff = MagicHeim.asset.LoadAsset<GameObject>("Mage_AncientTotem_Debuff");
         TotemPrefab.AddComponent<AncientTotemComponent>();
         CachedIcon = _definition.Icon;
-        this.InitRequiredItemFirstHalf("Wood", 0, 1.88f);
+        this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
         this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
         this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
     }

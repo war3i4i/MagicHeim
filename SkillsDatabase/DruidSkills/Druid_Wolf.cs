@@ -103,7 +103,7 @@ public sealed class Druid_Wolf : MH_Skill
                 Toggled = false;
                 p.m_seman.RemoveStatusEffect("Druid_WolfForm");
                 ZDOID zdoID = Player.m_localPlayer.GetZDOID();
-                ZPackage pkg = new();
+                ZPackage pkg = new(); 
                 pkg.Write(zdoID);
                 pkg.Write("");
                 ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, "MH_Druid_WolfForm_RPC", pkg);
@@ -118,7 +118,7 @@ public sealed class Druid_Wolf : MH_Skill
                 latestAttack++; 
                 if (latestAttack > 3) latestAttack = 1;
             }
-            
+            p.m_zanim.SetFloat(Character.turn_speed, 0);
             p.UseEitr(useMana);
             p.m_stamina = stamina;
             if (p.m_stamina > p.m_maxStamina) p.m_stamina = p.m_maxStamina;

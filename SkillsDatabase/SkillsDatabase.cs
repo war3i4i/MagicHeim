@@ -77,5 +77,7 @@ public static class SkillsDatabase
         AddSkill(new Druid_Rootball());
         AddSkill(new Druid_Moonfire());
         AddSkill(new Druid_SpiritWave());
+        AddSkill(new Druid_WeaponEnchantPoison());
+        AddSkill(new Druid_WeaponEnchantSpirit());
     }
 }

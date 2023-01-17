@@ -330,9 +330,11 @@
         <Compile Include="SkillsDatabase\DruidSkills\Druid_SpiritWave.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_NatureBuff.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Rootball.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_WeaponEnchantSpirit.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Wolf.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_ManaFlow.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Heal.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_WeaponEnchantPoison.cs" />
         <Compile Include="SkillsDatabase\GlobalMechanics\MH_FollowTargetComponent.cs" />
         <Compile Include="SkillsDatabase\GlobalMechanics\MH_WeaponEnchant.cs" />
         <Compile Include="SkillsDatabase\MageSkills\Mage_AncientTotem.cs" />

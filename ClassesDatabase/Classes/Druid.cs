@@ -21,6 +21,8 @@ public class Druid : MH_ClassDefinition
         AddSkill("Druid_Rootball"); 
         AddSkill("Druid_Spiritwave"); 
         AddSkill("Druid_Moonfire"); 
+        AddSkill("Druid_Weaponenchantpoison"); 
+        AddSkill("Druid_Weaponenchantspirit"); 
         SortSkills();
     }
  

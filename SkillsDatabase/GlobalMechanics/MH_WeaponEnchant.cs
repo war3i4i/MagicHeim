@@ -16,7 +16,9 @@ public class MH_WeaponEnchant : ItemData
         None = 0,
         Fire = 1,
         Lightning = 2,
-        Frost = 3
+        Frost = 3,
+        Poison = 4,
+        Spirit = 5,
     }
 
     public Type type;
@@ -140,6 +142,12 @@ static class ItemDrop__Patch
             case MH_WeaponEnchant.Type.Lightning:
                 __result.m_lightning += data.value;
                 break;
+            case MH_WeaponEnchant.Type.Poison:
+                __result.m_poison += data.value;
+                break;
+            case MH_WeaponEnchant.Type.Spirit:
+                __result.m_spirit += data.value;
+                break;
         }
     }
 }
@@ -173,6 +181,15 @@ public class GetTooltipPatch
                 __result +=
                     $"\nEnchanted with Lightning Damage <color=blue>(+{data.value})</color>. Time left: <color=yellow>{(int)(data.duration - (EnvMan.instance.m_totalSeconds - data.time))} seconds</color>";
                 break;
+            case MH_WeaponEnchant.Type.Poison:
+                __result +=
+                    $"\nEnchanted with Poison Damage <color=green>(+{data.value})</color>. Time left: <color=yellow>{(int)(data.duration - (EnvMan.instance.m_totalSeconds - data.time))} seconds</color>";
+                break;
+            case MH_WeaponEnchant.Type.Spirit:
+                __result +=
+                    $"\nEnchanted with Spirit Damage <color=gray>(+{data.value})</color>. Time left: <color=yellow>{(int)(data.duration - (EnvMan.instance.m_totalSeconds - data.time))} seconds</color>";
+                break;
+             
         }
     }
 }

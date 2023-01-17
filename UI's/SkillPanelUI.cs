@@ -1,4 +1,5 @@
 ﻿using MagicHeim.AnimationHelpers;
+using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
 using UnityEngine.EventSystems;
 using Logger = MagicHeim_Logger.Logger;
@@ -406,5 +407,41 @@ public static class SkillPanelUI
     {
         Default();
         UI.SetActive(false);
+    }
+
+    public static void ShowVisualOnly()
+    {
+        UI.SetActive(true);
+    }
+    
+    public static void HideVisualOnly()
+    {
+        UI.SetActive(false);
+    }
+    
+    [HarmonyPatch(typeof(Hud),nameof(Hud.Update))]
+    static class Hud_Update_Patch
+    {
+        static void HideUImethod()
+        {
+            if(ClassManager.CurrentClass == Class.None) return;
+            if (Hud.instance.m_userHidden)
+            {
+                HideVisualOnly();
+            }
+            else
+            {
+                ShowVisualOnly();
+            }
+        }
+            
+            
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> HideUI(IEnumerable<CodeInstruction> code)
+        {
+            List<CodeInstruction> list = new(code);
+            list.Insert(51, CodeInstruction.Call(()=> HideUImethod()));
+            return list.AsEnumerable();
+        }
     }
 }
