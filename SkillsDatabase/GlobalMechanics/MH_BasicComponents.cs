@@ -17,3 +17,11 @@ public class MH_FollowTargetComponent : MonoBehaviour
     }
 }
 
+public class MH_FollowCameraRotation : MonoBehaviour
+{
+    private void FixedUpdate()
+    {
+        if(!GameCamera.instance) return;
+        transform.rotation = GameCamera.instance.transform.rotation;
+    }
+}

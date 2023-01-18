@@ -3,6 +3,7 @@ using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Classes;
 using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
+using MagicHeim.SkillsDatabase.GlobalMechanics;
 using MagicHeim.UI_s;
 using Logger = MagicHeim_Logger.Logger;
 
@@ -11,6 +12,7 @@ namespace MagicHeim.SkillsDatabase.MageSkills;
 public sealed class Druid_Shield : MH_Skill
 {
     private static GameObject Buff;
+    private static GameObject TextPrefab;
 
     public Druid_Shield()
     {
@@ -59,7 +61,8 @@ public sealed class Druid_Shield : MH_Skill
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageWave];
         _definition.AnimationTime = 0.8f;
         Buff = MagicHeim.asset.LoadAsset<GameObject>("Druid_Shield_Prefab");
-
+        TextPrefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_Shield_Text");
+        TextPrefab.AddComponent<MH_FollowCameraRotation>();
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
         this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
         this.InitRequiredItemFinal("MH_Tome_Mistlands", 3);
@@ -149,7 +152,9 @@ public sealed class Druid_Shield : MH_Skill
     {
         public int shieldAmount;
         public float takenDamage;
-
+        private GameObject numbers;
+        private Text text;
+        
         public SE_Druid_Shield_Buff()
         {
             name = "Druid_Shield_Buff";
@@ -180,17 +185,27 @@ public sealed class Druid_Shield : MH_Skill
         {
             shieldAmount = itemLevel;
         }
-         
-        public override string GetIconText()
-        {
-            return $"Duration: <color=white>{GetRemaningTime()}</color>.\nShield: <color=lime>{Mathf.Max(0, (int)(shieldAmount - takenDamage))}</color>";
-        } 
 
         public override void OnDamaged(HitData hit, Character attacker)
         {
             float totalDamage = hit.GetTotalDamage(); 
             this.takenDamage += totalDamage;
             hit.ApplyModifier(0f); 
+        }
+
+        public override void Setup(Character character)
+        {
+            base.Setup(character);
+            numbers = Instantiate(TextPrefab, character.transform);
+            text = numbers.GetComponentInChildren<Text>();
+        }
+
+        public override void UpdateStatusEffect(float dt)
+        {
+            base.UpdateStatusEffect(dt);
+            text.text = $"{Mathf.Max(0,(int)(shieldAmount - takenDamage))}";
+            if (!IsDone()) return;
+            if(numbers) Destroy(numbers);
         }
     }
 
