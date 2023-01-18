@@ -123,7 +123,7 @@ namespace MagicHeim
                 ClassSelectionUI.AUsrc.reverbZoneMix = 0;
                 ClassSelectionUI.AUsrc.spatialBlend = 0;
                 ClassSelectionUI.AUsrc.bypassListenerEffects = true;
-                ClassSelectionUI.AUsrc.bypassEffects = true;
+                ClassSelectionUI.AUsrc.bypassEffects = true; 
                 ClassSelectionUI.AUsrc.volume = 0.8f;
                 ClassSelectionUI.AUsrc.outputAudioMixerGroup = __instance.m_masterMixer.outputAudioMixerGroup;
                 foreach (GameObject allAsset in MagicHeim.asset.LoadAllAssets<GameObject>())

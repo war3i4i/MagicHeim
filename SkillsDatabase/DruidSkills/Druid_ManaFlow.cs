@@ -41,7 +41,7 @@ public sealed class Druid_ManaFlow : MH_Skill
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 1,
-            "Leveling Step");
+            "Leveling Step"); 
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
         this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);
@@ -49,9 +49,10 @@ public sealed class Druid_ManaFlow : MH_Skill
     }
 
     private static int CachedKey;
-
+ 
     public override void Execute(Func<bool> Cond)
     {
+        
     }
  
     public override bool CanExecute()

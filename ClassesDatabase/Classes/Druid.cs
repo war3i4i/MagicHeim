@@ -16,13 +16,15 @@ public class Druid : MH_ClassDefinition
         AddSkill("Druid_Wolf");
         AddSkill("Druid_Fish");
         AddSkill("Druid_Manaflow");
-        AddSkill("Druid_Heal");
-        AddSkill("Druid_NatureBuff"); 
+        AddSkill("Druid_Heal"); 
+        AddSkill("Druid_NatureBuff");  
         AddSkill("Druid_Rootball"); 
         AddSkill("Druid_Spiritwave"); 
         AddSkill("Druid_Moonfire"); 
         AddSkill("Druid_Weaponenchantpoison"); 
         AddSkill("Druid_Weaponenchantspirit"); 
+        AddSkill("Druid_Natureprotection"); 
+        AddSkill("Druid_Shield"); 
         SortSkills();
     }
  
