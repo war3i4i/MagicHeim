@@ -434,8 +434,8 @@ public static class SkillPanelUI
                 ShowVisualOnly();
             }
         }
-            
-            
+        
+        //hide UI on Ctrl + F3 button. IL offest (51) may be changed in future, aware
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> HideUI(IEnumerable<CodeInstruction> code)
         {

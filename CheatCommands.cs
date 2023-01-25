@@ -1,4 +1,5 @@
-﻿using MagicHeim.MH_Enums;
+﻿using System.Text;
+using MagicHeim.MH_Enums;
 
 namespace MagicHeim;
 
@@ -19,7 +20,7 @@ public class CheatCommands
         {
             var text = __instance.m_input.text;
             //non cheat
- 
+
             if (text == showExp && ClassManager.CurrentClass != Class.None)
             {
                 __instance.AddString(
@@ -46,8 +47,8 @@ public class CheatCommands
                     var skills = classDef.GetSkills();
                     foreach (var skill in skills)
                     {
-                        skill.Value.StartCooldown(0, true);
-                    }
+                        skill.Value.StartCooldown(0, true); 
+                    } 
 
                     __instance.AddString("<color=lime>CD's resetted</color>");
                 }
@@ -61,7 +62,7 @@ public class CheatCommands
 
             if (text.StartsWith(setLevel))
             {
-                var level = text.Substring(setLevel.Length);
+                string level = text.Substring(setLevel.Length);
                 if (int.TryParse(level, out var levelInt))
                 {
                     ClassManager.SetLevel(levelInt);
@@ -90,7 +91,7 @@ public class CheatCommands
 
                 return false;
             }
-            
+
             if (text.StartsWith(setClass))
             {
                 var className = text.Substring(setClass.Length);
@@ -106,8 +107,8 @@ public class CheatCommands
 
                 return false;
             }
-            
-            
+
+
             return true;
         }
     }

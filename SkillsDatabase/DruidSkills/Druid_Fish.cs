@@ -97,7 +97,7 @@ public sealed class Druid_Fish : MH_Skill
         {
             if(!p) yield break;
             var useMana = manacost * Time.deltaTime;
-            if (!Toggled || p.IsDead() || !p.HaveEitr(useMana) || !Utils.InWater())
+            if (!Toggled || p.IsDead() || !p.HaveEitr(useMana) || !Utils.InWaterFish())
             {
                 Toggled = false;
                 p?.m_seman.RemoveStatusEffect("Druid_FishForm");

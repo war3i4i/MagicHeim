@@ -73,7 +73,21 @@ public class PossibleSkillFixes
         private static void Postfix(Humanoid __instance, ref bool __result)
         {
             if (__instance != Player.m_localPlayer) return;
-            __result = __result && !__instance.m_nview.m_zdo.GetBool("MH_HideCharacter");
+            __result = __result && !__instance.m_nview.m_zdo.GetBool("MH_HideCharacter")
+                                && !__instance.m_nview.m_zdo.GetBool("MH_Druid_FishForm")
+                                && !__instance.m_nview.m_zdo.GetBool("MH_Druid_WolfForm");
+        }
+    }
+
+    [HarmonyPatch(typeof(Player), nameof(Player.TeleportTo))]
+    private static class TeleportDebugFix2
+    {
+        private static bool Prefix(Player __instance)
+        {
+            if (__instance != Player.m_localPlayer) return true;
+            return !__instance.m_nview.m_zdo.GetBool("MH_HideCharacter") &&
+                   !__instance.m_nview.m_zdo.GetBool("MH_Druid_FishForm") &&
+                   !__instance.m_nview.m_zdo.GetBool("MH_Druid_WolfForm");
         }
     }
 

@@ -148,8 +148,7 @@ public sealed class Mage_IceWall : MH_Skill
             rot.y = 0;
             p.transform.rotation = Quaternion.LookRotation(rot);
             StartCooldown(this.CalculateSkillCooldown());
-            p.m_zanim.SetTrigger(
-                ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon]);
+            p.m_zanim.SetTrigger(ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon]);
             foreach (Transform child in targetPoint.transform.Find("Scaler"))
             {
                 if (child.name != "Ball") continue;
@@ -157,7 +156,7 @@ public sealed class Mage_IceWall : MH_Skill
                 if (ballPos.y < 30) continue;
                 var wallRot = p.transform.rotation;
                 wallRot.y += UnityEngine.Random.Range(-0.5f, 0.5f);
-                var wall = UnityEngine.Object.Instantiate(Prefab, ballPos, wallRot);
+                UnityEngine.Object.Instantiate(Prefab, ballPos, wallRot);
             }
         }
         else

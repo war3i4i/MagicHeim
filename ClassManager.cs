@@ -288,8 +288,9 @@ public static class ClassManager
                 .Select(x => x.Split(':'))
                 .ToDictionary(x => x[0], x => int.Parse(x[1])));
         }
-        catch
+        catch(Exception ex)
         {
+            Logger.Log($"Got exception while parsing exp map:\n{ex}");
         }
 
         float exp = Exp_Configs.StartExp.Value;

@@ -283,6 +283,7 @@ public static class Utils
     }
 
     public static bool InWater() => Player.m_localPlayer.InLiquidSwimDepth();
+    public static bool InWaterFish() => Player.m_localPlayer.InWater();
 
     public static void DamageMH(this IDestructible c, HitData hit)
     {
