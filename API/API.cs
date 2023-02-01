@@ -10,6 +10,7 @@ public static class MH_API
     private static readonly MethodInfo MI_GetClass;
     private static readonly MethodInfo MI_GetEXP;
     private static readonly MethodInfo MI_GetEXPToNextLevel;
+    private static readonly MethodInfo MI_IsInstalled;
 
     public enum API_Class
     {
@@ -48,8 +49,15 @@ public static class MH_API
     {
         return (long)MI_GetEXPToNextLevel?.Invoke(null, null);
     }
+    
+    public static bool IsInstalled()
+    {
+        return (bool)MI_IsInstalled?.Invoke(null, null);
+    }
+    
 
-
+    private static bool DefaultRetFalse() => false;
+    private static bool DefaultRetTrue() => true;
     private static int DefaultRetInt() => 0;
     private static long DefaultRetLong() => 0;
     
@@ -63,6 +71,7 @@ public static class MH_API
             MI_GetLevel = defaultRetInt;
             MI_GetEXP = defaultRetLong;
             MI_GetEXPToNextLevel = defaultRetLong;
+            MI_IsInstalled = new Func<bool>(DefaultRetFalse).Method;
             return;
         }
         MI_AddSkillUseCondition = mh_API.GetMethod("MH_AddSkillUseCondition", BindingFlags.Public | BindingFlags.Static);
@@ -71,6 +80,7 @@ public static class MH_API
         MI_GetClass = mh_API.GetMethod("MH_GetClass", BindingFlags.Public | BindingFlags.Static);
         MI_GetEXP = mh_API.GetMethod("MH_GetEXP", BindingFlags.Public | BindingFlags.Static);
         MI_GetEXPToNextLevel = mh_API.GetMethod("MH_GetEXPToNextLevel", BindingFlags.Public | BindingFlags.Static);
+        MI_IsInstalled = new Func<bool>(DefaultRetTrue).Method;
     }
 }
 

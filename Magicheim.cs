@@ -3,6 +3,7 @@ using LocalizationManager;
 using MagicHeim.AnimationHelpers;
 using MagicHeim.SkillsDatabase.MageSkills;
 using MagicHeim.UI_s;
+using Object = UnityEngine.Object;
 
 namespace MagicHeim
 {
@@ -103,7 +104,7 @@ namespace MagicHeim
         public static ConfigEntry<T> config<T>(string group, string name, T value, string description,
             bool synchronizedSetting = true) =>
             _thistype.config(group, name, value, new ConfigDescription(description), synchronizedSetting);
-
+        
 
         private static AssetBundle GetAssetBundle(string filename)
         {
@@ -137,9 +138,10 @@ namespace MagicHeim
                 }
             }
         }
-
+        
         private void Update()
-        {
+        { 
+
             TurnOffUIs();
             if (OptionsUI.CurrentChoosenButton >= 0)
             {

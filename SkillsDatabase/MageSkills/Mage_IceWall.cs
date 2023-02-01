@@ -17,7 +17,7 @@ public sealed class Mage_IceWall : MH_Skill
     {
         _definition._InternalName = "Mage_Icewall";
         _definition.Name = "$mh_mage_icewall";
-        _definition.Description = "$mh_mage_icewall_desc";
+        _definition.Description = "$mh_mage_icewall_desc";  
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
             $"MIN Lvl Distance", 10f,
