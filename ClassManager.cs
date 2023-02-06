@@ -124,7 +124,7 @@ public static class ClassManager
             {
                 skill.Level++;
                 SkillPoints--;
-                SkillPanelUI.Status = SkillPanelUI.Change.NeedToChange;
+                SkillPanelUI.Status = SkillPanelUI.Change.ToUpdate;
                 result = true;
             }
             else

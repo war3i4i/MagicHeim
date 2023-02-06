@@ -147,11 +147,19 @@ namespace MagicHeim
             {
                 foreach (var key in (KeyCode[])Enum.GetValues(typeof(KeyCode)))
                 {
-                    if (Input.GetKeyDown(key))
-                    {
-                        OptionsUI.ButtonPressed(key);
-                        break;
-                    }
+                    if (!Input.GetKeyDown(key)) continue;
+                    OptionsUI.ButtonPressed(key);
+                    break;
+                }
+            }
+
+            if (OptionsUI.CurrentChoosenButtonAdditional >= 0)
+            {
+                foreach (var key in (KeyCode[])Enum.GetValues(typeof(KeyCode)))
+                {
+                    if (!Input.GetKeyDown(key)) continue;
+                    OptionsUI.ButtonPressedAdditional(key);
+                    break;
                 }
             }
 

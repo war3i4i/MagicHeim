@@ -8,9 +8,18 @@ namespace MagicHeim.UI_s;
 
 public class DragUI : MonoBehaviour, IDragHandler, IEndDragHandler
 {
-    public RectTransform dragRect;
+    private static RectTransform dragRect;
     private static ConfigEntry<float> UI_X;
     private static ConfigEntry<float> UI_Y;
+
+    public static void Default()
+    {
+        if(!dragRect) return;
+        UI_X.Value = (float)UI_X.DefaultValue;
+        UI_Y.Value = (float)UI_Y.DefaultValue;
+        MagicHeim._thistype.Config.Save();
+        dragRect.anchoredPosition = new Vector2(UI_X.Value, UI_Y.Value);
+    }
 
     private void Awake()
     {
@@ -57,12 +66,21 @@ public class DragUI : MonoBehaviour, IDragHandler, IEndDragHandler
     }
 }
 
-public class ResizeUI : MonoBehaviour, IDragHandler, IEndDragHandler
+public class ResizeUI : MonoBehaviour, IDragHandler, IEndDragHandler 
 {
-    public RectTransform dragRect;
-    private static ConfigEntry<float> UI_X;
+    private static RectTransform dragRect;
+    private static ConfigEntry<float> UI_X; 
     private static ConfigEntry<float> UI_Y;
     public Vector3 Scale => new Vector3(dragRect.localScale.x, dragRect.localScale.y, 1f);
+    
+    public static void Default()
+    {
+        if(!dragRect) return;
+        UI_X.Value = (float)UI_X.DefaultValue;
+        UI_Y.Value = (float)UI_Y.DefaultValue;
+        MagicHeim._thistype.Config.Save();
+        dragRect.localScale = new Vector3(UI_X.Value, UI_Y.Value, 1f);
+    }
     
     private void Awake()
     {
@@ -109,23 +127,24 @@ public static class SkillPanelUI
 {
     public enum Change
     {
-        NeedToChange,
+        ToUpdate,
         Changed
     }
 
-    public static Change Status = Change.NeedToChange;
+    public static Change Status = Change.ToUpdate;
 
     private static GameObject UI;
     private static GameObject SkillElement;
     private static Transform SkillsTransform;
 
     private static ConfigEntry<int> MaxSlots;
-    public static ConfigEntry<bool> UseAltHotkey;
+    public static ConfigEntry<bool>[] UseAltHotkey;
     public static ConfigEntry<KeyCode>[] MH_Hotkeys;
+    public static ConfigEntry<KeyCode>[] MH_AdditionalHotkeys;
 
     public static ResizeUI Resizer;
 
-    private static readonly List<KeyCode> DefaultHotkeys = new List<KeyCode>()
+    public static readonly List<KeyCode> DefaultHotkeys = new List<KeyCode>()
     {
         KeyCode.Alpha1,
         KeyCode.Alpha2,
@@ -154,12 +173,17 @@ public static class SkillPanelUI
     public static void Init()
     {
         MaxSlots = MagicHeim.config("SkillPanel", "MaxSlots", 10, "Max slots in skill panel");
-        UseAltHotkey = MagicHeim._thistype.Config.Bind("SkillPanel", "UseAltHotkey", true, "Use alt hotkey for skills");
         MH_Hotkeys = new ConfigEntry<KeyCode>[11];
+        UseAltHotkey = new ConfigEntry<bool>[10];
+        MH_AdditionalHotkeys = new ConfigEntry<KeyCode>[10];
         for (int i = 0; i < 10; ++i)
         {
             MH_Hotkeys[i] = MagicHeim._thistype.Config.Bind("SkillPanel", "SkillHotkey_" + (i + 1), DefaultHotkeys[i],
                 "Hotkey for skill " + (i + 1));
+            UseAltHotkey[i] = MagicHeim._thistype.Config.Bind("SkillPanel", "UseAltHotkey_" + (i + 1), true,
+                "Use Alt hotkey for skill " + (i + 1));
+            MH_AdditionalHotkeys[i] = MagicHeim._thistype.Config.Bind("SkillPanel", "SkillHotkeyAlt_" + (i + 1), KeyCode.LeftAlt,
+                "Alt hotkey for skill " + (i + 1));
         }
 
         MH_Hotkeys[10] = MagicHeim._thistype.Config.Bind("SkillPanel", "Open Skillbook", DefaultHotkeys[10],
@@ -210,7 +234,7 @@ public static class SkillPanelUI
             _skillSlots.Add(i, button);
         }
 
-        Status = Change.NeedToChange;
+        Status = Change.ToUpdate;
         if (!string.IsNullOrEmpty(data))
         {
             var skills = data.Split(';');
@@ -252,7 +276,7 @@ public static class SkillPanelUI
             skillSlot.Value.Skill = null;
         }
 
-        Status = Change.NeedToChange;
+        Status = Change.ToUpdate;
     }
 
     public static void SetSkill(int slot, int skill)
@@ -262,7 +286,7 @@ public static class SkillPanelUI
         _skillSlots[slot].Skill = ClassManager.CurrentClassDef.GetSkills().TryGetValue(skill, out var skillDef)
             ? skillDef
             : null;
-        Status = Change.NeedToChange;
+        Status = Change.ToUpdate;
     }
 
 
@@ -281,19 +305,19 @@ public static class SkillPanelUI
             //skill usage
             foreach (var button in _skillSlots)
             {
-                if (UseAltHotkey.Value)
+                if (UseAltHotkey[button.Value.index].Value)
                 {
-                    if (!Input.GetKey(KeyCode.LeftAlt) || !Input.GetKeyDown(MH_Hotkeys[button.Key].Value)) continue;
-                    if (button.Value.Skill != null && button.Value.Skill.Level > 0)
+                    if (!Input.GetKey(MH_AdditionalHotkeys[button.Value.index].Value) || !Input.GetKeyDown(MH_Hotkeys[button.Key].Value)) continue;
+                    if (button.Value.Skill is { Level: > 0 })
                     {
                         SkillCastHelper.CastSkill(button.Value.Skill,
-                            cond: () => Input.GetKey(KeyCode.LeftAlt) && Input.GetKey(MH_Hotkeys[button.Key].Value));
+                            cond: () => Input.GetKey(MH_AdditionalHotkeys[button.Value.index].Value) && Input.GetKey(MH_Hotkeys[button.Key].Value));
                     }
                 }
                 else
                 {
                     if (!Input.GetKeyDown(MH_Hotkeys[button.Key].Value)) continue;
-                    if (button.Value.Skill != null && button.Value.Skill.Level > 0)
+                    if (button.Value.Skill is { Level: > 0 })
                     {
                         SkillCastHelper.CastSkill(button.Value.Skill,
                             cond: () => Input.GetKey(MH_Hotkeys[button.Key].Value));
@@ -307,7 +331,7 @@ public static class SkillPanelUI
             {
                 if (button.Value.Skill == null)
                 {
-                    if (Status == Change.NeedToChange)
+                    if (Status == Change.ToUpdate)
                     {
                         button.Value.Icon.enabled = false;
                         button.Value.Cooldown.fillAmount = 0;
@@ -326,7 +350,7 @@ public static class SkillPanelUI
                         goto restart;
                     }
 
-                    if (Status == Change.NeedToChange)
+                    if (Status == Change.ToUpdate)
                     {
                         button.Value.Icon.enabled = true;
                         button.Value.Manacost.gameObject.SetActive(true);

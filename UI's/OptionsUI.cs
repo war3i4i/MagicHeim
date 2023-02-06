@@ -10,24 +10,24 @@ public static class OptionsUI
     private static GameObject LatestUI;
     private static readonly List<Image> toDropColor = new();
 
-    private static void Init(GameObject UI)
-    {
-        UI.transform.Find("Ok").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -340f);
-        UI.transform.Find("Keys").GetComponent<RectTransform>().localScale = new Vector3(1.5f, 1.5f, 1.5f);
-        UI.transform.Find("Keys").GetComponent<RectTransform>().anchoredPosition = new Vector2(-200, 225f);
-        UI.transform.Find("UseAlt").GetComponent<RectTransform>().localScale = new Vector3(1.5f, 1.5f, 1.5f);
-        UI.transform.Find("UseAlt").GetComponent<RectTransform>().anchoredPosition = new Vector2(250, 225f);
-    }
-
 
     public static int CurrentChoosenButton = -1;
+    public static int CurrentChoosenButtonAdditional = -1;
 
     private static void SetCurrentActiveHotkeySwap(int index)
     {
         ClassSelectionUI.AUsrc.Play();
         toDropColor.ForEach(x => x.color = Color.white);
-        toDropColor[index].color = Color.green;
+        toDropColor[index * 2].color = Color.green;
         CurrentChoosenButton = index;
+    }
+
+    private static void SetCurrentActiveHotkeySwapAdditional(int index)
+    {
+        ClassSelectionUI.AUsrc.Play();
+        toDropColor.ForEach(x => x.color = Color.white);
+        toDropColor[index * 2 + 1].color = Color.green;
+        CurrentChoosenButtonAdditional = index;
     }
 
     public static void ButtonPressed(KeyCode key)
@@ -38,7 +38,17 @@ public static class OptionsUI
         toDropColor.ForEach(x => x.color = Color.white);
         MagicHeim._thistype.Config.Save();
         UpdateValues();
-        SkillPanelUI.Status = SkillPanelUI.Change.NeedToChange;
+        SkillPanelUI.Status = SkillPanelUI.Change.ToUpdate;
+    }
+
+    public static void ButtonPressedAdditional(KeyCode key)
+    {
+        if (CurrentChoosenButtonAdditional == -1) return;
+        SkillPanelUI.MH_AdditionalHotkeys[CurrentChoosenButtonAdditional].Value = key;
+        CurrentChoosenButtonAdditional = -1;
+        toDropColor.ForEach(x => x.color = Color.white);
+        MagicHeim._thistype.Config.Save();
+        UpdateValues();
     }
 
 
@@ -46,15 +56,22 @@ public static class OptionsUI
     {
         if (!LatestUI) return;
         var hotkeys = SkillPanelUI.MH_Hotkeys;
+        var additional = SkillPanelUI.MH_AdditionalHotkeys;
         for (int i = 0; i < 10; ++i)
         {
             LatestUI.transform.Find($"Keys/Key{i + 1}/Label").GetComponent<Text>().text = $"Use Skill {i + 1}";
             LatestUI.transform.Find($"Keys/Key{i + 1}/Background/key").GetComponent<Text>().text =
                 hotkeys[i].Value.ToString().Replace("Alpha", "").Replace("Mouse", "M");
+
+            LatestUI.transform.Find($"AdditionalButtons/Key{i + 1}/Background/key").GetComponent<Text>().text =
+                additional[i].Value.ToString().Replace("Alpha", "").Replace("Mouse", "M");
+
+            LatestUI.transform.Find($"Alts/Alt{i + 1}/Background/Checkmark").gameObject
+                .SetActive(SkillPanelUI.UseAltHotkey[i].Value);
         }
 
-        LatestUI.transform.Find($"Keys/Key{11}/Label").GetComponent<Text>().text = $"Open SkillBook";
-        LatestUI.transform.Find($"Keys/Key{11}/Background/key").GetComponent<Text>().text =
+        LatestUI.transform.Find($"Keys/Key11/Label").GetComponent<Text>().text = $"Open SkillBook";
+        LatestUI.transform.Find($"Keys/Key11/Background/key").GetComponent<Text>().text =
             hotkeys[10].Value.ToString().Replace("Alpha", "").Replace("Mouse", "M");
     }
 
@@ -64,6 +81,7 @@ public static class OptionsUI
         static void Postfix(Settings __instance)
         {
             var hotkeys = SkillPanelUI.MH_Hotkeys;
+            var additional = SkillPanelUI.MH_AdditionalHotkeys;
             var MH = __instance.transform.Find("panel/Tabs/MagicHeim");
             toDropColor.Clear();
             for (int i = 0; i < 10; ++i)
@@ -75,32 +93,74 @@ public static class OptionsUI
                 MH.transform.Find($"Keys/Key{i + 1}/Background").GetComponent<Button>().onClick
                     .AddListener(() => SetCurrentActiveHotkeySwap(i1));
                 toDropColor.Add(MH.transform.Find($"Keys/Key{i + 1}/Background").GetComponent<Image>());
+
+                MH.transform.Find($"AdditionalButtons/Key{i + 1}/Background/key").GetComponent<Text>().text =
+                    additional[i].Value.ToString().Replace("Alpha", "").Replace("Mouse", "M");
+                MH.transform.Find($"AdditionalButtons/Key{i + 1}/Background").GetComponent<Button>().onClick
+                    .AddListener(() => SetCurrentActiveHotkeySwapAdditional(i1));
+                toDropColor.Add(MH.transform.Find($"AdditionalButtons/Key{i + 1}/Background").GetComponent<Image>());
+
+                MH.transform.Find($"Alts/Alt{i + 1}/Background/Checkmark").gameObject
+                    .SetActive(SkillPanelUI.UseAltHotkey[i].Value);
+                MH.transform.Find($"Alts/Alt{i + 1}/Background").GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    ClassSelectionUI.AUsrc.Play();
+                    SkillPanelUI.UseAltHotkey[i1].Value = !SkillPanelUI.UseAltHotkey[i1].Value;
+                    MH.transform.Find($"Alts/Alt{i1 + 1}/Background/Checkmark").gameObject
+                        .SetActive(SkillPanelUI.UseAltHotkey[i1].Value);
+                    MagicHeim._thistype.Config.Save();
+                });
             }
 
-            MH.transform.Find($"Keys/Key{11}/Label").GetComponent<Text>().text = $"Open Skillbook";
-            MH.transform.Find($"Keys/Key{11}/Background/key").GetComponent<Text>().text =
+            MH.transform.Find("Keys/Key11/Label").GetComponent<Text>().text = $"Open Skillbook";
+            MH.transform.Find("Keys/Key11/Background/key").GetComponent<Text>().text =
                 hotkeys[10].Value.ToString().Replace("Alpha", "").Replace("Mouse", "M");
-            MH.transform.Find($"Keys/Key{11}/Background").GetComponent<Button>().onClick
+            MH.transform.Find("Keys/Key11/Background").GetComponent<Button>().onClick
                 .AddListener(() => SetCurrentActiveHotkeySwap(10));
-            toDropColor.Add(MH.transform.Find($"Keys/Key{11}/Background").GetComponent<Image>());
+            toDropColor.Add(MH.transform.Find("Keys/Key11/Background").GetComponent<Image>());
 
+            MH.transform.Find("DefaultButtons").GetComponent<Button>().onClick.AddListener(() =>
+            {
+                ClassSelectionUI.AUsrc.Play();
+                Reset();
+            });
+            
+            MH.transform.Find("DefaultUI").GetComponent<Button>().onClick.AddListener(() =>
+            {
+                ClassSelectionUI.AUsrc.Play();
+                ResetUI();
+            });
 
             MH.transform.Find("Ok").GetComponent<Button>().onClick.AddListener(() =>
-            {
+            { 
                 ClassSelectionUI.AUsrc.Play();
                 __instance.OnOk();
-            });
-            MH.transform.Find("UseAlt/Background/Checkmark").gameObject.SetActive(SkillPanelUI.UseAltHotkey.Value);
-            MH.transform.Find("UseAlt/Background").GetComponent<Button>().onClick.AddListener(() =>
-            {
-                ClassSelectionUI.AUsrc.Play();
-                SkillPanelUI.UseAltHotkey.Value = !SkillPanelUI.UseAltHotkey.Value;
-                MH.transform.Find("UseAlt/Background/Checkmark").gameObject.SetActive(SkillPanelUI.UseAltHotkey.Value);
-                MagicHeim._thistype.Config.Save();
             });
 
             LatestUI = MH.gameObject;
         }
+    }
+
+    private static void Reset()
+    {
+        var hotkeys = SkillPanelUI.MH_Hotkeys;
+        var additional = SkillPanelUI.MH_AdditionalHotkeys;
+        var useAlt = SkillPanelUI.UseAltHotkey;
+        for (int i = 0; i < 10; i++)
+        {
+            hotkeys[i].Value = SkillPanelUI.DefaultHotkeys[i];
+            additional[i].Value = KeyCode.LeftAlt;
+            useAlt[i].Value = true;
+        }
+        hotkeys[10].Value = KeyCode.K;
+        MagicHeim._thistype.Config.Save();
+        UpdateValues();
+    }
+
+    private static void ResetUI()
+    {
+        ResizeUI.Default();
+        DragUI.Default();
     }
 
 
@@ -129,7 +189,6 @@ public static class OptionsUI
                 UnityEngine.Object.Instantiate(MagicHeim.asset.LoadAsset<GameObject>("MagicHeimSettings"));
             newPage.transform.SetParent(page);
             newPage.name = "MagicHeim";
-            Init(newPage);
             newPage.SetActive(false);
             TabHandler.Tab newTab = new TabHandler.Tab();
             newTab.m_default = false;
