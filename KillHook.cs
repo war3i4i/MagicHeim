@@ -31,7 +31,7 @@ namespace MagicHeim.KillHooks
 
             private static void Postfix(Character __instance)
             {
-                if (__instance.GetHealth() <= 0f && CharacterLastDamageList.ContainsKey(__instance))
+                if (__instance.GetHealth() <= 0f && CharacterLastDamageList.TryGetValue(__instance, out long id) && id != 100)
                 {
                     ZRoutedRpc.instance.InvokeRoutedRPC(CharacterLastDamageList[__instance], "MH KillHook",
                         global::Utils.GetPrefabName(__instance.gameObject), __instance.GetLevel());
@@ -45,7 +45,7 @@ namespace MagicHeim.KillHooks
         {
             private static void Postfix(Character __instance)
             {
-                if (__instance.GetHealth() <= 0f && CharacterLastDamageList.ContainsKey(__instance))
+                if (__instance.GetHealth() <= 0f && CharacterLastDamageList.TryGetValue(__instance, out long id) && id != 100)
                 {
                     ZRoutedRpc.instance.InvokeRoutedRPC(CharacterLastDamageList[__instance], "MH KillHook",
                         global::Utils.GetPrefabName(__instance.gameObject), __instance.GetLevel());
