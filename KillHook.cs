@@ -33,7 +33,7 @@ namespace MagicHeim.KillHooks
             {
                 if (__instance.GetHealth() <= 0f && CharacterLastDamageList.TryGetValue(__instance, out long id) && id != 100)
                 {
-                    ZRoutedRpc.instance.InvokeRoutedRPC(CharacterLastDamageList[__instance], "MH KillHook",
+                    ZRoutedRpc.instance.InvokeRoutedRPC(id, "MH KillHook",
                         global::Utils.GetPrefabName(__instance.gameObject), __instance.GetLevel());
                     CharacterLastDamageList.Remove(__instance);
                 }
@@ -47,7 +47,7 @@ namespace MagicHeim.KillHooks
             {
                 if (__instance.GetHealth() <= 0f && CharacterLastDamageList.TryGetValue(__instance, out long id) && id != 100)
                 {
-                    ZRoutedRpc.instance.InvokeRoutedRPC(CharacterLastDamageList[__instance], "MH KillHook",
+                    ZRoutedRpc.instance.InvokeRoutedRPC(id, "MH KillHook",
                         global::Utils.GetPrefabName(__instance.gameObject), __instance.GetLevel());
                     CharacterLastDamageList.Remove(__instance);
                 }
