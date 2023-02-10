@@ -15,12 +15,12 @@ namespace MagicHeim
     {
         private const string GUID = "kg.magicheim";
         private const string PluginName = "MagicHeim";
-        private const string PluginVersion = "1.1.0";
+        private const string PluginVersion = "1.2.1";
         public static MagicHeim _thistype;
         private readonly ConfigSync configSync = new(GUID) { DisplayName = PluginName };
-        public static AssetBundle asset;
+        public static AssetBundle asset; 
         public static GameObject MH_Altar;
-        public static ConfigFile MH_SyncedConfig;
+        public static ConfigFile MH_SyncedConfig;  
         private static FileSystemWatcher FSW;
 
         private void Awake()

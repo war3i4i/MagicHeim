@@ -244,12 +244,12 @@ public static class SkillPanelUI
                     break;
                 int.TryParse(skills[i], out var skillID);
                 SetSkill(i, skillID);
-            }
+            } 
         }
 
         _coroutine = Player.m_localPlayer.StartCoroutine(Global_Routine());
     }
-
+ 
     private static void DragSkill(int index)
     {
         ClassSelectionUI.AUsrc.Play();

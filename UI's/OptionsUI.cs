@@ -15,11 +15,11 @@ public static class OptionsUI
     public static int CurrentChoosenButtonAdditional = -1;
 
     private static void SetCurrentActiveHotkeySwap(int index)
-    {
+    { 
         ClassSelectionUI.AUsrc.Play();
         toDropColor.ForEach(x => x.color = Color.white);
         toDropColor[index * 2].color = Color.green;
-        CurrentChoosenButton = index;
+        CurrentChoosenButton = index; 
     }
 
     private static void SetCurrentActiveHotkeySwapAdditional(int index)
