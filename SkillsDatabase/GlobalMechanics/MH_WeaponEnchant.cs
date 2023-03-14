@@ -175,7 +175,7 @@ public class GetTooltipPatch
                 break;
             case MH_WeaponEnchant.Type.Frost:
                 __result +=
-                    $"\nEnchanted with Frost Damage <color=cyan>(+{data.value})</color>. Time left: <color=yellow>{(int)(data.duration - (EnvMan.instance.m_totalSeconds - data.time))} seconds</color>";
+                    $"\nEnchanted with Frost Damage <color=#00FFFF>(+{data.value})</color>. Time left: <color=yellow>{(int)(data.duration - (EnvMan.instance.m_totalSeconds - data.time))} seconds</color>";
                 break;
             case MH_WeaponEnchant.Type.Lightning:
                 __result +=

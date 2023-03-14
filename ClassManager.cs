@@ -314,7 +314,7 @@ public static class ClassManager
     public static void AddExp(long exp)
     {
         if (Level >= Exp_Configs.MaxLevel.Value) return;
-        Utils.FloatingText($"<color=yellow>+ {exp}</color><color=cyan> exp</color>");
+        Utils.FloatingText($"<color=yellow>+ {exp}</color><color=#00FFFF> exp</color>");
         while (exp > 0)
         {
             if (Level >= Exp_Configs.MaxLevel.Value) break;

@@ -1,4 +1,4 @@
-mh_altar: <color=cyan>Magic</color><color=yellow>Heim</color> Altar
+mh_altar: <color=#00FFFF>Magic</color><color=yellow>Heim</color> Altar
 mh_altar_desc: A magical altar that allows you to change your class
 mh_acceptclass: Change Class
 mh_mage_energyblast: Energy Blast

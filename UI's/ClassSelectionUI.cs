@@ -197,7 +197,7 @@ public static class ClassSelectionUI
                 LOADING.gameObject.SetActive(false);
                 SkillDescription.text = skill.Value.Description;
                 if (skill.Value.Video != null)
-                    SkillDescription.text += "\n\n<color=lime>Click to watch video</color>";
+                    SkillDescription.text += "\n\n<color=#00FF00>Click to watch video</color>";
             };
             skillPreview.GetComponent<UIInputHandler>().m_onPointerExit = _ =>
             {

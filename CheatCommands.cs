@@ -16,7 +16,7 @@ public class CheatCommands
 
         private const string showExp = "/exp";
 
-        static bool Prefix(Chat __instance)
+        static bool Prefix(Chat __instance) 
         {
             var text = __instance.m_input.text;
             //non cheat
@@ -24,7 +24,7 @@ public class CheatCommands
             if (text == showExp && ClassManager.CurrentClass != Class.None)
             {
                 __instance.AddString(
-                    $"<color=cyan>Magic</color><color=yellow>Heim</color> EXP: <color=cyan>{ClassManager.EXP}</color> / <color=yellow>{ClassManager.GetExpForLevel(ClassManager.Level)}</color>");
+                    $"<color=#00FFFF>Magic</color><color=yellow>Heim</color> EXP: <color=#00FFFF>{ClassManager.EXP}</color> / <color=yellow>{ClassManager.GetExpForLevel(ClassManager.Level)}</color>");
                 return false;
             }
 
@@ -52,7 +52,7 @@ public class CheatCommands
                         skill.Value.StartCooldown(0, true); 
                     } 
 
-                    __instance.AddString("<color=lime>CD's resetted</color>");
+                    __instance.AddString("<color=#00FF00>CD's resetted</color>");
                 }
                 else
                 {
@@ -68,7 +68,7 @@ public class CheatCommands
                 if (int.TryParse(level, out var levelInt))
                 {
                     ClassManager.SetLevel(levelInt);
-                    __instance.AddString($"<color=lime>Level Set To {levelInt}</color>");
+                    __instance.AddString($"<color=#00FF00>Level Set To {levelInt}</color>");
                 }
                 else
                 {
@@ -84,7 +84,7 @@ public class CheatCommands
                 if (int.TryParse(exp, out var expInt))
                 {
                     ClassManager.AddExp(expInt);
-                    __instance.AddString($"<color=lime>Added {expInt} exp</color>");
+                    __instance.AddString($"<color=#00FF00>Added {expInt} exp</color>");
                 }
                 else
                 {
@@ -100,7 +100,7 @@ public class CheatCommands
                 if (Enum.TryParse(className, true, out Class classEnum))
                 {
                     ClassManager.SetClass(classEnum);
-                    __instance.AddString($"<color=lime>Class Set To {classEnum}</color>");
+                    __instance.AddString($"<color=#00FF00>Class Set To {classEnum}</color>");
                 }
                 else
                 {

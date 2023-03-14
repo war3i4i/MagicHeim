@@ -1,4 +1,6 @@
-﻿namespace MagicHeim;
+﻿using TMPro;
+
+namespace MagicHeim;
 
 public static class CustomMapPins
 {
@@ -18,18 +20,23 @@ public static class CustomMapPins
             pin.m_save = false;
             pin.m_checked = false;
             pin.m_ownerID = 0;
+            RectTransform root = (Minimap.instance.m_mode == Minimap.MapMode.Large) ? Minimap.instance.m_pinNameRootLarge : Minimap.instance.m_pinNameRootSmall;
+            pin.m_NamePinData = new Minimap.PinNameData(pin);
+            Minimap.instance.CreateMapNamePin(pin, root);
+            pin.m_NamePinData.PinNameText.richText = true;
+            pin.m_NamePinData.PinNameText.overrideColorTags = false;
             Minimap.instance?.m_pins?.Add(pin);
         }
 
         private void LateUpdate()
         {
-            pin.m_checked = false;
+            pin.m_checked = false; 
             pin.m_pos = transform.position;
         }
 
         private void OnDestroy()
         {
-            if (pin.m_uiElement) Destroy(pin.m_uiElement.gameObject);
+            if (pin.m_uiElement) Minimap.instance.DestroyPinMarker(pin);
             Minimap.instance?.m_pins?.Remove(pin);
         }
     }
@@ -40,14 +47,5 @@ public static class CustomMapPins
         comp.pinName = name;
         comp.icon = icon;
     }
-
-
-    [HarmonyPatch(typeof(Minimap), nameof(Minimap.Awake))]
-    static class Minimap_Awake_Patch
-    {
-        static void Postfix(Minimap __instance)
-        {
-            __instance.m_pinPrefab.transform.Find("Name").GetComponent<Text>().supportRichText = true;
-        }
-    }
+    
 }

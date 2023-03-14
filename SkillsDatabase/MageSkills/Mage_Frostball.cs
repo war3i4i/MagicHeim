@@ -204,7 +204,7 @@ public sealed class Mage_Frostball : MH_Skill
         float currentManacost = this.CalculateSkillManacost(forLevel);
 
         builder.AppendLine(
-            $"Damage: <color=cyan>Frost {Math.Round(currentValue / 2f, 1)}</color> + <color=yellow>Blunt {Math.Round(currentValue / 2f, 1)}</color>");
+            $"Damage: <color=#00FFFF>Frost {Math.Round(currentValue / 2f, 1)}</color> + <color=yellow>Blunt {Math.Round(currentValue / 2f, 1)}</color>");
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
@@ -223,7 +223,7 @@ public sealed class Mage_Frostball : MH_Skill
 
             builder.AppendLine($"\nNext Level:");
             builder.AppendLine(
-                $"Damage: <color=cyan>Frost {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=yellow>Blunt {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
+                $"Damage: <color=#00FFFF>Frost {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=yellow>Blunt {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
             builder.AppendLine(
                 $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
             builder.AppendLine(

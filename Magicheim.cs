@@ -15,7 +15,7 @@ namespace MagicHeim
     {
         private const string GUID = "kg.magicheim";
         private const string PluginName = "MagicHeim";
-        private const string PluginVersion = "1.2.1";
+        private const string PluginVersion = "1.2.2";
         public static MagicHeim _thistype;
         private readonly ConfigSync configSync = new(GUID) { DisplayName = PluginName };
         public static AssetBundle asset; 
@@ -25,7 +25,7 @@ namespace MagicHeim
 
         private void Awake()
         {
-            Localizer.Load();
+            Localizer.Load(); 
             _thistype = this;
             MH_SyncedConfig = new ConfigFile(Path.Combine(Paths.ConfigPath, "kg.magicheim_synced.cfg"), true);
             var stream = Assembly.GetExecutingAssembly()
@@ -139,14 +139,14 @@ namespace MagicHeim
             }
         }
         
+        
         private void Update()
         { 
-
             TurnOffUIs();
             if (OptionsUI.CurrentChoosenButton >= 0)
             {
                 foreach (var key in (KeyCode[])Enum.GetValues(typeof(KeyCode)))
-                {
+                { 
                     if (!Input.GetKeyDown(key)) continue;
                     OptionsUI.ButtonPressed(key);
                     break;

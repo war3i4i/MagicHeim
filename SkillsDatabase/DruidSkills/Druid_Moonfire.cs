@@ -89,7 +89,7 @@ public sealed class Druid_Moonfire : MH_Skill
             if (Vector3.Distance(enemy.transform.position, p.transform.position) > 50f)
             {
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
-                    $"<color=cyan>Too</color><color=yellow> far</color>");
+                    $"<color=#00FFFF>Too</color><color=yellow> far</color>");
                 p.AddEitr(this.CalculateSkillManacost());
                 return;
             }
@@ -110,7 +110,7 @@ public sealed class Druid_Moonfire : MH_Skill
         {
             p.AddEitr(this.CalculateSkillManacost());
             MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
-                $"<color=cyan>No</color><color=yellow> target</color>");
+                $"<color=#00FFFF>No</color><color=yellow> target</color>");
         }
     }
 
@@ -136,7 +136,7 @@ public sealed class Druid_Moonfire : MH_Skill
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
 
-        builder.AppendLine($"Damage: <color=magenta>Piercing {Math.Round(currentValue, 1)}</color>");
+        builder.AppendLine($"Damage: <color=#FF00FF>Piercing {Math.Round(currentValue, 1)}</color>");
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
@@ -154,7 +154,7 @@ public sealed class Druid_Moonfire : MH_Skill
             var roundedManacostDiff = Math.Round(manacostDiff, 1);
 
             builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Damage: <color=magenta>Piercing {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
+            builder.AppendLine($"Damage: <color=#FF00FF>Piercing {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
             builder.AppendLine(
                 $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
             builder.AppendLine(

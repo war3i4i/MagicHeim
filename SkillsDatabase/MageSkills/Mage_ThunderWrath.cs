@@ -108,7 +108,7 @@ public sealed class Mage_ThunderWrath : MH_Skill
         {
             if (rangeShowup) UnityEngine.Object.Destroy(rangeShowup);
             p.AddEitr(this.CalculateSkillManacost());
-            MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "<color=cyan>Too far</color>");
+            MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "<color=#00FFFF>Too far</color>");
             yield break;
         }
 
@@ -202,7 +202,7 @@ public sealed class Mage_ThunderWrath : MH_Skill
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
-        if (this.Level < maxLevel && this.Level > 0)
+        if (this.Level < maxLevel && this.Level > 0) 
         {
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float nextCooldown = this.CalculateSkillCooldown(forLevel + 1);

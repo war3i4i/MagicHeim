@@ -131,7 +131,7 @@ public sealed class Mage_ThunderShock : MH_Skill
         {
             p.AddEitr(this.CalculateSkillManacost());
             MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
-                $"<color=cyan>Too Far</color>");
+                $"<color=#00FFFF>Too Far</color>");
         }
     }
 

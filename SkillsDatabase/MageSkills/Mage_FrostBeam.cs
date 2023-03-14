@@ -217,7 +217,7 @@ public sealed class Mage_FrostBeam : MH_Skill
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
 
-        builder.AppendLine($"Damage (Per Second): <color=cyan>Frost  {Math.Round(currentValue, 1)}</color>");
+        builder.AppendLine($"Damage (Per Second): <color=#00FFFF>Frost  {Math.Round(currentValue, 1)}</color>");
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
@@ -236,7 +236,7 @@ public sealed class Mage_FrostBeam : MH_Skill
 
             builder.AppendLine($"\nNext Level:");
             builder.AppendLine(
-                $"Damage (Per Second): <color=cyan>Frost  {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
+                $"Damage (Per Second): <color=#00FFFF>Frost  {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
             builder.AppendLine(
                 $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
             builder.AppendLine(

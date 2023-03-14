@@ -218,7 +218,7 @@ public sealed class Mage_BlackHole : MH_Skill
             if (!cancel)
             {
                 p.AddEitr(this.CalculateSkillManacost());
-                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "<color=cyan>Too far</color>");
+                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "<color=#00FFFF>Too far</color>");
             }
         }
 

@@ -162,7 +162,7 @@ public sealed class Mage_IceWall : MH_Skill
         else
         {
             if (!cancel)
-                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "<color=cyan>Too far</color>");
+                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "<color=#00FFFF>Too far</color>");
         }
 
         UnityEngine.Object.Destroy(rangeShowup);

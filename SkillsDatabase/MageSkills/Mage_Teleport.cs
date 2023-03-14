@@ -33,7 +33,7 @@ public sealed class Mage_Teleport : MH_Skill
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
             $"MAX Lvl Manacost", 45f,
             "Manacost amount (Max Lvl)");
-
+ 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
             $"MIN Lvl Cooldown", 18f,
             "Cooldown amount (Min Lvl)");
@@ -186,7 +186,7 @@ public sealed class Mage_Teleport : MH_Skill
             if (!cancel)
             {
                 p.AddEitr(this.CalculateSkillManacost());
-                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "<color=cyan>Too far</color>");
+                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "<color=#00FFFF>Too far</color>");
             }
         }
 

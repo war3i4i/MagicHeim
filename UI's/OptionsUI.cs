@@ -182,7 +182,7 @@ public static class OptionsUI
             newButton.GetComponent<RectTransform>().anchoredPosition +=
                 new Vector2(0, newButton.GetComponent<RectTransform>().sizeDelta.y);
             newButton.transform.Find("Text").GetComponent<Text>().text =
-                "<color=cyan>Magic</color><color=yellow>Heim</color>";
+                "<color=#00FFFF>Magic</color><color=yellow>Heim</color>";
             var tabHandler = settingsPrefab.transform.Find("panel/TabButtons").GetComponent<TabHandler>();
             var page = settingsPrefab.transform.Find("panel/Tabs");
             GameObject newPage =
