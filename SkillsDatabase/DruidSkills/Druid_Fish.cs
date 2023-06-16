@@ -91,7 +91,7 @@ public sealed class Druid_Fish : MH_Skill
         var manacost = this.CalculateSkillManacost();
         Player p = Player.m_localPlayer;
         var stamina = p.GetStamina();
-        p.m_seman.AddStatusEffect("Druid_FishForm");
+        p.m_seman.AddStatusEffect("Druid_FishForm".GetStableHashCode());
         UnityEngine.Object.Instantiate(Fish_Explosion, p.transform.position, Quaternion.identity);
         for (;;)
         {
@@ -100,7 +100,7 @@ public sealed class Druid_Fish : MH_Skill
             if (!Toggled || p.IsDead() || !p.HaveEitr(useMana) || !Utils.InWaterFish())
             {
                 Toggled = false;
-                p?.m_seman.RemoveStatusEffect("Druid_FishForm");
+                p?.m_seman.RemoveStatusEffect("Druid_FishForm".GetStableHashCode());
                 ZDOID zdoID = Player.m_localPlayer.GetZDOID();
                 ZPackage pkg = new();
                 pkg.Write(zdoID);
@@ -170,7 +170,7 @@ public sealed class Druid_Fish : MH_Skill
         };
         p.m_collider.enabled = true;
         p.m_animator.SetBool(Wakeup, false);
-        p.m_animator.SetBool(Character.inWater, false);
+        p.m_animator.SetBool(Character.s_inWater, false);
     }
 
     private static void ReplacePlayerModel(Player p, string changedModel)

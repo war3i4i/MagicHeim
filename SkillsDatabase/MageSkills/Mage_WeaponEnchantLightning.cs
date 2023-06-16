@@ -122,7 +122,7 @@ public sealed class Mage_WeaponEnchantLightning : MH_Skill
             Player.m_localPlayer?.EquipItem(weapon);
     }
 
-    [HarmonyPatch(typeof(VisEquipment), nameof(VisEquipment.SetLeftHandEquiped))]
+    [HarmonyPatch(typeof(VisEquipment), nameof(VisEquipment.SetLeftHandEquipped))]
     private static class MockLeft
     {
         private static bool Transfer;
@@ -155,7 +155,7 @@ public sealed class Mage_WeaponEnchantLightning : MH_Skill
         }
     }
 
-    [HarmonyPatch(typeof(VisEquipment), nameof(VisEquipment.SetRightHandEquiped))]
+    [HarmonyPatch(typeof(VisEquipment), nameof(VisEquipment.SetRightHandEquipped))]
     private static class MockRight
     {
         private static bool Transfer;

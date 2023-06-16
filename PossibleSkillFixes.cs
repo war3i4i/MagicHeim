@@ -52,7 +52,7 @@ public class PossibleSkillFixes
     }
 
 
-    [HarmonyPatch(typeof(Character), nameof(Character.FixedUpdate))]
+    [HarmonyPatch(typeof(Character), nameof(Character.CustomFixedUpdate))]
     private static class MageCancelTP
     {
         private static void Postfix(Character __instance)

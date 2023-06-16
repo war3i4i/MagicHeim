@@ -94,7 +94,7 @@ public sealed class Druid_NatureBuff : MH_Skill
 
         foreach (var player in list)
         {
-            player.m_seman.AddStatusEffect("Druid_NatureBuff_Buff", false, (int)this.CalculateSkillDuration(),
+            player.m_seman.AddStatusEffect("Druid_NatureBuff_Buff".GetStableHashCode(), false, (int)this.CalculateSkillDuration(),
                 this.CalculateSkillValue());
         }
 

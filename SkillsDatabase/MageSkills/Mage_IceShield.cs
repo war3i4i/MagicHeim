@@ -94,7 +94,7 @@ public sealed class Mage_IceShield : MH_Skill
         foreach (var player in players)
         {
             if (!Utils.IsPlayerInGroup(player)) continue;
-            player.GetSEMan().AddStatusEffect("Mage_IceShield_Buff", true, armorBonus, duration);
+            player.GetSEMan().AddStatusEffect("Mage_IceShield_Buff".GetStableHashCode(), true, armorBonus, duration);
         }
 
         StartCooldown(this.CalculateSkillCooldown());
@@ -196,7 +196,7 @@ public sealed class Mage_IceShield : MH_Skill
     {
         static void Postfix(Player __instance, ref float __result)
         {
-            if (__instance.m_seman.GetStatusEffect("Mage_IceShield_Buff") is SE_Mage_IceShield_Buff buff)
+            if (__instance.m_seman.GetStatusEffect("Mage_IceShield_Buff".GetStableHashCode()) is SE_Mage_IceShield_Buff buff)
             {
                 __result += buff.armorBonus;
             }

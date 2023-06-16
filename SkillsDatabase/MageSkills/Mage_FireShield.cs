@@ -95,7 +95,7 @@ public sealed class Mage_FireShield : MH_Skill
         foreach (var player in players)
         {
             if (!Utils.IsPlayerInGroup(player)) continue;
-            player.GetSEMan().AddStatusEffect("Mage_FireShield_Buff", true, armorBonus, duration);
+            player.GetSEMan().AddStatusEffect("Mage_FireShield_Buff".GetStableHashCode(), true, armorBonus, duration);
         }
 
         StartCooldown(this.CalculateSkillCooldown());

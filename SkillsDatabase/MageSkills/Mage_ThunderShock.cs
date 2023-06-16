@@ -118,7 +118,7 @@ public sealed class Mage_ThunderShock : MH_Skill
                         hit.m_point = collider.ClosestPoint(target);
                         hit.m_ranged = true;
                         hit.SetAttacker(Player.m_localPlayer);
-                        character.GetSEMan().AddStatusEffect("Mage_ThunderShock_Debuff", false, 0, duration);
+                        character.GetSEMan().AddStatusEffect("Mage_ThunderShock_Debuff".GetStableHashCode(), false, 0, duration);
                         component.DamageMH(hit);
                     }
                 }

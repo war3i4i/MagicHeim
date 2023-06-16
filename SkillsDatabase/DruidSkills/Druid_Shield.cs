@@ -90,7 +90,7 @@ public sealed class Druid_Shield : MH_Skill
         foreach (var player in players)
         {
             if (!Utils.IsPlayerInGroup(player)) continue;
-            player.GetSEMan().AddStatusEffect("Druid_Shield_Buff", true, armorBonus);
+            player.GetSEMan().AddStatusEffect("Druid_Shield_Buff".GetStableHashCode(), true, armorBonus);
         }
 
         StartCooldown(this.CalculateSkillCooldown());

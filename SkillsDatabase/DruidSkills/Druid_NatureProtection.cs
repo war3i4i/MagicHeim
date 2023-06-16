@@ -91,7 +91,7 @@ public sealed class Druid_NatureProtection : MH_Skill
         foreach (var player in players)
         {
             if (!Utils.IsPlayerInGroup(player)) continue;
-            player.GetSEMan().AddStatusEffect("Druid_NatureProtection_Buff", true, 0, duration);
+            player.GetSEMan().AddStatusEffect("Druid_NatureProtection_Buff".GetStableHashCode(), true, 0, duration);
         }
 
         StartCooldown(this.CalculateSkillCooldown());

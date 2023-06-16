@@ -13,9 +13,9 @@ public static class ClassManager
 {
     private const string _savedClass = "MH_Class";
     private const string _savedLevel = "MH_Level";
-    private const string _savedExp = "MH_Exp";
+    private const string _savedExp = "MH_Exp"; 
     private const string _savedData = "MH_Data";
-    private const string _savedSkillPoints = "MH_SkillPoints";
+    private const string _savedSkillPoints = "MH_SkillPoints"; 
     private const string _savedPanel = "MH_Panel";
 
 
@@ -252,7 +252,7 @@ public static class ClassManager
             }
 
             if (p.m_customData.ContainsKey(_savedPanel))
-            {
+            { 
                 PanelData = p.m_customData[_savedPanel];
             }
 
@@ -269,7 +269,7 @@ public static class ClassManager
             SkillPanelUI.Show(_currentClassDefinition, PanelData);
         }
     }
-
+ 
 
     /////// class level system
     ///

@@ -98,8 +98,7 @@ public sealed class Mage_Fireball : MH_Skill
         private void Explosion(float damage)
         {
             var explosion = Instantiate(Fireball_Explosion, transform.position, Quaternion.identity);
-            Collider[] array = Physics.OverlapSphere(transform.position, 4f, m_rayMaskSolids,
-                QueryTriggerInteraction.UseGlobal);
+            Collider[] array = Physics.OverlapSphere(transform.position, 4f, m_rayMaskSolids, QueryTriggerInteraction.UseGlobal);
             HashSet<GameObject> hashSet = new HashSet<GameObject>();
             foreach (Collider collider in array)
             {

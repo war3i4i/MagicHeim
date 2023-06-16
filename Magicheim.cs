@@ -14,16 +14,16 @@ namespace MagicHeim
     public partial class MagicHeim : BaseUnityPlugin
     {
         private const string GUID = "kg.magicheim";
-        private const string PluginName = "MagicHeim";
-        private const string PluginVersion = "1.2.2";
+        private const string PluginName = "MagicHeim"; 
+        private const string PluginVersion = "1.2.3";
         public static MagicHeim _thistype;
         private readonly ConfigSync configSync = new(GUID) { DisplayName = PluginName };
         public static AssetBundle asset; 
         public static GameObject MH_Altar;
         public static ConfigFile MH_SyncedConfig;  
         private static FileSystemWatcher FSW;
-
-        private void Awake()
+ 
+        private void Awake() 
         {
             Localizer.Load(); 
             _thistype = this;
@@ -64,7 +64,7 @@ namespace MagicHeim
                 SynchronizingObject = ThreadingHelper.SynchronizingObject
             };
             FSW.Changed += ConfigChanged;
-
+ 
             new Harmony(GUID).PatchAll();
         }
 

@@ -124,7 +124,7 @@ public sealed class Mage_AncientTotem : MH_Skill
                         if (component is Character character)
                         {
                             if (!Utils.IsEnemy(character)) continue;
-                            character.m_seman.AddStatusEffect("Mage_AncientTotem_Debuff", true, 0, _value);
+                            character.m_seman.AddStatusEffect("Mage_AncientTotem_Debuff".GetStableHashCode(), true, 0, _value);
                         }
                     }
                 }

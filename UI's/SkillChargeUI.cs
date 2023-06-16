@@ -25,7 +25,7 @@ public static class SkillChargeUI
     public static bool IsCharging => Data.Count > 0;
 
     private static void SetupElement(GameObject go, MH_Skill skill, float maxTime)
-    {
+    { 
         go.transform.Find("Icon").GetComponent<Image>().sprite = skill.Icon;
         go.transform.Find("Text").GetComponent<Text>().text = Localization.instance.Localize(skill.Name);
         ChargeData _cData = new()

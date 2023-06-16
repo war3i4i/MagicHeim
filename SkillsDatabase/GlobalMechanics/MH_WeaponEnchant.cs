@@ -68,7 +68,7 @@ static class ItemDrop_Start_Patch
             var go = UnityEngine.Object.Instantiate(_VFX, __instance.transform);
             PSMeshRendererUpdater update = go.GetComponent<PSMeshRendererUpdater>();
             update.MeshObject = __instance.gameObject;
-            update.UpdateMeshEffect();
+            update.UpdateMeshEffect(); 
         }
     }
 }

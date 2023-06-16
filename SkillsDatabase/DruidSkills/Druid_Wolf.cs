@@ -92,7 +92,7 @@ public sealed class Druid_Wolf : MH_Skill
         var manacost = this.CalculateSkillManacost();
         Player p = Player.m_localPlayer;
         var stamina = p.GetStamina();
-        p.m_seman.AddStatusEffect("Druid_WolfForm");
+        p.m_seman.AddStatusEffect("Druid_WolfForm".GetStableHashCode());
         UnityEngine.Object.Instantiate(Wolf_Explosion, p.transform.position, Quaternion.identity);
         for (;;)
         {
@@ -101,7 +101,7 @@ public sealed class Druid_Wolf : MH_Skill
             if (!Toggled || p.IsDead() || !p.HaveEitr(useMana) || Utils.InWater())
             {
                 Toggled = false;
-                p.m_seman.RemoveStatusEffect("Druid_WolfForm");
+                p.m_seman.RemoveStatusEffect("Druid_WolfForm".GetStableHashCode());
                 ZDOID zdoID = Player.m_localPlayer.GetZDOID();
                 ZPackage pkg = new(); 
                 pkg.Write(zdoID);
@@ -118,7 +118,7 @@ public sealed class Druid_Wolf : MH_Skill
                 latestAttack++; 
                 if (latestAttack > 3) latestAttack = 1;
             }
-            p.m_zanim.SetFloat(Character.turn_speed, 0);
+            p.m_zanim.SetFloat(Character.s_turnSpeed, 0);
             p.UseEitr(useMana);
             p.m_stamina = stamina;
             if (p.m_stamina > p.m_maxStamina) p.m_stamina = p.m_maxStamina;
@@ -177,7 +177,7 @@ public sealed class Druid_Wolf : MH_Skill
         };
         p.m_collider.enabled = true;
         p.m_animator.SetBool(Wakeup, false);
-        p.m_animator.SetBool(Character.inWater, false);
+        p.m_animator.SetBool(Character.s_inWater, false);
     }
 
     private static void ReplacePlayerModel(Player p, string changedModel)

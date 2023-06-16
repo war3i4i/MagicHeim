@@ -42,7 +42,8 @@ public static class ClassAnimationReplace
         ExternalAnimations.Add("MH_Wolf_Jump", MagicHeim.asset.LoadAsset<AnimationClip>("MH_Wolf_Jump"));
         ExternalAnimations.Add("ProjectileTwoHanded", MagicHeim.asset.LoadAsset<AnimationClip>("TwoHandedCast"));
         ExternalAnimations.Add("SummonTwoHanded", MagicHeim.asset.LoadAsset<AnimationClip>("TwoHandedCast2"));
-        ExternalAnimations.Add("TransformTwoHanded", MagicHeim.asset.LoadAsset<AnimationClip>("TwoHandedCastTransform"));
+        ExternalAnimations.Add("TransformTwoHanded",
+            MagicHeim.asset.LoadAsset<AnimationClip>("TwoHandedCastTransform"));
         ReplacementMap.Add("Cheer", "MageSummon");
         ReplacementMap.Add("No no no", "MageSlam");
         ReplacementMap.Add("Thumbsup", "MageProjectile");
@@ -50,7 +51,6 @@ public static class ClassAnimationReplace
         ReplacementMap.Add("GetOverHere", "ProjectileTwoHanded");
         ReplacementMap.Add("Flex", "SummonTwoHanded");
         ReplacementMap.Add("Despair", "TransformTwoHanded");
-        
     }
 
     private static void ReplacePlayerRAC(Animator anim, RuntimeAnimatorController rac)

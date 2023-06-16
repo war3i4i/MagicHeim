@@ -124,7 +124,7 @@ public sealed class Mage_WeaponEnchantFrost : MH_Skill
     }
 
 
-    [HarmonyPatch(typeof(VisEquipment), nameof(VisEquipment.SetLeftHandEquiped))]
+    [HarmonyPatch(typeof(VisEquipment), nameof(VisEquipment.SetLeftHandEquipped))]
     private static class MockLeft
     {
         private static bool Transfer;
@@ -156,7 +156,7 @@ public sealed class Mage_WeaponEnchantFrost : MH_Skill
         }
     }
 
-    [HarmonyPatch(typeof(VisEquipment), nameof(VisEquipment.SetRightHandEquiped))]
+    [HarmonyPatch(typeof(VisEquipment), nameof(VisEquipment.SetRightHandEquipped))]
     private static class MockRight
     {
         private static bool Transfer;

@@ -146,7 +146,7 @@ public sealed class Mage_WaterWalk : MH_Skill
             if (IsInWaterWalk && __instance == Player.m_localPlayer)
             {
                 Player.m_localPlayer.m_fallTimer = -10;
-                Player.m_localPlayer.m_zanim.SetBool(Character.onGround, true);
+                Player.m_localPlayer.m_zanim.SetBool(Character.s_onGround, true);
                 Player.m_localPlayer.m_zanim.SetBool("falling", false);
             }
         }

@@ -10,7 +10,7 @@ namespace MagicHeim;
 public static class Utils
 {
     public static bool IsEnemy(Character c)
-    {
+    { 
         if (c == Player.m_localPlayer) return false;
         if (c.IsPlayer())
         {
@@ -25,7 +25,7 @@ public static class Utils
         if (skill.Definition.MaxLevel.Value <= 0) return skill.Definition.MinLvlValue.Value;
         int currentLevel = forLevel > 0 ? forLevel - 1 : skill.Level - 1;
         int maxLevel = skill.Definition.MaxLevel.Value - 1;
-        float minValue = skill.Definition.MinLvlValue.Value;
+        float minValue = skill.Definition.MinLvlValue.Value; 
         float maxValue = skill.Definition.MaxLvlValue.Value;
         return Mathf.Lerp(minValue, maxValue, (float)currentLevel / maxLevel);
     }
@@ -228,7 +228,7 @@ public static class Utils
         if (!Groups.API.IsLoaded() || p == Player.m_localPlayer) return true;
         foreach (var party in Groups.API.GroupPlayers())
         {
-            if (party.peerId == p.m_nview.m_zdo.m_uid.m_userID)
+            if (party.peerId == p.m_nview.m_zdo.m_uid.UserID)
                 return true;
         }
 

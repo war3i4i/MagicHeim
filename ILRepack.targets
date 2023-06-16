@@ -3,9 +3,7 @@
 	<Target Name="ILRepacker" AfterTargets="Build">
 		<ItemGroup>
 			<InputAssemblies Include="$(TargetPath)"/>
-			<InputAssemblies Include="$(OutputPath)\ItemDataManager.dll" />
 			<InputAssemblies Include="$(OutputPath)\ServerSync.dll" />
-			<InputAssemblies Include="$(OutputPath)\ItemManager.dll" />
 			<InputAssemblies Include="$(OutputPath)\fastJSON.dll" />
 			<InputAssemblies Include="$(OutputPath)\KeyManager.dll" /> 
 			<InputAssemblies Include="$(OutputPath)\LocalizationManager.dll" />

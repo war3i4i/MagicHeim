@@ -126,7 +126,7 @@ public sealed class Druid_Rootball : MH_Skill
                     {
                         if (!Utils.IsEnemy(character)) continue;
                         HitData hit = new();
-                        hit.m_statusEffect = "Druid_Rootball_Debuff";
+                        hit.m_statusEffectHash = "Druid_Rootball_Debuff".GetStableHashCode();
                         hit.m_skillLevel = duration;
                         hit.m_skill = Skills.SkillType.ElementalMagic;
                         hit.m_damage.m_blunt = damage / 2f;
