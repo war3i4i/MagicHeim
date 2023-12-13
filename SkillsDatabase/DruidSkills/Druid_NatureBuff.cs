@@ -1,10 +1,6 @@
 ﻿using System.Text;
 using MagicHeim.AnimationHelpers;
-using MagicHeim.MH_Classes;
-using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
-using MagicHeim.UI_s;
-using Logger = MagicHeim_Logger.Logger;
 
 namespace MagicHeim.SkillsDatabase.DruidSkills;
 
@@ -62,7 +58,7 @@ public sealed class Druid_NatureBuff : MH_Skill
 
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_NatureBuff_Icon");
-        _definition.Video = "https://kg-dev.xyz/skills/MH_Druid_Heal.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_Heal.mp4";
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedSummon];
         _definition.AnimationTime = 1.2f;
         Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_NatureBuff_Buff");
@@ -196,8 +192,8 @@ public sealed class Druid_NatureBuff : MH_Skill
         builder.AppendLine(Localization.instance.Localize(Description));
         builder.AppendLine($"\n");
 
-        int maxLevel = this.MaxLevel;
-        int forLevel = this.Level > 0 ? this.Level : 1;
+        int maxLevel = MaxLevel;
+        int forLevel = Level > 0 ? Level : 1;
         float currentValue = this.CalculateSkillValue(forLevel);
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
@@ -208,7 +204,7 @@ public sealed class Druid_NatureBuff : MH_Skill
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
-        if (this.Level < maxLevel && this.Level > 0)
+        if (Level < maxLevel && Level > 0)
         {
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float nextCooldown = this.CalculateSkillCooldown(forLevel + 1); 
@@ -239,7 +235,7 @@ public sealed class Druid_NatureBuff : MH_Skill
     }
 
 
-    public override Class PreferableClass => Class.Druid;
+    public override bool CanRightClickCast => true;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
     public override Color SkillColor => new Color(0.05f, 1f, 0.04f);

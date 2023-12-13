@@ -1,9 +1,6 @@
 ﻿using System.Text;
-using MagicHeim.AnimationHelpers;
-using MagicHeim.MH_Classes;
 using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
-using MagicHeim.UI_s;
 
 namespace MagicHeim.SkillsDatabase.MageSkills;
 
@@ -61,13 +58,13 @@ public sealed class Mage_EitrControl : MH_Skill
         builder.AppendLine(Localization.instance.Localize(Description));
         builder.AppendLine($"\n");
 
-        int maxLevel = this.MaxLevel;
-        int forLevel = this.Level > 0 ? this.Level : 1;
+        int maxLevel = MaxLevel;
+        int forLevel = Level > 0 ? Level : 1;
         float currentValue = this.CalculateSkillValue(forLevel);
 
         builder.AppendLine($"Eitr Regen Bonus: {Math.Round(currentValue, 1)}%");
 
-        if (this.Level < maxLevel && this.Level > 0)
+        if (Level < maxLevel && Level > 0)
         {
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float valueDiff = nextValue - currentValue;
@@ -98,7 +95,7 @@ public sealed class Mage_EitrControl : MH_Skill
     }
 
 
-    public override Class PreferableClass => Class.Mage;
+    public override bool CanRightClickCast => false;
     public override bool IsPassive => true;
     public override CostType _costType => CostType.None;
     public override Color SkillColor => new Color(1f, 0.32f, 0.91f);

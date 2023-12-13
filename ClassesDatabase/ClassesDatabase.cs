@@ -10,7 +10,7 @@ public static class ClassesDatabase
 
     public static MH_ClassDefinition GetClassDefinition(Class @class)
     {
-        return GLOBAL_ClassesDefinitions.ContainsKey(@class) ? GLOBAL_ClassesDefinitions[@class] : null;
+        return GLOBAL_ClassesDefinitions.TryGetValue(@class, out var definition) ? definition : null;
     }
 
     private static void AddClass(Class @class, MH_ClassDefinition classDefinition)
@@ -23,10 +23,11 @@ public static class ClassesDatabase
     {
         AddClass(Class.Warrior, new Warrior("Warrior", "Warrior Description"));
         AddClass(Class.Mage, new Mage("Mage", "$mh_mageclass_description"));
-        //AddClass(Class.Archer, new Archer("Archer", "Archer Description"));
-        //AddClass(Class.Assassin, new Assassin("Assassin", "Assassin Description"));
-        AddClass(Class.Druid, new Druid("Druid", "Druid Description"));
+        AddClass(Class.Druid, new Druid("Druid", "$mh_druidclass_description"));
+        foreach (var classesDefinition in GLOBAL_ClassesDefinitions)
+            classesDefinition.Value.Init();
     }
+    
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch

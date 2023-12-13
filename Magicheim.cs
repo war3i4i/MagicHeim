@@ -1,23 +1,20 @@
-﻿using KeyManager;
+﻿using JetBrains.Annotations;
 using LocalizationManager;
 using MagicHeim.AnimationHelpers;
-using MagicHeim.SkillsDatabase.MageSkills;
 using MagicHeim.UI_s;
-using Object = UnityEngine.Object;
 
 namespace MagicHeim
 {
     [BepInPlugin(GUID, PluginName, PluginVersion)]
     [BepInDependency("org.bepinex.plugins.groups", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInIncompatibility("org.bepinex.plugins.valheim_plus")]
-    [KeyManager.VerifyKey("KGvalheim/MagicHeim", LicenseMode.Always)]
     public partial class MagicHeim : BaseUnityPlugin
     {
         private const string GUID = "kg.magicheim";
         private const string PluginName = "MagicHeim"; 
-        private const string PluginVersion = "1.2.3";
+        private const string PluginVersion = "1.2.6";
         public static MagicHeim _thistype;
-        private readonly ConfigSync configSync = new(GUID) { DisplayName = PluginName };
+        private readonly ConfigSync configSync = new(GUID) { DisplayName = PluginName, MinimumRequiredVersion = PluginVersion, CurrentVersion = PluginVersion, ModRequired = true, IsLocked = true};
         public static AssetBundle asset; 
         public static GameObject MH_Altar;
         public static ConfigFile MH_SyncedConfig;  
@@ -54,9 +51,8 @@ namespace MagicHeim
                 MH_Altar.GetComponent<Piece>().m_icon);
             MH_Altar.AddComponent<MH_Altar>();
             Exp_Configs.Init();
-            Type.GetType("Groups.Initializer, Magicheim").GetMethod("Init").Invoke(null, null);
 
-            FSW = new FileSystemWatcher(BepInEx.Paths.ConfigPath)
+            FSW = new FileSystemWatcher(Paths.ConfigPath)
             {
                 Filter = Path.GetFileName(MH_SyncedConfig.ConfigFilePath),
                 EnableRaisingEvents = true,
@@ -71,9 +67,30 @@ namespace MagicHeim
 
         private void ConfigChanged(object sender, FileSystemEventArgs e)
         {
+            if (!Game.instance || !ZNet.instance || !ZNet.instance.IsServer()) return;
             if (Path.GetFileName(e.Name) != "kg.magicheim_synced.cfg") return;
             MagicHeim_Logger.Logger.Log($"Reloading Config");
             DelayedReload(MH_SyncedConfig);
+        }
+        
+        [HarmonyPatch(typeof(FejdStartup), nameof(FejdStartup.Start))]
+        private static class FejdStartup_Awake_Patch
+        {
+            [UsedImplicitly]
+            private static void Postfix(FejdStartup __instance)
+            {
+                List<World> mWorlds = SaveSystem.GetWorldList();
+                string name = PlayerPrefs.GetString("world");
+                World world = mWorlds.FirstOrDefault(x => x.m_name == name);
+                if (world == null) return;
+                string playerProfile = PlayerPrefs.GetString("profile");
+                if (string.IsNullOrWhiteSpace(playerProfile)) return;
+                ZSteamMatchmaking.instance.StopServerListing();
+                ZNet.m_onlineBackend = OnlineBackendType.Steamworks;
+                Game.SetProfile(playerProfile, FileHelpers.FileSource.Auto);
+                ZNet.SetServer(true, false, false, name, "", world);
+                __instance.LoadMainScene();
+            }
         }
 
         private static IEnumerator DelayedReloadRoutine(ConfigFile config)
@@ -113,35 +130,10 @@ namespace MagicHeim
             using Stream stream = execAssembly.GetManifestResourceStream(resourceName);
             return AssetBundle.LoadFromStream(stream);
         }
-
-        [HarmonyPatch(typeof(AudioMan), nameof(AudioMan.Awake))]
-        private static class AudioMan_Awake_Patch
-        {
-            private static void Postfix(AudioMan __instance)
-            {
-                ClassSelectionUI.AUsrc = Chainloader.ManagerObject.AddComponent<AudioSource>();
-                ClassSelectionUI.AUsrc.clip = MagicHeim.asset.LoadAsset<AudioClip>("MH_Click");
-                ClassSelectionUI.AUsrc.reverbZoneMix = 0;
-                ClassSelectionUI.AUsrc.spatialBlend = 0;
-                ClassSelectionUI.AUsrc.bypassListenerEffects = true;
-                ClassSelectionUI.AUsrc.bypassEffects = true; 
-                ClassSelectionUI.AUsrc.volume = 0.8f;
-                ClassSelectionUI.AUsrc.outputAudioMixerGroup = __instance.m_masterMixer.outputAudioMixerGroup;
-                foreach (GameObject allAsset in MagicHeim.asset.LoadAllAssets<GameObject>())
-                {
-                    if(allAsset.GetComponentInChildren<ZSFX>()) MagicHeim_Logger.Logger.Log($"Found {allAsset.name} with zsfx");
-
-                    foreach (AudioSource audioSource in allAsset.GetComponentsInChildren<AudioSource>(true))
-                    {
-                        audioSource.outputAudioMixerGroup = __instance.m_masterMixer.outputAudioMixerGroup;
-                    }
-                }
-            }
-        }
         
         
         private void Update()
-        { 
+        {
             TurnOffUIs();
             if (OptionsUI.CurrentChoosenButton >= 0)
             {
@@ -161,10 +153,10 @@ namespace MagicHeim
                     OptionsUI.ButtonPressedAdditional(key);
                     break;
                 }
-            }
+            } 
 
             if (!Player.m_localPlayer) return;
-            if (Input.GetKeyDown(SkillPanelUI.MH_Hotkeys[10].Value))
+            if (Input.GetKeyDown(SkillPanelUI.MH_Hotkeys[20].Value))
             {
                 if (!SkillBookUI.IsVisible())
                 {
@@ -200,6 +192,30 @@ namespace MagicHeim
             }
         }
         
+        [HarmonyPatch(typeof(AudioMan), nameof(AudioMan.Awake))]
+        private static class AudioMan_Awake_Patch
+        {
+            private static void Postfix(AudioMan __instance)
+            {
+                ClassSelectionUI.AUsrc = Chainloader.ManagerObject.AddComponent<AudioSource>();
+                ClassSelectionUI.AUsrc.clip = asset.LoadAsset<AudioClip>("MH_Click");
+                ClassSelectionUI.AUsrc.reverbZoneMix = 0;
+                ClassSelectionUI.AUsrc.spatialBlend = 0;
+                ClassSelectionUI.AUsrc.bypassListenerEffects = true;
+                ClassSelectionUI.AUsrc.bypassEffects = true; 
+                ClassSelectionUI.AUsrc.volume = 0.8f;
+                ClassSelectionUI.AUsrc.outputAudioMixerGroup = __instance.m_masterMixer.outputAudioMixerGroup;
+                foreach (GameObject allAsset in asset.LoadAllAssets<GameObject>())
+                {
+                    if(allAsset.GetComponentInChildren<ZSFX>()) MagicHeim_Logger.Logger.Log($"Found {allAsset.name} with zsfx");
+
+                    foreach (AudioSource audioSource in allAsset.GetComponentsInChildren<AudioSource>(true))
+                    {
+                        audioSource.outputAudioMixerGroup = __instance.m_masterMixer.outputAudioMixerGroup;
+                    }
+                }
+            }
+        }
         
     }
 }

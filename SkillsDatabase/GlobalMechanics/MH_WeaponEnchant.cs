@@ -1,7 +1,4 @@
-﻿using ItemDataManager;
-using Logger = MagicHeim_Logger.Logger;
-
-namespace MagicHeim.SkillsDatabase.GlobalMechanics;
+﻿namespace MagicHeim.SkillsDatabase.GlobalMechanics;
 
 public static class MH_WeaponEnchants_VFXs
 {
@@ -62,7 +59,7 @@ static class ItemDrop_Start_Patch
         if (!__instance.m_nview || !__instance.m_nview.IsValid()) return;
         if (__instance.m_nview.m_zdo.GetInt("MH_WeaponEnchant") is int val && val > 0)
         {
-            var MeshFilter = __instance.GetComponentInChildren<UnityEngine.MeshFilter>();
+            var MeshFilter = __instance.GetComponentInChildren<MeshFilter>();
             if (MeshFilter == null || (MH_WeaponEnchant.Type)val == MH_WeaponEnchant.Type.None) return;
             var _VFX = MH_WeaponEnchants_VFXs.WeaponEnchantVFXs[(MH_WeaponEnchant.Type)val];
             var go = UnityEngine.Object.Instantiate(_VFX, __instance.transform);
@@ -117,7 +114,7 @@ static class VisEquipment_Patch_Right
     }
 }
 
-[HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetDamage), typeof(int))]
+[HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetDamage), typeof(int), typeof(float))]
 static class ItemDrop__Patch
 {
     static void Postfix(ItemDrop.ItemData __instance, ref HitData.DamageTypes __result)
@@ -153,7 +150,7 @@ static class ItemDrop__Patch
 }
 
 [HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetTooltip), typeof(ItemDrop.ItemData), typeof(int),
-    typeof(bool))]
+    typeof(bool), typeof(float))]
 public class GetTooltipPatch
 {
     public static void Postfix(ItemDrop.ItemData item, bool crafting, ref string __result)

@@ -1,9 +1,6 @@
 ﻿using System.Text;
 using MagicHeim.AnimationHelpers;
-using MagicHeim.MH_Classes;
-using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
-using MagicHeim.UI_s;
 
 namespace MagicHeim.SkillsDatabase.MageSkills;
 
@@ -60,7 +57,7 @@ public sealed class Mage_IceShield : MH_Skill
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_IceShield_Icon");
         CachedIcon = _definition.Icon;
-        _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_IceShield.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/MH_Mage_IceShield.mp4";
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageWave];
         _definition.AnimationTime = 0.8f;
         IceShield_Buff = MagicHeim.asset.LoadAsset<GameObject>("Mage_IceShield_Prefab");
@@ -116,8 +113,8 @@ public sealed class Mage_IceShield : MH_Skill
         builder.AppendLine(Localization.instance.Localize(Description));
         builder.AppendLine($"\n");
 
-        int maxLevel = this.MaxLevel;
-        int forLevel = this.Level > 0 ? this.Level : 1;
+        int maxLevel = MaxLevel;
+        int forLevel = Level > 0 ? Level : 1;
         float currentValue = this.CalculateSkillValue(forLevel);
         float currentDuration = this.CalculateSkillDuration(forLevel);
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
@@ -128,7 +125,7 @@ public sealed class Mage_IceShield : MH_Skill
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
-        if (this.Level < maxLevel && this.Level > 0)
+        if (Level < maxLevel && Level > 0)
         {
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float nextDuration = this.CalculateSkillDuration(forLevel + 1);
@@ -233,7 +230,7 @@ public sealed class Mage_IceShield : MH_Skill
         }
     }
 
-    public override Class PreferableClass => Class.Mage;
+    public override bool CanRightClickCast => true;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
     public override Color SkillColor => Color.cyan;

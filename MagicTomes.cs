@@ -1,7 +1,5 @@
 ﻿using ItemManager;
 using MagicHeim.MH_Enums;
-using MagicHeim.MH_Interfaces;
-using Logger = MagicHeim_Logger.Logger;
 using Random = UnityEngine.Random;
 
 namespace MagicHeim;
@@ -58,7 +56,8 @@ public static class MagicTomes
 
     [HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetTooltip), typeof(ItemDrop.ItemData),
         typeof(int),
-        typeof(bool))]
+        typeof(bool),
+        typeof(float))]
     public class GetTooltipPatch
     {
         public static void Postfix(ItemDrop.ItemData item, bool crafting, ref string __result)
@@ -106,13 +105,13 @@ public static class MagicTomes
     {
         static void DropItem(GameObject prefab, Vector3 centerPos, float dropArea)
         {
-            Quaternion rotation = Quaternion.Euler(0f, (float)UnityEngine.Random.Range(0, 360), 0f);
-            Vector3 b = UnityEngine.Random.insideUnitSphere * dropArea;
+            Quaternion rotation = Quaternion.Euler(0f, (float)Random.Range(0, 360), 0f);
+            Vector3 b = Random.insideUnitSphere * dropArea;
             GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(prefab, centerPos + b, rotation);
             Rigidbody component = gameObject.GetComponent<Rigidbody>();
             if (component)
             {
-                Vector3 insideUnitSphere = UnityEngine.Random.insideUnitSphere;
+                Vector3 insideUnitSphere = Random.insideUnitSphere;
                 if (insideUnitSphere.y < 0f)
                 {
                     insideUnitSphere.y = -insideUnitSphere.y;

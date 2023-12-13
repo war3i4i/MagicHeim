@@ -1,5 +1,4 @@
 ﻿using MagicHeim.MH_Classes;
-using MagicHeim.MH_Enums;
 using MagicHeim.SkillsDatabase.MageSkills;
 
 namespace MagicHeim.MH_Interfaces;
@@ -71,11 +70,11 @@ public abstract class MH_Skill
     public string ExternalDescription()
     {
         string result = $"\nMax Level: <color=yellow>{MaxLevel}</color>";
-        if (this.Level >= this.MaxLevel) return result;
-        var requiredLevel = this.RequiredLevel + (this.LevelingStep * this.Level);
+        if (Level >= MaxLevel) return result;
+        var requiredLevel = RequiredLevel + (LevelingStep * Level);
         bool canUpgrade = ClassManager.Level >= requiredLevel;
         result +=
-            $"\n\nLeveling Step: <color=yellow>{this.LevelingStep}</color>\n(Can be {(this.Level > 0 ? "upgraded" : "learned")} on LVL: <color={(canUpgrade ? "green" : "red")}>{requiredLevel}</color>)";
+            $"\n\nLeveling Step: <color=yellow>{LevelingStep}</color>\n(Can be {(Level > 0 ? "upgraded" : "learned")} on LVL: <color={(canUpgrade ? "green" : "red")}>{requiredLevel}</color>)";
         return result;
     }
 
@@ -98,13 +97,11 @@ public abstract class MH_Skill
                 Hud.instance.EitrBarEmptyFlash();
                 return false;
             }
-            else
-            {
-                p.UseEitr(cost);
-                return true;
-            }
+
+            p.UseEitr(cost);
+            return true;
         }
-        else
+
         if (costType == CostType.Stamina)
         {
             if (!p.HaveStamina(cost))
@@ -112,13 +109,10 @@ public abstract class MH_Skill
                 Hud.instance.StaminaBarEmptyFlash();
                 return false;
             }
-            else
-            {
-                p.UseStamina(cost);
-                return true;
-            }
+
+            p.UseStamina(cost);
+            return true;
         }
-        else
         if (costType == CostType.Health)
         {
             if (!p.HaveHealth(cost))
@@ -126,11 +120,9 @@ public abstract class MH_Skill
                 Hud.instance.FlashHealthBar();
                 return false;
             }
-            else
-            {
-                p.UseHealth(cost);
-                return true;
-            }
+
+            p.UseHealth(cost);
+            return true;
         }
 
         return true;
@@ -177,8 +169,8 @@ public abstract class MH_Skill
     public abstract bool CanExecute();
     public abstract string BuildDescription();
     public abstract string GetSpecialTags();
-    public abstract Class PreferableClass { get; }
     public abstract Color SkillColor { get; }
     public abstract bool IsPassive { get; }
     public abstract CostType _costType { get; }
+    public abstract bool CanRightClickCast { get; }
 }

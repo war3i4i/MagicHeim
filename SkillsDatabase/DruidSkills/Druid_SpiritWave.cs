@@ -1,10 +1,6 @@
 ﻿using System.Text;
 using MagicHeim.AnimationHelpers;
-using MagicHeim.MH_Classes;
-using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
-using MagicHeim.SkillsDatabase.GlobalMechanics;
-using MagicHeim.UI_s;
 using Object = UnityEngine.Object;
 
 namespace MagicHeim.SkillsDatabase.DruidSkills;
@@ -20,7 +16,7 @@ public sealed class Druid_SpiritWave : MH_Skill
         _definition.Name = "$mh_druid_spiritwave";
         _definition.Description = "$mh_druid_spiritwave_desc";
         _definition.Animation =
-            AnimationHelpers.ClassAnimationReplace.MH_AnimationNames[
+            ClassAnimationReplace.MH_AnimationNames[
                 ClassAnimationReplace.MH_Animation.TwoHandedProjectile];
         _definition.AnimationTime = 0.8f;
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
@@ -57,8 +53,9 @@ public sealed class Druid_SpiritWave : MH_Skill
             $"Leveling Step", 6,
             "Leveling Step");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_SpiritWave_Icon");
-        _definition.Video = "https://kg-dev.xyz/skills/MH_Druid_SpiritWave.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_SpiritWave.mp4";
         _Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_Spiritwave_Prefab");
+        _Prefab.layer = 3;
         _Prefab_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Druid_SpiritWave_Explosion");
         _Prefab.AddComponent<SpiritWaveComponent>();
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -90,7 +87,7 @@ public sealed class Druid_SpiritWave : MH_Skill
             {
                 if (!list.Contains(c))
                 {
-                    if (!global::MagicHeim.Utils.IsEnemy(c))
+                    if (!Utils.IsEnemy(c))
                     {
                         c.Heal(VALUE / 2f);
                     }
@@ -133,7 +130,7 @@ public sealed class Druid_SpiritWave : MH_Skill
                 yield return null;
             }
 
-            ZNetScene.instance.Destroy(this.gameObject);
+            ZNetScene.instance.Destroy(gameObject);
         }
     }
     
@@ -145,7 +142,7 @@ public sealed class Druid_SpiritWave : MH_Skill
         Vector3 rot = (target - p.transform.position).normalized;
         rot.y = 0;
         p.transform.rotation = Quaternion.LookRotation(rot);
-        var proj = UnityEngine.Object.Instantiate(_Prefab, p.transform.position + Vector3.up + p.transform.forward * 0.3f, GameCamera.instance.transform.rotation);
+        var proj = Object.Instantiate(_Prefab, p.transform.position + Vector3.up + p.transform.forward * 0.3f, GameCamera.instance.transform.rotation);
         var rotTo = (target - proj.transform.position).normalized;
         proj.GetComponent<SpiritWaveComponent>().Setup(rotTo, this.CalculateSkillValue());
         StartCooldown(this.CalculateSkillCooldown());
@@ -167,8 +164,8 @@ public sealed class Druid_SpiritWave : MH_Skill
         builder.AppendLine(Localization.instance.Localize(Description));
         builder.AppendLine($"\n");
 
-        int maxLevel = this.MaxLevel;
-        int forLevel = this.Level > 0 ? this.Level : 1;
+        int maxLevel = MaxLevel;
+        int forLevel = Level > 0 ? Level : 1;
         float currentValue = this.CalculateSkillValue(forLevel);
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
@@ -178,7 +175,7 @@ public sealed class Druid_SpiritWave : MH_Skill
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
-        if (this.Level < maxLevel && this.Level > 0)
+        if (Level < maxLevel && Level > 0)
         {
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float nextCooldown = this.CalculateSkillCooldown(forLevel + 1);
@@ -202,8 +199,8 @@ public sealed class Druid_SpiritWave : MH_Skill
 
         return builder.ToString();
     }
-
-    public override Class PreferableClass => Class.Druid;
+    
+    public override bool CanRightClickCast => false;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
     public override Color SkillColor => new Color(1f, 0.98f, 0.91f);

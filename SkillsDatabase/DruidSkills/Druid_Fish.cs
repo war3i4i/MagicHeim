@@ -1,9 +1,6 @@
 ﻿using System.Text;
 using MagicHeim.AnimationHelpers;
-using MagicHeim.MH_Classes;
-using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
-using MagicHeim.UI_s;
 
 namespace MagicHeim.SkillsDatabase.DruidSkills;
 
@@ -47,7 +44,7 @@ public sealed class Druid_Fish : MH_Skill
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Fish_Icon");
-        _definition.Video = "https://kg-dev.xyz/skills/Mage_EnergyBlast.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/Mage_EnergyBlast.mp4";
         _definition.Animation =
             ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedTransform];
         _definition.AnimationTime = 1f;
@@ -228,7 +225,7 @@ public sealed class Druid_Fish : MH_Skill
         {
             if (IsDone())
             {
-                UnityEngine.Object.Instantiate(Fish_Explosion, this.m_character.transform.position + Vector3.up,
+                Instantiate(Fish_Explosion, m_character.transform.position + Vector3.up,
                     Quaternion.identity);
                 ZDOID zdoID = Player.m_localPlayer.GetZDOID();
                 ZPackage pkg = new();
@@ -303,12 +300,12 @@ public sealed class Druid_Fish : MH_Skill
         builder.AppendLine(Localization.instance.Localize(Description));
         builder.AppendLine($"\n");
 
-        int maxLevel = this.MaxLevel;
-        int forLevel = this.Level > 0 ? this.Level : 1;
+        int maxLevel = MaxLevel;
+        int forLevel = Level > 0 ? Level : 1;
         float currentManacost = this.CalculateSkillManacost(forLevel);
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
-        if (this.Level < maxLevel && this.Level > 0)
+        if (Level < maxLevel && Level > 0)
         {
             float nextManacost = this.CalculateSkillManacost(forLevel + 1);
             float manacostDiff = nextManacost - currentManacost;
@@ -323,7 +320,7 @@ public sealed class Druid_Fish : MH_Skill
         return builder.ToString();
     }
 
-    public override Class PreferableClass => Class.Druid;
+    public override bool CanRightClickCast => true;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
     public override Color SkillColor => Color.green;

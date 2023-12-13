@@ -18,7 +18,8 @@ public static class ClassAnimationReplace
         MageWave,
         TwoHandedProjectile,
         TwoHandedSummon,
-        TwoHandedTransform
+        TwoHandedTransform,
+        Throw
     }
 
     public static readonly Dictionary<MH_Animation, string> MH_AnimationNames = new()
@@ -30,6 +31,7 @@ public static class ClassAnimationReplace
         { MH_Animation.TwoHandedProjectile, "emote_comehere" },
         { MH_Animation.TwoHandedSummon, "emote_flex" },
         { MH_Animation.TwoHandedTransform, "emote_despair" },
+        { MH_Animation.Throw, "emote_point" }
     };
 
     public static void InitAnimations()
@@ -42,8 +44,8 @@ public static class ClassAnimationReplace
         ExternalAnimations.Add("MH_Wolf_Jump", MagicHeim.asset.LoadAsset<AnimationClip>("MH_Wolf_Jump"));
         ExternalAnimations.Add("ProjectileTwoHanded", MagicHeim.asset.LoadAsset<AnimationClip>("TwoHandedCast"));
         ExternalAnimations.Add("SummonTwoHanded", MagicHeim.asset.LoadAsset<AnimationClip>("TwoHandedCast2"));
-        ExternalAnimations.Add("TransformTwoHanded",
-            MagicHeim.asset.LoadAsset<AnimationClip>("TwoHandedCastTransform"));
+        ExternalAnimations.Add("TransformTwoHanded", MagicHeim.asset.LoadAsset<AnimationClip>("TwoHandedCastTransform"));
+        ExternalAnimations.Add("ThrowBomb", MagicHeim.asset.LoadAsset<AnimationClip>("BombThrow"));
         ReplacementMap.Add("Cheer", "MageSummon");
         ReplacementMap.Add("No no no", "MageSlam");
         ReplacementMap.Add("Thumbsup", "MageProjectile");
@@ -51,6 +53,7 @@ public static class ClassAnimationReplace
         ReplacementMap.Add("GetOverHere", "ProjectileTwoHanded");
         ReplacementMap.Add("Flex", "SummonTwoHanded");
         ReplacementMap.Add("Despair", "TransformTwoHanded");
+        ReplacementMap.Add("Point", "ThrowBomb");
     }
 
     private static void ReplacePlayerRAC(Animator anim, RuntimeAnimatorController rac)

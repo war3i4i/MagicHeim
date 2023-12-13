@@ -19,9 +19,7 @@ public abstract class MH_ClassDefinition
     private void AddSkill(MH_Skill skill) => _currentSkillDefinitions[skill.Key] = skill.Clone();
 
     protected void AddSkill(string key) =>
-        (SkillsDatabase.SkillsDatabase.TryGetSkillDefinition(key, out var skillDefinition)
-            ? (Action<MH_Skill>)AddSkill
-            : null)?.Invoke(skillDefinition);
+        (SkillsDatabase.SkillsDatabase.TryGetSkillDefinition(key, out var skillDefinition) ? (Action<MH_Skill>)AddSkill : null)?.Invoke(skillDefinition);
 
     public Dictionary<int, MH_Skill> GetSkills() => _currentSkillDefinitions;
     public MH_Skill GetSkill(int key) => _currentSkillDefinitions.TryGetValue(key, out var skill) ? skill : null;

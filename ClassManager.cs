@@ -1,7 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using fastJSON;
-using MagicHeim.MH_Enums;
+﻿using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
 using MagicHeim.UI_s;
 using MonoMod.Utils;
@@ -61,7 +58,6 @@ public static class ClassManager
     {
         _currentClass = newClass;
         _currentClassDefinition = ClassesDatabase.ClassesDatabase.GetClassDefinition(_currentClass);
-        _currentClassDefinition.Init();
         SkillPanelUI.Show(_currentClassDefinition);
         SkillPoints = Exp_Configs.SkillpointsPerLevel.Value;
         Level = 1;
@@ -70,7 +66,6 @@ public static class ClassManager
 
     public static void ResetSkills()
     {
-        _currentClassDefinition.Init();
         SkillPoints = Level * Exp_Configs.SkillpointsPerLevel.Value;
         SkillPanelUI.Reset();
     }
@@ -78,7 +73,7 @@ public static class ClassManager
     public static bool CanUpgradeSkill(MH_Skill skill)
     {
         var requiredLevel = skill.RequiredLevel + (skill.LevelingStep * skill.Level);
-        return ClassManager.SkillPoints > 0 && skill.Level < skill.MaxLevel &&
+        return SkillPoints > 0 && skill.Level < skill.MaxLevel &&
                requiredLevel <= Level;
     }
 
@@ -264,7 +259,6 @@ public static class ClassManager
             SkillPanelUI.Hide();
             if (_currentClass == Class.None) return;
             _currentClassDefinition = ClassesDatabase.ClassesDatabase.GetClassDefinition(_currentClass);
-            _currentClassDefinition.Init();
             LoadPlayerSkillData(SkillsData);
             SkillPanelUI.Show(_currentClassDefinition, PanelData);
         }
@@ -282,13 +276,13 @@ public static class ClassManager
         LevelUpExp = new long[Exp_Configs.MaxLevel.Value + 5];
         _expMap.Clear();
         try
-        {
+        { 
             _expMap.AddRange(Exp_Configs.ExpMap.Value.Replace(" ", "").TrimEnd(',')
                 .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => x.Split(':'))
                 .ToDictionary(x => x[0], x => int.Parse(x[1])));
         }
-        catch(Exception ex)
+        catch(Exception ex) 
         {
             Logger.Log($"Got exception while parsing exp map:\n{ex}");
         }

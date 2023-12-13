@@ -1,5 +1,4 @@
-﻿using MagicHeim.ClassesDatabase.Classes;
-using MagicHeim.MH_Interfaces;
+﻿using MagicHeim.MH_Interfaces;
 using MagicHeim.SkillsDatabase.DruidSkills;
 using MagicHeim.SkillsDatabase.MageSkills;
 
@@ -81,5 +80,12 @@ public static class SkillsDatabase
         AddSkill(new Druid_WeaponEnchantSpirit());
         AddSkill(new Druid_NatureProtection());
         AddSkill(new Druid_Shield());
+        AddSkill(new Druid_TrollPower());
+        AddSkill(new Druid_EikthyrPower());
+        AddSkill(new Druid_ElderPower());
+        AddSkill(new Druid_Exchange());
+        AddSkill(new Druid_Eclipse());
+        AddSkill(new Druid_Grenade());
+        AddSkill(new Druid_SelfHeal());
     }
 }

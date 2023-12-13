@@ -1,9 +1,6 @@
 ﻿using System.Text;
 using MagicHeim.AnimationHelpers;
-using MagicHeim.MH_Classes;
-using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
-using MagicHeim.UI_s;
 
 namespace MagicHeim.SkillsDatabase.DruidSkills;
 
@@ -12,6 +9,8 @@ public sealed class Druid_Eagle : MH_Skill
     public static int CachedKey;
     private static GameObject Eagle_Prefab;
     private static GameObject Eagle_Explosion;
+    private static GameObject RevealAbility;
+    private static GameObject RevealAbility_Character;
 
     public Druid_Eagle()
     {
@@ -41,20 +40,24 @@ public sealed class Druid_Eagle : MH_Skill
             $"Required Level To Learn",
             75, "Required Level");
 
-
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 1,
             "Leveling Step");
 
-        _definition.Animation =
-            ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedTransform];
+        _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedTransform];
         _definition.AnimationTime = 1f;
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Eagle_Icon");
-        _definition.Video = "https://kg-dev.xyz/skills/Mage_EnergyBlast.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/Mage_EnergyBlast.mp4";
         Eagle_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_Eagle_Prefab");
         Eagle_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Druid_Eagle_Explosion");
+        RevealAbility = MagicHeim.asset.LoadAsset<GameObject>("Druid_Eagle_Reveal");
+        RevealAbility_Character = MagicHeim.asset.LoadAsset<GameObject>("Druid_Eagle_Reveal_Icon");
+        RevealAbility.AddComponent<RevealController>();
+        RevealAbility_Character.AddComponent<BillboardObject>();
     }
 
+    private static readonly Dictionary<string, GameObject> ObjectToTrophy = new();
+    
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
     {
@@ -62,6 +65,79 @@ public sealed class Druid_Eagle : MH_Skill
         {
             __instance.m_namedPrefabs[Eagle_Prefab.name.GetStableHashCode()] = Eagle_Prefab;
             __instance.m_namedPrefabs[Eagle_Explosion.name.GetStableHashCode()] = Eagle_Explosion;
+            __instance.m_namedPrefabs[RevealAbility.name.GetStableHashCode()] = RevealAbility;
+            foreach (var prefab in __instance.m_prefabs.Where(c => c.GetComponent<CharacterDrop>()).Select(c => c.GetComponent<CharacterDrop>()))
+            {
+                if (prefab.m_drops.Count <= 0) continue;
+                foreach (var drop in prefab.m_drops)
+                {
+                    if (drop.m_prefab.GetComponent<ItemDrop>() is { } item && item.m_itemData.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Trophy)
+                    {
+                        ObjectToTrophy[prefab.name] = drop.m_prefab;
+                    }
+                }
+            }
+        }
+    }
+    
+    private class BillboardObject : MonoBehaviour
+    {
+        private void FixedUpdate()
+        {
+            transform.rotation = Quaternion.LookRotation(GameCamera.instance.transform.forward);
+        }
+    }
+    
+     
+    private class RevealController : MonoBehaviour
+    {
+        private ZNetView znv;
+        private readonly HashSet<Character> list = new();
+
+        private void Awake()
+        { 
+            znv = GetComponent<ZNetView>();
+        }
+
+        private float counter = 0f;
+        private void Update()
+        {
+            counter += Time.deltaTime;
+            float scale = counter * 150f; 
+            transform.localScale = new Vector3(scale, scale, scale);
+            if (counter >= 2f)
+            {
+                znv.ClaimOwnership(); 
+                ZNetScene.instance.Destroy(gameObject);
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!znv.IsOwner()) return;
+            if (other.TryGetComponent<Character>(out var c))
+            {
+                if (list.Add(c) && Utils.IsEnemy(c) && c.m_nview.IsValid())
+                {
+                    string goName = global::Utils.GetPrefabName(c.gameObject);
+                    GameObject go = ObjectToTrophy.TryGetValue(goName, out var trophyGo) ? trophyGo : ZNetScene.instance.GetPrefab("Trophy" + goName);
+                    if (c.transform.Find("RevealIcon"))
+                        Destroy(c.transform.Find("RevealIcon").gameObject);
+                    
+                    var reveal = Instantiate(RevealAbility_Character, c.transform);
+                    reveal.name = "RevealIcon";
+                    if (!go || go.GetComponent<ItemDrop>() is not { } trophy)
+                    {
+                        reveal.transform.GetChild(0).gameObject.SetActive(false);
+                        return;
+                    }
+                    float height = c.m_collider.height - 1.7f;
+                    reveal.transform.GetChild(0).transform.localPosition += Vector3.up * height; 
+                    var sr = reveal.transform.GetChild(0).GetComponent<SpriteRenderer>();
+                    sr.sprite = trophy.m_itemData.m_shared.m_icons[0];
+                    sr.size = new Vector2(6f, 6f);
+                }
+            }
         }
     }
 
@@ -94,47 +170,53 @@ public sealed class Druid_Eagle : MH_Skill
         p.m_nview.m_zdo.Set("MH_HideCharacter", true); 
         p.m_zanim.SetTrigger("emote_stop");
         p.m_collider.isTrigger = true;
-        UnityEngine.Object.Instantiate(Eagle_Explosion, p.transform.position + Vector3.up, Quaternion.identity);
-        GameObject go;
-        go = UnityEngine.Object.Instantiate(Eagle_Prefab, p.transform.position + Vector3.up,
-            Quaternion.LookRotation(GameCamera.instance.transform.forward));
+        p.m_body.useGravity = false;
+        p.m_body.position += Vector3.up;
+        var position = p.transform.position;
+        UnityEngine.Object.Instantiate(Eagle_Explosion, position + Vector3.up, Quaternion.identity);
+        var go = UnityEngine.Object.Instantiate(Eagle_Prefab, position, Quaternion.LookRotation(GameCamera.instance.transform.forward));
         var rbody = go.GetComponent<Rigidbody>();
-        go.transform.position = p.transform.position + Vector3.up;
+        go.transform.position = position;
         for (;;)
         {
             if(!p) yield break;
-            rbody.angularVelocity = Vector3.zero;
-            rbody.velocity = Vector3.zero;
-            go.transform.rotation = Quaternion.LookRotation(GameCamera.instance.transform.forward);
-            var pos = go.transform.position;
+            var pos = p.m_body.position;
             var fwd = GameCamera.instance.transform.forward;
             float mod = ZInput.GetButton("Run") || ZInput.GetButton("JoyRun") ? 12f : 8f;
             if (ZInput.GetButton("Forward") || ZInput.GetJoyLeftStickY() < 0)
                 pos += fwd * (mod * Time.deltaTime);
             if (ZInput.GetButton("Backward") || ZInput.GetJoyLeftStickY() > 0)
                 pos -= fwd * (mod * Time.deltaTime);
-
-            if (ZInput.GetButton("Crouch"))
+            Quaternion rot = Quaternion.LookRotation(fwd);
+            if (ZInput.GetButton("Crouch")) 
             {
-                go.transform.rotation = Quaternion.LookRotation(-go.transform.up + go.transform.forward * 2f);
+                rot = Quaternion.LookRotation(-Vector3.up + fwd * 2f);
                 pos.y -= mod * Time.deltaTime;
             }
-
-            if (ZInput.GetButton("Jump"))
+            else
+            if (ZInput.GetButton("Jump")) 
             {
-                go.transform.rotation = Quaternion.LookRotation(go.transform.up + go.transform.forward * 2f);
+                rot = Quaternion.LookRotation(Vector3.up + fwd * 2f);
                 pos.y += mod * Time.deltaTime;
+            }
+ 
+            if (Input.GetKeyDown(KeyCode.Mouse1) && !Player.m_localPlayer.TakeInput()) 
+            {
+                UnityEngine.Object.Instantiate(RevealAbility, p.transform.position, Quaternion.identity);
             }
 
             pos.y = pos.y < ZoneSystem.instance.GetGroundHeight(pos) + 1
                 ? ZoneSystem.instance.GetGroundHeight(pos) + 1
                 : pos.y;
             if (pos.y < 31) pos.y = 31;
-            go.transform.position = pos;
-            p.transform.position = pos;
-            p.transform.rotation = go.transform.rotation;
+            p.m_body.position = pos;
+            var transform = rbody.transform;
+            transform.position = pos;
+            transform.rotation = rot; 
             p.m_maxAirAltitude = 0f;
             p.m_lastGroundTouch = 0f;
+            rbody.angularVelocity = Vector3.zero;
+            rbody.velocity = Vector3.zero;
             var useMana = manacost * Time.deltaTime;
             if (!p.HaveEitr(useMana) || !Toggled || p.IsDead())
             {
@@ -158,7 +240,6 @@ public sealed class Druid_Eagle : MH_Skill
             yield return null;
         }
     }
-    
 
     public override bool CanExecute()
     {
@@ -176,12 +257,12 @@ public sealed class Druid_Eagle : MH_Skill
         builder.AppendLine(Localization.instance.Localize(Description));
         builder.AppendLine($"\n");
 
-        int maxLevel = this.MaxLevel;
-        int forLevel = this.Level > 0 ? this.Level : 1;
+        int maxLevel = MaxLevel;
+        int forLevel = Level > 0 ? Level : 1;
         float currentManacost = this.CalculateSkillManacost(forLevel);
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
-        if (this.Level < maxLevel && this.Level > 0)
+        if (Level < maxLevel && Level > 0)
         {
             float nextManacost = this.CalculateSkillManacost(forLevel + 1);
             float manacostDiff = nextManacost - currentManacost;
@@ -196,7 +277,7 @@ public sealed class Druid_Eagle : MH_Skill
         return builder.ToString();
     }
 
-    public override Class PreferableClass => Class.Druid;
+    public override bool CanRightClickCast => true;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
     public override Color SkillColor => Color.green;

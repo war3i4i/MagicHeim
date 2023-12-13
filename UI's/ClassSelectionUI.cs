@@ -25,8 +25,16 @@ public static class ClassSelectionUI
 
     public static bool IsVisible() => UI && UI.activeSelf;
 
-    [HarmonyPatch(typeof(Menu), nameof(Menu.IsVisible))]
+    [HarmonyPatch(typeof(TextInput), nameof(TextInput.IsVisible))]
     static class Menu_IsVisible_Patch
+    {
+        static void Postfix(ref bool __result)
+        {
+            __result |= IsVisible();
+        }
+    }
+    [HarmonyPatch(typeof(StoreGui), nameof(StoreGui.IsVisible))]
+    static class Menu_IsVisible_Patch2
     {
         static void Postfix(ref bool __result)
         {
@@ -162,8 +170,7 @@ public static class ClassSelectionUI
         {
             FemaleClasses.gameObject.SetActive(true);
         }
-
-        if (classDefinition != ClassManager.CurrentClassDef) classDefinition.Init();
+        
         SelectedClass = @class;
         ClassDescription.gameObject.SetActive(true);
         ClassName.gameObject.SetActive(true);

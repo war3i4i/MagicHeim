@@ -20,11 +20,18 @@ public class Druid : MH_ClassDefinition
         AddSkill("Druid_NatureBuff");  
         AddSkill("Druid_Rootball"); 
         AddSkill("Druid_Spiritwave"); 
-        AddSkill("Druid_Moonfire"); 
-        AddSkill("Druid_Weaponenchantpoison"); 
-        AddSkill("Druid_Weaponenchantspirit"); 
+        AddSkill("Druid_Moonfire");  
+        AddSkill("Druid_Weaponenchantpoison");  
+        AddSkill("Druid_Weaponenchantspirit");
         AddSkill("Druid_Natureprotection"); 
         AddSkill("Druid_Shield"); 
+        AddSkill("Druid_TrollPower"); 
+        AddSkill("Druid_EikthyrPower"); 
+        AddSkill("Druid_ElderPower"); 
+        AddSkill("Druid_Exchange"); 
+        AddSkill("Druid_Eclipse");  
+        AddSkill("Druid_Grenade"); 
+        AddSkill("Druid_SelfHeal"); 
         SortSkills();
     }
  

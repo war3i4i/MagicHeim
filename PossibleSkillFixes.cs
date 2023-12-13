@@ -1,6 +1,4 @@
 ﻿using MagicHeim.UI_s;
-using Mono.Cecil.Cil;
-using Logger = MagicHeim_Logger.Logger;
 
 namespace MagicHeim;
 
@@ -19,11 +17,11 @@ public class PossibleSkillFixes
                 secondaryAttack = false;
                 secondaryAttackHold = false;
                 block = false;
-                blockHold = false;
+                blockHold = false; 
                 jump = false;
             }
         }
-    }
+    } 
 
 
     [HarmonyPatch(typeof(Player), nameof(Player.Update))]

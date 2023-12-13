@@ -1,7 +1,6 @@
-﻿using Groups;
-using MagicHeim.MH_Interfaces;
+﻿using MagicHeim.MH_Interfaces;
 using MagicHeim.SkillsDatabase.MageSkills;
-using Mono.Unix.Native;
+using TMPro;
 using Logger = MagicHeim_Logger.Logger;
 using Random = UnityEngine.Random;
 
@@ -10,7 +9,7 @@ namespace MagicHeim;
 public static class Utils
 {
     public static bool IsEnemy(Character c)
-    { 
+    {
         if (c == Player.m_localPlayer) return false;
         if (c.IsPlayer())
         {
@@ -25,18 +24,18 @@ public static class Utils
         if (skill.Definition.MaxLevel.Value <= 0) return skill.Definition.MinLvlValue.Value;
         int currentLevel = forLevel > 0 ? forLevel - 1 : skill.Level - 1;
         int maxLevel = skill.Definition.MaxLevel.Value - 1;
-        float minValue = skill.Definition.MinLvlValue.Value; 
+        float minValue = skill.Definition.MinLvlValue.Value;
         float maxValue = skill.Definition.MaxLvlValue.Value;
         return Mathf.Lerp(minValue, maxValue, (float)currentLevel / maxLevel);
     }
-    
+
     public static float CalculateSkillExternalValue(this MH_Skill skill, int index, int forLevel = -1)
     {
         if (skill.Definition.MaxLevel.Value <= 0) return skill.Definition.ExternalValues[index].Value;
         int currentLevel = forLevel > 0 ? forLevel - 1 : skill.Level - 1;
         int maxLevel = skill.Definition.MaxLevel.Value - 1;
         float minValue = skill.Definition.ExternalValues[index].Value;
-        float maxValue = skill.Definition.ExternalValues[index+1].Value;
+        float maxValue = skill.Definition.ExternalValues[index + 1].Value;
         return Mathf.Lerp(minValue, maxValue, (float)currentLevel / maxLevel);
     }
 
@@ -226,13 +225,17 @@ public static class Utils
     public static bool IsPlayerInGroup(Player p)
     {
         if (!Groups.API.IsLoaded() || p == Player.m_localPlayer) return true;
-        foreach (var party in Groups.API.GroupPlayers())
-        {
-            if (party.peerId == p.m_nview.m_zdo.m_uid.UserID)
-                return true;
-        }
+        return Groups.API.GroupPlayers().Any(party => party.peerId == p.m_nview.m_zdo.m_uid.UserID);
+    }
 
-        return false;
+    public static List<Player> GetPlayersInGroup(int range = 999999, bool excludeSelf = false)
+    {
+        Player local = Player.m_localPlayer;
+        List<Player> result = Player.s_players.Where(p =>
+            (p.transform.position - local.transform.position).magnitude <= range &&
+            IsPlayerInGroup(p)).ToList();
+        if (excludeSelf) result.Remove(local);
+        return result;
     }
 
 
@@ -243,13 +246,13 @@ public static class Utils
             if (go.GetComponent<ZNetView>() &&
                 !ZNetScene.instance.m_namedPrefabs.ContainsKey(go.name.GetStableHashCode()))
             {
-                MagicHeim_Logger.Logger.Log($"{go} has ZNetView but not in ZNetScene");
+                Logger.Log($"{go} has ZNetView but not in ZNetScene");
             }
 
             if (!go.GetComponent<ZNetView>() &&
                 ZNetScene.instance.m_namedPrefabs.ContainsKey(go.name.GetStableHashCode()))
             {
-                MagicHeim_Logger.Logger.Log($"{go} is in ZNetScene but doesn't have ZNetVview");
+                Logger.Log($"{go} is in ZNetScene but doesn't have ZNetVview");
             }
         }
     }
@@ -266,7 +269,7 @@ public static class Utils
             m_gui = UnityEngine.Object.Instantiate(DamageText.instance.m_worldTextBase, DamageText.instance.transform)
         };
         worldTextInstance.m_gui.GetComponent<RectTransform>().sizeDelta *= 2;
-        worldTextInstance.m_textField = worldTextInstance.m_gui.GetComponent<Text>();
+        worldTextInstance.m_textField = worldTextInstance.m_gui.GetComponent<TMP_Text>();
         DamageText.instance.m_worldTexts.Add(worldTextInstance);
         worldTextInstance.m_textField.fontSize = 20;
         worldTextInstance.m_textField.text = text;
@@ -278,7 +281,7 @@ public static class Utils
     {
         static void Postfix(DamageText __instance)
         {
-            __instance.m_worldTextBase.GetComponentInChildren<Text>().supportRichText = true;
+            __instance.m_worldTextBase.GetComponentInChildren<TMP_Text>().richText = true;
         }
     }
 
@@ -290,4 +293,12 @@ public static class Utils
         hit.ApplyModifier(Exp_Configs.GLOBAL_DAMAGE_MULTIPLIER.Value);
         c.Damage(hit);
     }
+    
+    public static float GetParabolaHeight(float maxHeight, float dt, float totalTime)
+    {
+        float t = dt / totalTime;
+        float height = Mathf.Sin(t * Mathf.PI) * maxHeight;
+        return height;
+    }
+    
 }

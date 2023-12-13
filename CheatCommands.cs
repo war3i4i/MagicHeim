@@ -1,5 +1,4 @@
-﻿using System.Text;
-using MagicHeim.MH_Enums;
+﻿using MagicHeim.MH_Enums;
 
 namespace MagicHeim;
 

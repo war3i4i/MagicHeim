@@ -2,10 +2,9 @@
 using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
 using UnityEngine.EventSystems;
-using Logger = MagicHeim_Logger.Logger;
 
 namespace MagicHeim.UI_s;
-
+ 
 public class DragUI : MonoBehaviour, IDragHandler, IEndDragHandler
 {
     private static RectTransform dragRect;
@@ -135,7 +134,8 @@ public static class SkillPanelUI
 
     private static GameObject UI;
     private static GameObject SkillElement;
-    private static Transform SkillsTransform;
+    private static Transform BottomSkillsTransform;
+    private static Transform TopSkillsTransform;
 
     private static ConfigEntry<int> MaxSlots;
     public static ConfigEntry<bool>[] UseAltHotkey;
@@ -156,6 +156,16 @@ public static class SkillPanelUI
         KeyCode.Alpha8,
         KeyCode.Alpha9,
         KeyCode.Alpha0,
+        KeyCode.Keypad1,
+        KeyCode.Keypad2,
+        KeyCode.Keypad3,
+        KeyCode.Keypad4,
+        KeyCode.Keypad5,
+        KeyCode.Keypad6,
+        KeyCode.Keypad7,
+        KeyCode.Keypad8,
+        KeyCode.Keypad9,
+        KeyCode.Keypad0,
         KeyCode.K,
     };
 
@@ -172,11 +182,11 @@ public static class SkillPanelUI
 
     public static void Init()
     {
-        MaxSlots = MagicHeim.config("SkillPanel", "MaxSlots", 10, "Max slots in skill panel");
-        MH_Hotkeys = new ConfigEntry<KeyCode>[11];
-        UseAltHotkey = new ConfigEntry<bool>[10];
-        MH_AdditionalHotkeys = new ConfigEntry<KeyCode>[10];
-        for (int i = 0; i < 10; ++i)
+        MaxSlots = MagicHeim.config("SkillPanel", "MaxSlots", 20, "Max slots in skill panel");
+        MH_Hotkeys = new ConfigEntry<KeyCode>[21];
+        UseAltHotkey = new ConfigEntry<bool>[20];
+        MH_AdditionalHotkeys = new ConfigEntry<KeyCode>[20];
+        for (int i = 0; i < 20; ++i)
         {
             MH_Hotkeys[i] = MagicHeim._thistype.Config.Bind("SkillPanel", "SkillHotkey_" + (i + 1), DefaultHotkeys[i],
                 "Hotkey for skill " + (i + 1));
@@ -185,8 +195,8 @@ public static class SkillPanelUI
             MH_AdditionalHotkeys[i] = MagicHeim._thistype.Config.Bind("SkillPanel", "SkillHotkeyAlt_" + (i + 1), KeyCode.LeftAlt,
                 "Alt hotkey for skill " + (i + 1));
         }
-
-        MH_Hotkeys[10] = MagicHeim._thistype.Config.Bind("SkillPanel", "Open Skillbook", DefaultHotkeys[10],
+ 
+        MH_Hotkeys[20] = MagicHeim._thistype.Config.Bind("SkillPanel", "Open Skillbook", DefaultHotkeys[20],
             "Hotkey for SkillBook");
 
         UI = UnityEngine.Object.Instantiate(MagicHeim.asset.LoadAsset<GameObject>("SkillPanelUI"));
@@ -195,7 +205,8 @@ public static class SkillPanelUI
         UnityEngine.Object.DontDestroyOnLoad(UI);
         UI.SetActive(false);
         SkillElement = MagicHeim.asset.LoadAsset<GameObject>("SkillPanelSkill");
-        SkillsTransform = UI.transform.Find("Canvas/Background/skills");
+        BottomSkillsTransform = UI.transform.Find("Canvas/Background/skills_bottomrow");
+        TopSkillsTransform = UI.transform.Find("Canvas/Background/skills_toprow");
         Default();
         UI.transform.Find("Canvas/Background/move").gameObject.AddComponent<DragUI>();
         Resizer = UI.transform.Find("Canvas/Background/resize").gameObject.AddComponent<ResizeUI>();
@@ -216,12 +227,14 @@ public static class SkillPanelUI
 
         ExpBar.color = _currentClass.GetColor;
         _skillSlots.Clear();
-        for (var i = 0; i < Mathf.Min(10, MaxSlots.Value); i++)
+        for (var i = 0; i < Mathf.Min(20, MaxSlots.Value); i++)
         {
             PanelButton button = new();
-            var gameObject = UnityEngine.Object.Instantiate(SkillElement, SkillsTransform);
+            Transform t = i < 10 ? BottomSkillsTransform : TopSkillsTransform;
+            var gameObject = UnityEngine.Object.Instantiate(SkillElement, t);
             int i1 = i;
             gameObject.GetComponent<UIInputHandler>().m_onLeftClick = _ => DragSkill(i1);
+            gameObject.GetComponent<UIInputHandler>().m_onRightClick = _ => TryUseSkill(i1);
             button.go = gameObject;
             button.index = i;
             button.Icon = gameObject.GetComponent<Image>();
@@ -249,12 +262,18 @@ public static class SkillPanelUI
 
         _coroutine = Player.m_localPlayer.StartCoroutine(Global_Routine());
     }
+
+    private static void TryUseSkill(int index )
+    {
+        if (index > _skillSlots.Count) return;
+        if (_skillSlots[index].Skill is not { CanRightClickCast: true, Level: > 0 }) return;
+        SkillCastHelper.CastSkill(_skillSlots[index].Skill, skipInput: true);
+    }
  
     private static void DragSkill(int index)
     {
         ClassSelectionUI.AUsrc.Play();
         if (index > _skillSlots.Count) return;
-        //if (_skillSlots[index].Skill != null && _skillSlots[index].Skill.GetCooldown() > 0) return; // can replace skill if on CD ???
         if (Time.unscaledTime - SkillDrag.LastDragTime <= 0.2f)
         {
             var skill = SkillDrag.LastDragSkill;
@@ -412,7 +431,11 @@ public static class SkillPanelUI
     private static void Default()
     {
         _skillSlots.Clear();
-        foreach (Transform transform in SkillsTransform)
+        foreach (Transform transform in BottomSkillsTransform)
+        {
+            UnityEngine.Object.Destroy(transform.gameObject);
+        }
+        foreach (Transform transform in TopSkillsTransform)
         {
             UnityEngine.Object.Destroy(transform.gameObject);
         }
@@ -464,7 +487,7 @@ public static class SkillPanelUI
         static IEnumerable<CodeInstruction> HideUI(IEnumerable<CodeInstruction> code)
         {
             List<CodeInstruction> list = new(code);
-            list.Insert(51, CodeInstruction.Call(()=> HideUImethod()));
+            list.Insert(146, CodeInstruction.Call(()=> HideUImethod()));
             return list.AsEnumerable();
         }
     }

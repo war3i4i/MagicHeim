@@ -1,6 +1,4 @@
-﻿using MagicHeim.MH_Interfaces;
-using UnityEngine.PlayerLoop;
-using Logger = MagicHeim_Logger.Logger;
+﻿using TMPro;
 using Object = UnityEngine.Object;
 
 namespace MagicHeim.UI_s;
@@ -131,17 +129,17 @@ public static class OptionsUI
                 ResetUI();
             });
 
-            MH.transform.Find("Ok").GetComponent<Button>().onClick.AddListener(() =>
+            MH.transform.Find("Ok").gameObject.SetActive(false);/*.GetComponent<Button>().onClick.AddListener(() =>
             { 
                 ClassSelectionUI.AUsrc.Play();
                 __instance.OnOk();
-            });
+            });*/
 
             LatestUI = MH.gameObject;
         }
     }
 
-    private static void Reset()
+    private static void Reset() 
     {
         var hotkeys = SkillPanelUI.MH_Hotkeys;
         var additional = SkillPanelUI.MH_AdditionalHotkeys;
@@ -167,7 +165,7 @@ public static class OptionsUI
     [HarmonyPatch(typeof(FejdStartup), nameof(FejdStartup.Awake))]
     static class Menu_Start_Patch
     {
-        private static bool firstInit = true;
+        private static bool firstInit = false;
 
         static void Postfix(FejdStartup __instance)
         {
@@ -175,18 +173,17 @@ public static class OptionsUI
             firstInit = false;
             var settingsPrefab = __instance.m_settingsPrefab;
             var controls = settingsPrefab.transform.Find("panel/TabButtons/Controlls");
-            var newButton = UnityEngine.Object.Instantiate(controls);
+            var newButton = Object.Instantiate(controls);
             newButton.SetParent(controls.parent, false);
             newButton.name = "MagicHeim";
             newButton.SetAsLastSibling();
             newButton.GetComponent<RectTransform>().anchoredPosition +=
                 new Vector2(0, newButton.GetComponent<RectTransform>().sizeDelta.y);
-            newButton.transform.Find("Text").GetComponent<Text>().text =
+            newButton.transform.Find("Text").GetComponent<TMP_Text>().text =
                 "<color=#00FFFF>Magic</color><color=yellow>Heim</color>";
             var tabHandler = settingsPrefab.transform.Find("panel/TabButtons").GetComponent<TabHandler>();
             var page = settingsPrefab.transform.Find("panel/Tabs");
-            GameObject newPage =
-                UnityEngine.Object.Instantiate(MagicHeim.asset.LoadAsset<GameObject>("MagicHeimSettings"));
+            GameObject newPage = Object.Instantiate(MagicHeim.asset.LoadAsset<GameObject>("MagicHeimSettings"));
             newPage.transform.SetParent(page);
             newPage.name = "MagicHeim";
             newPage.SetActive(false);

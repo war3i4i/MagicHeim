@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace MagicHeim.API;
+﻿namespace MagicHeim.API;
 
 public static class MH_API
 {

@@ -1,11 +1,7 @@
 ﻿using System.Text;
 using MagicHeim.AnimationHelpers;
-using MagicHeim.MH_Classes;
-using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
 using MagicHeim.SkillsDatabase.GlobalMechanics;
-using MagicHeim.UI_s;
-using Logger = MagicHeim_Logger.Logger;
 
 namespace MagicHeim.SkillsDatabase.MageSkills;
 
@@ -57,7 +53,7 @@ public sealed class Druid_Shield : MH_Skill
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Shield_Icon");
         CachedIcon = _definition.Icon;
-        _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_ArcaneShield.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/MH_Mage_ArcaneShield.mp4";
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageWave];
         _definition.AnimationTime = 0.8f;
         Buff = MagicHeim.asset.LoadAsset<GameObject>("Druid_Shield_Prefab");
@@ -112,8 +108,8 @@ public sealed class Druid_Shield : MH_Skill
         builder.AppendLine(Localization.instance.Localize(Description));
         builder.AppendLine($"\n");
 
-        int maxLevel = this.MaxLevel;
-        int forLevel = this.Level > 0 ? this.Level : 1;
+        int maxLevel = MaxLevel;
+        int forLevel = Level > 0 ? Level : 1;
         float currentValue = this.CalculateSkillValue(forLevel);
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
@@ -122,7 +118,7 @@ public sealed class Druid_Shield : MH_Skill
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
-        if (this.Level < maxLevel && this.Level > 0)
+        if (Level < maxLevel && Level > 0)
         {
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float nextCooldown = this.CalculateSkillCooldown(forLevel + 1);
@@ -189,7 +185,7 @@ public sealed class Druid_Shield : MH_Skill
         public override void OnDamaged(HitData hit, Character attacker)
         {
             float totalDamage = hit.GetTotalDamage(); 
-            this.takenDamage += totalDamage;
+            takenDamage += totalDamage;
             hit.ApplyModifier(0f); 
         }
 
@@ -239,7 +235,7 @@ public sealed class Druid_Shield : MH_Skill
         }
     }
 
-    public override Class PreferableClass => Class.Druid;
+    public override bool CanRightClickCast => true;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
     public override Color SkillColor => new Color(0.43f, 1f, 0.33f);

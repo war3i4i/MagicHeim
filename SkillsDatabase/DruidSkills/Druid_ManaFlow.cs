@@ -1,9 +1,6 @@
 ﻿using System.Text;
-using MagicHeim.AnimationHelpers;
-using MagicHeim.MH_Classes;
 using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
-using MagicHeim.UI_s;
 
 namespace MagicHeim.SkillsDatabase.DruidSkills;
 
@@ -49,11 +46,8 @@ public sealed class Druid_ManaFlow : MH_Skill
     }
 
     private static int CachedKey;
- 
-    public override void Execute(Func<bool> Cond)
-    {
-        
-    }
+
+    public override void Execute(Func<bool> Cond){}
  
     public override bool CanExecute()
     {
@@ -71,15 +65,15 @@ public sealed class Druid_ManaFlow : MH_Skill
         builder.AppendLine(Localization.instance.Localize(Description));
         builder.AppendLine($"\n");
 
-        int maxLevel = this.MaxLevel;
-        int forLevel = this.Level > 0 ? this.Level : 1;
+        int maxLevel = MaxLevel;
+        int forLevel = Level > 0 ? Level : 1;
         float currentValue = this.CalculateSkillValue(forLevel);
         float externalValue = this.CalculateSkillExternalValue(0,forLevel);
 
         builder.AppendLine($"Max Eitr Bonus: {Math.Round(currentValue, 1)}");
         builder.AppendLine($"HP Bonus: {Math.Round(externalValue, 1)}");
 
-        if (this.Level < maxLevel && this.Level > 0)
+        if (Level < maxLevel && Level > 0)
         {
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float nextExternalValue = this.CalculateSkillExternalValue(0, forLevel + 1);
@@ -116,7 +110,7 @@ public sealed class Druid_ManaFlow : MH_Skill
     }
 
 
-    public override Class PreferableClass => Class.Druid;
+    public override bool CanRightClickCast => false;
     public override bool IsPassive => true;
     public override CostType _costType => CostType.None;
     public override Color SkillColor => new Color(0.33f, 1f, 0.38f);

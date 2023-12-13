@@ -1,12 +1,7 @@
-﻿using System.Diagnostics;
-using System.Text;
+﻿using System.Text;
 using MagicHeim.AnimationHelpers;
-using MagicHeim.MH_Classes;
-using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
 using MagicHeim.UI_s;
-using Logger = MagicHeim_Logger.Logger;
-using Random = UnityEngine.Random;
 
 namespace MagicHeim.SkillsDatabase.MageSkills;
 
@@ -58,7 +53,7 @@ public sealed class Mage_BlackHole : MH_Skill
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_BlackHole_Icon");
-        _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_BlackHole.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/MH_Mage_BlackHole.mp4";
         Teleport_RangeShowup = MagicHeim.asset.LoadAsset<GameObject>("Mage_AreaShowup");
         Teleport_TargetPoint = MagicHeim.asset.LoadAsset<GameObject>("Mage_BlackHole_TargetShowup");
         BlackHole_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_BlackHole_Prefab");
@@ -243,8 +238,8 @@ public sealed class Mage_BlackHole : MH_Skill
         builder.AppendLine(Localization.instance.Localize(Description));
         builder.AppendLine($"\n");
 
-        int maxLevel = this.MaxLevel;
-        int forLevel = this.Level > 0 ? this.Level : 1;
+        int maxLevel = MaxLevel;
+        int forLevel = Level > 0 ? Level : 1;
         float currentValue = this.CalculateSkillValue(forLevel);
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
@@ -253,7 +248,7 @@ public sealed class Mage_BlackHole : MH_Skill
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
-        if (this.Level < maxLevel && this.Level > 0)
+        if (Level < maxLevel && Level > 0)
         {
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float nextCooldown = this.CalculateSkillCooldown(forLevel + 1);
@@ -279,7 +274,7 @@ public sealed class Mage_BlackHole : MH_Skill
         return builder.ToString();
     }
 
-    public override Class PreferableClass => Class.Mage;
+    public override bool CanRightClickCast => false;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
     public override Color SkillColor => new Color(0.18f, 0.13f, 0.22f);

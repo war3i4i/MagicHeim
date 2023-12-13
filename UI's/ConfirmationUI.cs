@@ -1,6 +1,4 @@
-﻿using MagicHeim.MH_Interfaces;
-
-namespace MagicHeim.UI_s;
+﻿namespace MagicHeim.UI_s;
 
 public static class ConfirmationUI
 {
@@ -67,8 +65,16 @@ public static class ConfirmationUI
         sizeFillers.ForEach(filter => filter.enabled = true);
     }
 
-    [HarmonyPatch(typeof(Menu), nameof(Menu.IsVisible))]
+    [HarmonyPatch(typeof(TextInput), nameof(TextInput.IsVisible))]
     static class Menu_IsVisible_Patch
+    {
+        static void Postfix(ref bool __result)
+        {
+            __result |= IsVisible();
+        }
+    }
+    [HarmonyPatch(typeof(StoreGui), nameof(StoreGui.IsVisible))]
+    static class Menu_IsVisible_Patch2
     {
         static void Postfix(ref bool __result)
         {

@@ -1,6 +1,4 @@
-﻿using TMPro;
-
-namespace MagicHeim;
+﻿namespace MagicHeim;
 
 public static class CustomMapPins
 {

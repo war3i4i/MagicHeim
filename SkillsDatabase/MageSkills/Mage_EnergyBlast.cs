@@ -1,10 +1,7 @@
 ﻿using System.Text;
 using MagicHeim.AnimationHelpers;
-using MagicHeim.MH_Classes;
-using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
 using MagicHeim.UI_s;
-using Logger = MagicHeim_Logger.Logger;
 
 namespace MagicHeim.SkillsDatabase.MageSkills;
 
@@ -73,7 +70,7 @@ public sealed class Mage_EnergyBlast : MH_Skill
 
         _definition.AnimationTime = 0.6f;
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_EnergyBlast_Icon");
-        _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_EnergyBlast.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/MH_Mage_EnergyBlast.mp4";
         Energyblast_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_EnergyBlast");
         Energyblast_Prefab.AddComponent<EnergyBlastComponent>();
         Energyblast_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Mage_EnergyBlast_Impact");
@@ -223,7 +220,7 @@ public sealed class Mage_EnergyBlast : MH_Skill
             rot = (target - p.transform.position).normalized;
             rot.y = 0;
             p.transform.rotation = Quaternion.LookRotation(rot);
-            p.transform.position = new Vector3(initPos.x, p.transform.position.y, initPos.z);
+            p.m_body.position = new Vector3(initPos.x, p.transform.position.y, initPos.z);
             go.transform.position = p.transform.position + Vector3.up + GameCamera.instance.transform.forward * 2f;
             animationTime -= dt;
             if (animationTime <= 0f)
@@ -266,8 +263,8 @@ public sealed class Mage_EnergyBlast : MH_Skill
         builder.AppendLine(Localization.instance.Localize(Description));
         builder.AppendLine($"\n");
 
-        int maxLevel = this.MaxLevel;
-        int forLevel = this.Level > 0 ? this.Level : 1;
+        int maxLevel = MaxLevel;
+        int forLevel = Level > 0 ? Level : 1;
         float currentValue = this.CalculateSkillValue(forLevel);
         float currentAoe = this.CalculateSkillAoe(forLevel);
         float currentChargeTime = this.CalculateSkillChargeTime(forLevel);
@@ -281,7 +278,7 @@ public sealed class Mage_EnergyBlast : MH_Skill
         builder.AppendLine($"Area of Effect: {Math.Round(currentAoe, 1)}");
         builder.AppendLine($"Charge Time: {Math.Round(currentChargeTime, 1)}");
 
-        if (this.Level < maxLevel && this.Level > 0)
+        if (Level < maxLevel && Level > 0)
         {
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float nextAoe = this.CalculateSkillAoe(forLevel + 1);
@@ -317,7 +314,7 @@ public sealed class Mage_EnergyBlast : MH_Skill
         return builder.ToString();
     }
 
-    public override Class PreferableClass => Class.Mage;
+    public override bool CanRightClickCast => false;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
     public override Color SkillColor => new Color(1f, 0.76f, 0.21f);

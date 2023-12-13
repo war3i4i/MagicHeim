@@ -1,9 +1,5 @@
 ﻿using System.Text;
-using MagicHeim.AnimationHelpers;
-using MagicHeim.MH_Classes;
-using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
-using MagicHeim.UI_s;
 
 namespace MagicHeim.SkillsDatabase.MageSkills;
 
@@ -39,7 +35,7 @@ public sealed class Mage_WaterWalk : MH_Skill
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_WaterWalk_Icon");
-        _definition.Video = "https://kg-dev.xyz/skills/MH_Mage_WaterWalk.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/MH_Mage_WaterWalk.mp4";
         WaterWalk_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Mage_WaterWalk_Prefab");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -169,12 +165,12 @@ public sealed class Mage_WaterWalk : MH_Skill
         builder.AppendLine(Localization.instance.Localize(Description));
         builder.AppendLine($"\n");
 
-        int maxLevel = this.MaxLevel;
-        int forLevel = this.Level > 0 ? this.Level : 1;
+        int maxLevel = MaxLevel;
+        int forLevel = Level > 0 ? Level : 1;
         float currentManacost = this.CalculateSkillManacost(forLevel);
         builder.AppendLine($"Manacost (Per Second): {Math.Round(currentManacost, 1)}");
 
-        if (this.Level < maxLevel && this.Level > 0)
+        if (Level < maxLevel && Level > 0)
         {
             float nextManacost = this.CalculateSkillManacost(forLevel + 1);
             float manacostDiff = nextManacost - currentManacost;
@@ -189,7 +185,7 @@ public sealed class Mage_WaterWalk : MH_Skill
         return builder.ToString();
     }
 
-    public override Class PreferableClass => Class.Mage;
+    public override bool CanRightClickCast => true;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
     public override Color SkillColor => new Color(0.44f, 1f, 0.92f);

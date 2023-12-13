@@ -1,8 +1,6 @@
 ﻿using MagicHeim.MH_Interfaces;
 using MagicHeim.SkillsDatabase.DruidSkills;
-using MagicHeim.SkillsDatabase.MageSkills;
 using MagicHeim.UI_s;
-using Logger = MagicHeim_Logger.Logger;
 
 namespace MagicHeim.AnimationHelpers;
 
@@ -44,11 +42,10 @@ public class SkillCastHelper
     }
 
 
-    public static void CastSkill(MH_Skill skill, Func<bool> cond)
+    public static void CastSkill(MH_Skill skill, Func<bool> cond = null, bool skipInput = false)
     {
-        if (IsInDelayedInvoke || skill.GetCooldown() > 0 || !skill.CanExecute() || SkillChargeUI.IsCharging ||
-            !Player.m_localPlayer.TakeInput()) return;
-        if (skill.Toggled || (DEBUG_PreventUsages() && skill.TryUseCost()))
+        if (IsInDelayedInvoke || skill.GetCooldown() > 0 || !skill.CanExecute() || SkillChargeUI.IsCharging || (!Player.m_localPlayer.TakeInput() && !skipInput)) return;
+        if (skill.Toggled || (DEBUG_PreventUsages(skill) && skill.TryUseCost()))
             MagicHeim._thistype.StartCoroutine(instance.DelayedInvoke(skill, cond));
     }
 
@@ -58,7 +55,7 @@ public class SkillCastHelper
     }
 
 
-    private static bool DEBUG_PreventUsages()
+    private static bool DEBUG_PreventUsages(MH_Skill skill)
     {
         if (!Player.m_localPlayer) return false;
         if (Player.m_localPlayer.IsTeleporting())
