@@ -73,9 +73,9 @@ public sealed class Druid_Exchange : MH_Skill
         Player p = Player.m_localPlayer;
         float cooldown = this.CalculateSkillCooldown();
         p.m_collider.enabled = false;
-        bool castHit = Physics.Raycast(GameCamera.instance.transform.position, p.GetLookDir(), out var raycast, 60f, Script_Layermask);
+        bool castHit = Physics.Raycast(GameCamera.instance.transform.position, p.GetLookDir(), out var raycast, 70f, Script_Layermask);
         p.m_collider.enabled = true;
-        if (castHit && raycast.collider && raycast.collider.GetComponentInParent<Character>() is {} enemy)
+        if (castHit && raycast.collider && raycast.collider.GetComponentInParent<Character>() is {} enemy && enemy.m_nview.m_persistent)
         {
             if (Vector3.Distance(enemy.transform.position, p.transform.position) > 50f)
             {
@@ -116,6 +116,7 @@ public sealed class Druid_Exchange : MH_Skill
         Player p = Player.m_localPlayer;
         GameObject toEnemy = Object.Instantiate(_Prefab, p.transform.position, Quaternion.identity);
         GameObject toPlayer = Object.Instantiate(_Prefab, target.transform.position, Quaternion.identity);
+        if (!target.IsPlayer()) target.m_nview.ClaimOwnership();
         float counter = 0f;
         while (counter < 1f)
         {

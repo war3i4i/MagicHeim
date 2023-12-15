@@ -11,7 +11,7 @@ public class Druid : MH_ClassDefinition
 
     public override void Init()
     {
-        ResetSkills();
+        ResetSkills(); 
         AddSkill("Druid_Eagle");
         AddSkill("Druid_Wolf");
         AddSkill("Druid_Fish");
@@ -25,13 +25,19 @@ public class Druid : MH_ClassDefinition
         AddSkill("Druid_Weaponenchantspirit");
         AddSkill("Druid_Natureprotection"); 
         AddSkill("Druid_Shield"); 
-        AddSkill("Druid_TrollPower"); 
-        AddSkill("Druid_EikthyrPower"); 
+        AddSkill("Druid_TrollPower");
+        AddSkill("Druid_EikthyrPower");
         AddSkill("Druid_ElderPower"); 
         AddSkill("Druid_Exchange"); 
         AddSkill("Druid_Eclipse");  
         AddSkill("Druid_Grenade"); 
         AddSkill("Druid_SelfHeal"); 
+        AddSkill("Druid_Connection"); 
+        AddSkill("Druid_Tame"); 
+        AddSkill("Druid_CreatuesBuff"); 
+        AddSkill("Druid_StaminaSphere"); 
+        AddSkill("Druid_Crystals"); 
+        AddSkill("Druid_AspeedBuff"); 
         SortSkills();
     }
  

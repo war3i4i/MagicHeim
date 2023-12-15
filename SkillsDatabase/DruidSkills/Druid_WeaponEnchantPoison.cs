@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using ItemDataManager;
 using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Interfaces;
 using MagicHeim.SkillsDatabase.GlobalMechanics;
@@ -52,7 +53,7 @@ public sealed class Druid_WeaponEnchantPoison : MH_Skill
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Required Level To Learn",
-            20, "Required Level");
+            1, "Required Level");
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 5,

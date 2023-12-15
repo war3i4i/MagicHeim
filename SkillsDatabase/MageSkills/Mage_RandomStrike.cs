@@ -132,7 +132,7 @@ public sealed class Mage_RandomStrike : MH_Skill
 
             rangeShowup.transform.position = p.transform.position;
             bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out var raycast,
-                _definition.MaxLvlValue.Value + 10f,
+                maxDistance + 20f,
                 JumpMask);
             if (castHit && raycast.collider)
             {

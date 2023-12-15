@@ -285,6 +285,8 @@ public static class Utils
         }
     }
 
+    public static string Localize(this string s) => Localization.instance.Localize(s);
+
     public static bool InWater() => Player.m_localPlayer.InLiquidSwimDepth();
     public static bool InWaterFish() => Player.m_localPlayer.InWater();
 

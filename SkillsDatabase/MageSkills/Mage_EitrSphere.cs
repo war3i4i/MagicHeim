@@ -83,7 +83,7 @@ public sealed class Mage_EitrSphere : MH_Skill
 
     public class AoeMechanic : MonoBehaviour
     {
-        private static float time;
+        private static int time;
         public ZNetView nview;
 
         private void Awake()
@@ -109,8 +109,9 @@ public sealed class Mage_EitrSphere : MH_Skill
         {
             if (!Player.m_localPlayer) return;
             if (!nview.IsValid()) return;
-            if (time == Time.time) return;
-            time = Time.time;
+            if (time == Time.frameCount) return;
+            if (!IsInsideMultiplier(Player.m_localPlayer.transform.position)) return;
+            time = Time.frameCount;
             var eitrRegen = nview.m_zdo.GetFloat("eitrRegen");
             Player.m_localPlayer.AddEitr(eitrRegen * Time.fixedDeltaTime);
         }

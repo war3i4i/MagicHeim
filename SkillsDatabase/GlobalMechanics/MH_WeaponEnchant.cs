@@ -1,4 +1,6 @@
-﻿namespace MagicHeim.SkillsDatabase.GlobalMechanics;
+﻿using ItemDataManager;
+
+namespace MagicHeim.SkillsDatabase.GlobalMechanics;
 
 public static class MH_WeaponEnchants_VFXs
 {
@@ -184,7 +186,7 @@ public class GetTooltipPatch
                 break;
             case MH_WeaponEnchant.Type.Spirit:
                 __result +=
-                    $"\nEnchanted with Spirit Damage <color=gray>(+{data.value})</color>. Time left: <color=yellow>{(int)(data.duration - (EnvMan.instance.m_totalSeconds - data.time))} seconds</color>";
+                    $"\nEnchanted with Spirit Damage <color=#808080>(+{data.value})</color>. Time left: <color=yellow>{(int)(data.duration - (EnvMan.instance.m_totalSeconds - data.time))} seconds</color>";
                 break;
              
         }

@@ -33,7 +33,7 @@ public sealed class Druid_Eclipse : MH_Skill
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Required Level To Learn",
-            40, "Required Level");
+            1, "Required Level");
         
         
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
@@ -121,6 +121,7 @@ public sealed class Druid_Eclipse : MH_Skill
                     hitData.m_point = character.m_collider.ClosestPoint(pPos);
                     hitData.m_ranged = true;
                     hitData.SetAttacker(Player.m_localPlayer); 
+                    character.DamageMH(hitData);
                 }
             }
             

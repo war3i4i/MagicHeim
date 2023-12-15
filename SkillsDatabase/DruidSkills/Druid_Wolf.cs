@@ -1,6 +1,9 @@
 ﻿using System.Text;
+using System.Threading.Tasks;
 using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Interfaces;
+using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.Serialization;
 
 namespace MagicHeim.SkillsDatabase.DruidSkills;
 
@@ -8,6 +11,21 @@ public sealed class Druid_Wolf : MH_Skill
 {
     public static int CachedKey;
     private static GameObject Wolf_Explosion;
+    
+    static Druid_Wolf()
+    {
+        AnimationSpeedManager.Add(AnimSpeedManager);
+    }
+
+    private static int CachedAnimHash = "Druid_WolfForm".GetStableHashCode();
+    
+    private static double AnimSpeedManager(Character c, double speed)
+    {
+        if (c != Player.m_localPlayer || !c.InAttack()) return speed;
+        var se = c.m_seman.GetStatusEffect(CachedAnimHash) as SE_Druid_WolfForm;
+        if (se == null) return speed;
+        return speed * (1 + se.aspeed / 100f);
+    }
 
     public Druid_Wolf()
     {
@@ -35,7 +53,7 @@ public sealed class Druid_Wolf : MH_Skill
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Required Level To Learn",
-            75, "Required Level");
+            1, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
@@ -88,7 +106,7 @@ public sealed class Druid_Wolf : MH_Skill
         var manacost = this.CalculateSkillManacost();
         Player p = Player.m_localPlayer;
         var stamina = p.GetStamina();
-        p.m_seman.AddStatusEffect("Druid_WolfForm".GetStableHashCode());
+        p.m_seman.AddStatusEffect("Druid_WolfForm".GetStableHashCode(), false, (int)this.CalculateSkillValue(), this.CalculateSkillExternalValue(0));
         UnityEngine.Object.Instantiate(Wolf_Explosion, p.transform.position, Quaternion.identity);
         for (;;)
         {
@@ -151,8 +169,7 @@ public sealed class Druid_Wolf : MH_Skill
         Player component = go.GetComponent<Player>();
         ReplacePlayerModel(component, changedModel);
     }
-
-
+    
     private static readonly int Wakeup = Animator.StringToHash("wakeup");
 
     private static void ResetPlayerModel(Player p)
@@ -205,10 +222,12 @@ public sealed class Druid_Wolf : MH_Skill
             global::Utils.FindChild(p.m_visual.transform, "RightFoot")
         };
     }
-
-
+    
     public class SE_Druid_WolfForm : StatusEffect
     {
+        public int aspeed = 0;
+        public int mspeed = 0;
+        
         public SE_Druid_WolfForm()
         {
             name = "Druid_WolfForm";
@@ -218,9 +237,15 @@ public sealed class Druid_Wolf : MH_Skill
             m_ttl = 0;
         }
 
+        public override void SetLevel(int itemLevel, float skillLevel)
+        {
+            aspeed = itemLevel;
+            mspeed = (int)skillLevel;
+        }
+
         public override void ModifySpeed(float baseSpeed, ref float speed)
         {
-            speed *= 1.5f;
+            speed *= (1 + mspeed / 100f);
         }
 
         public override void Setup(Character character)
@@ -237,8 +262,7 @@ public sealed class Druid_Wolf : MH_Skill
         {
             if (IsDone())
             {
-                Instantiate(Wolf_Explosion, m_character.transform.position + Vector3.up,
-                    Quaternion.identity);
+                Instantiate(Wolf_Explosion, m_character.transform.position + Vector3.up, Quaternion.identity);
                 ZDOID zdoID = Player.m_localPlayer.GetZDOID();
                 ZPackage pkg = new();
                 pkg.Write(zdoID);

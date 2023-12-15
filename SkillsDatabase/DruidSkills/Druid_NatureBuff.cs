@@ -50,7 +50,7 @@ public sealed class Druid_NatureBuff : MH_Skill
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             $"Required Level To Learn",
-            10, "Required Level");
+            1, "Required Level");
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             $"Leveling Step", 4,

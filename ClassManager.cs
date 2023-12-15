@@ -57,7 +57,9 @@ public static class ClassManager
     public static void SetClass(Class newClass)
     {
         _currentClass = newClass;
+        _currentClassDefinition.Reset();
         _currentClassDefinition = ClassesDatabase.ClassesDatabase.GetClassDefinition(_currentClass);
+        _currentClassDefinition.Reset();
         SkillPanelUI.Show(_currentClassDefinition);
         SkillPoints = Exp_Configs.SkillpointsPerLevel.Value;
         Level = 1;
@@ -68,6 +70,8 @@ public static class ClassManager
     {
         SkillPoints = Level * Exp_Configs.SkillpointsPerLevel.Value;
         SkillPanelUI.Reset();
+        _currentClassDefinition.Reset();
+        SaveAll(); 
     }
 
     public static bool CanUpgradeSkill(MH_Skill skill)
@@ -259,6 +263,7 @@ public static class ClassManager
             SkillPanelUI.Hide();
             if (_currentClass == Class.None) return;
             _currentClassDefinition = ClassesDatabase.ClassesDatabase.GetClassDefinition(_currentClass);
+            _currentClassDefinition.Reset();
             LoadPlayerSkillData(SkillsData);
             SkillPanelUI.Show(_currentClassDefinition, PanelData);
         }

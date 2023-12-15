@@ -124,6 +124,10 @@ public static class ClassSelectionUI
     private static void AcceptClassInternal()
     {
         if (SelectedClass == Class.None) return;
+        if (ClassManager.CurrentClassDef != null && !ClassManager.CurrentClassDef.CanChangeClass())
+        {
+            return;
+        }
         var player = Player.m_localPlayer;
         if (!player) return;
         ClassManager.SetClass(SelectedClass);

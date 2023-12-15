@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using ItemDataManager;
 using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Interfaces;
 using MagicHeim.SkillsDatabase.GlobalMechanics;

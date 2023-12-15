@@ -62,7 +62,7 @@ public static class SkillsDatabase
         AddSkill(new Mage_WeaponEnchantFrost());
         AddSkill(new Mage_Meteor());
         AddSkill(new Mage_FireShield());
-        AddSkill(new Mage_EnergyStorm());
+        AddSkill(new Mage_EnergyStorm()); 
         AddSkill(new Mage_WaveOfFlame());
         AddSkill(new Mage_ArcaneShield());
         AddSkill(new Mage_AncientTotem());
@@ -87,5 +87,11 @@ public static class SkillsDatabase
         AddSkill(new Druid_Eclipse());
         AddSkill(new Druid_Grenade());
         AddSkill(new Druid_SelfHeal());
+        AddSkill(new Druid_Connection());
+        AddSkill(new Druid_Tame());
+        AddSkill(new Druid_StaminaSphere());
+        AddSkill(new Druid_CreatuesBuff());
+        AddSkill(new Druid_Crystals());
+        AddSkill(new Druid_AspeedBuff());
     }
 }

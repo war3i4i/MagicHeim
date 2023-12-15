@@ -1,4 +1,6 @@
-﻿using MagicHeim.UI_s;
+﻿using System.Reflection.Emit;
+using JetBrains.Annotations;
+using MagicHeim.UI_s;
 
 namespace MagicHeim;
 
@@ -130,12 +132,55 @@ public class PossibleSkillFixes
     }
 
 
+    [HarmonyPatch(typeof(CharacterAnimEvent), nameof(CharacterAnimEvent.Awake))]
+    private static class Fix1
+    {
+        private static bool Prefix(CharacterAnimEvent __instance)
+        {
+            if (__instance.GetComponentInParent<Character>() != null) return true;
+            UnityEngine.Object.Destroy(__instance);
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(LevelEffects), nameof(LevelEffects.Start))]
+    private static class Fix2
+    {
+        private static bool Prefix(LevelEffects __instance)
+        {
+            if (__instance.GetComponentInParent<Character>() == null)
+            {
+                UnityEngine.Object.Destroy(__instance);
+                return false;
+            }
+
+            return true;
+        }
+    }
+    
     [HarmonyPatch(typeof(Player), nameof(Player.UseHotbarItem))]
     static class Player_UseHotbarItem_Patch
     {
         static bool Prefix()
         {
             return !Input.GetKey(KeyCode.LeftAlt);
+        }
+    }
+    
+    [HarmonyPatch(typeof(Settings),nameof(Settings.ApplyQualitySettings))]
+    private static class Settings_ApplyQualitySettings_Patch
+    {
+        [UsedImplicitly]
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> code)
+        {
+            CodeMatcher matcher = new(code);
+            var target = AccessTools.Method(typeof(Shader), nameof(Shader.EnableKeyword), new[]{typeof(string)});
+            var replaceDisable = AccessTools.Method(typeof(Shader), nameof(Shader.DisableKeyword), new[]{typeof(string)});
+            matcher.MatchForward(false, new CodeMatch(OpCodes.Ldstr, "TESSELATION_ON"), new CodeMatch(OpCodes.Call, target));
+            if (matcher.IsInvalid) return matcher.Instructions();
+            matcher.Advance(1);
+            matcher.Set(OpCodes.Call, replaceDisable);
+            return matcher.Instructions();
         }
     }
 }

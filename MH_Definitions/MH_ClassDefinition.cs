@@ -16,6 +16,26 @@ public abstract class MH_ClassDefinition
 
     protected void ResetSkills() => _currentSkillDefinitions.Clear();
 
+    public void Reset()
+    {
+        foreach (var mhSkill in GetSkills())
+        {
+            mhSkill.Value.Toggled = false;
+            mhSkill.Value.StartCooldown(0, true);
+            mhSkill.Value.SetLevel(0);
+        }
+    }
+
+    public bool CanChangeClass()
+    {
+        foreach (var mhSkill in GetSkills())
+        {
+            if (mhSkill.Value.Toggled || mhSkill.Value.GetCooldown() > 0)
+                return false;
+        }
+        return true;
+    }
+
     private void AddSkill(MH_Skill skill) => _currentSkillDefinitions[skill.Key] = skill.Clone();
 
     protected void AddSkill(string key) =>
