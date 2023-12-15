@@ -46,7 +46,7 @@ public static class Utils
         int maxLevel = skill.Definition.MaxLevel.Value - 1;
         float minValue = skill.Definition.MinLvlCooldown.Value;
         float maxValue = skill.Definition.MaxLvlCooldown.Value;
-        var cooldown = Mathf.Lerp(minValue, maxValue, (float)currentLevel / maxLevel);
+        float cooldown = Mathf.Lerp(minValue, maxValue, (float)currentLevel / maxLevel);
         //passives
         if (!skipChecks)
         {
@@ -63,7 +63,7 @@ public static class Utils
         int maxLevel = skill.Definition.MaxLevel.Value - 1;
         float minValue = skill.Definition.MinLvlManacost.Value;
         float maxValue = skill.Definition.MaxLvlManacost.Value;
-        var manacost = Mathf.Lerp(minValue, maxValue, (float)currentLevel / maxLevel);
+        float manacost = Mathf.Lerp(minValue, maxValue, (float)currentLevel / maxLevel);
         //passives check
         if (!skipChecks)
         {
@@ -114,38 +114,38 @@ public static class Utils
     public static void InitRequiredItemFirstHalf(this MH_Skill skill, string prefab, int initialValue, float step)
     {
         skill.Definition.RequiredItemFirstHalfToUpgrade = MagicHeim.config($"{skill.Definition._InternalName}",
-            $"Required Item to Upgrade First Half", prefab,
+            "Required Item to Upgrade First Half", prefab,
             "Required Item to Upgrade");
         skill.Definition.RequiredItemFirstHalfAmountToUpgrade = MagicHeim.config($"{skill.Definition._InternalName}",
-            $"Required Item Amount to Upgrade First Half", initialValue,
+            "Required Item Amount to Upgrade First Half", initialValue,
             "Required Item Amount to Upgrade");
         skill.Definition.RequiredItemFirstHalfAmountToUpgrade_Step = MagicHeim.config(
             $"{skill.Definition._InternalName}",
-            $"Required Item Amount to Upgrade Step First Half", step,
+            "Required Item Amount to Upgrade Step First Half", step,
             "Required Item Amount to Upgrade Step");
     }
 
     public static void InitRequiredItemSecondHalf(this MH_Skill skill, string prefab, int initialValue, float step)
     {
         skill.Definition.RequiredItemSecondHalfToUpgrade = MagicHeim.config($"{skill.Definition._InternalName}",
-            $"Required Item to Upgrade Second Half", prefab,
+            "Required Item to Upgrade Second Half", prefab,
             "Required Item to Upgrade");
         skill.Definition.RequiredItemSecondHalfAmountToUpgrade = MagicHeim.config($"{skill.Definition._InternalName}",
-            $"Required Item Amount to Upgrade Second Half", initialValue,
+            "Required Item Amount to Upgrade Second Half", initialValue,
             "Required Item Amount to Upgrade");
         skill.Definition.RequiredItemSecondHalfAmountToUpgrade_Step = MagicHeim.config(
             $"{skill.Definition._InternalName}",
-            $"Required Item Amount to Upgrade Step Second Half", step,
+            "Required Item Amount to Upgrade Step Second Half", step,
             "Required Item Amount to Upgrade Step");
     }
 
     public static void InitRequiredItemFinal(this MH_Skill skill, string prefab, int initialValue)
     {
         skill.Definition.RequiredItemFinalToUpgrade = MagicHeim.config($"{skill.Definition._InternalName}",
-            $"Required Item to Upgrade Final", prefab,
+            "Required Item to Upgrade Final", prefab,
             "Required Item to Upgrade");
         skill.Definition.RequiredItemFinalAmountToUpgrade = MagicHeim.config($"{skill.Definition._InternalName}",
-            $"Required Item Amount to Upgrade Final", initialValue,
+            "Required Item Amount to Upgrade Final", initialValue,
             "Required Item Amount to Upgrade");
     }
 
@@ -241,7 +241,7 @@ public static class Utils
 
     public static void CheckProblems_ZNS()
     {
-        foreach (var go in MagicHeim.asset.LoadAllAssets<GameObject>())
+        foreach (GameObject go in MagicHeim.asset.LoadAllAssets<GameObject>())
         {
             if (go.GetComponent<ZNetView>() &&
                 !ZNetScene.instance.m_namedPrefabs.ContainsKey(go.name.GetStableHashCode()))

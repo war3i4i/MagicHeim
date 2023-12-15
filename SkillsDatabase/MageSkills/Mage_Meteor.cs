@@ -18,50 +18,50 @@ public sealed class Mage_Meteor : MH_Skill
         _definition.Description = "$mh_mage_meteor_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Damage", 80f,
+            "MIN Lvl Damage", 80f,
             "Damage amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Damage", 220f,
+            "MAX Lvl Damage", 220f,
             "Damage amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 80f,
+            "MIN Lvl Manacost", 80f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 45f,
+            "MAX Lvl Manacost", 45f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 45f,
+            "MIN Lvl Cooldown", 45f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 18f,
+            "MAX Lvl Cooldown", 18f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MinLvlAoE = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl AoE", 8,
+            "MIN Lvl AoE", 8,
             "AoE amount (Min Lvl)");
         _definition.MaxLvlAoE = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl AoE", 16,
+            "MAX Lvl AoE", 16,
             "AoE amount (Max Lvl)");
 
         _definition.MinLvlChargeTime = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Charge Time", 8,
+            "MIN Lvl Charge Time", 8,
             "Charge Time amount (Min Lvl)");
         _definition.MaxLvlChargeTime = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Charge Time", 3,
+            "MAX Lvl Charge Time", 3,
             "Charge Time amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             56, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 2,
+            "Leveling Step", 2,
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -106,7 +106,7 @@ public sealed class Mage_Meteor : MH_Skill
 
         private void Explosion(float aoe, float damage)
         {
-            var explosion = Instantiate(Mage_Meteor.Explosion, transform.position, Quaternion.identity);
+            GameObject explosion = Instantiate(Mage_Meteor.Explosion, transform.position, Quaternion.identity);
             explosion.transform.localScale *= aoe;
             Collider[] array = Physics.OverlapSphere(transform.position, aoe, m_rayMaskSolids,
                 QueryTriggerInteraction.UseGlobal);
@@ -156,9 +156,9 @@ public sealed class Mage_Meteor : MH_Skill
             while (count <= 2f)
             {
                 count += Time.deltaTime;
-                var oldPos = transform.position;
+                Vector3 oldPos = transform.position;
                 transform.position += dir * speed * Time.deltaTime;
-                var newPos = transform.position;
+                Vector3 newPos = transform.position;
                 Vector3 normalized = newPos - oldPos;
                 RaycastHit[] array = Physics.SphereCastAll(transform.position, 0.2f * aoe, normalized.normalized,
                     normalized.magnitude, mask);
@@ -207,7 +207,7 @@ public sealed class Mage_Meteor : MH_Skill
         Player p = Player.m_localPlayer;
         Vector3 initPos = p.transform.position;
         Vector3 target;
-        bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out var raycast, 100f, JumpMask);
+        bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out RaycastHit raycast, 100f, JumpMask);
         if (castHit && raycast.collider)
         {
             target = raycast.point;
@@ -220,12 +220,12 @@ public sealed class Mage_Meteor : MH_Skill
         Vector3 rot = (target - p.transform.position).normalized;
         rot.y = 0;
         p.transform.rotation = Quaternion.LookRotation(rot);
-        var go = UnityEngine.Object.Instantiate(Prefab,
+        GameObject go = UnityEngine.Object.Instantiate(Prefab,
             p.transform.position + Vector3.up * 8f + GameCamera.instance.transform.forward * 4f,
             GameCamera.instance.transform.rotation);
         while (Cond() && charge < maxCharge && p && !p.IsDead())
         {
-            var dt = Time.deltaTime;
+            float dt = Time.deltaTime;
             charge += dt;
             go.transform.localScale += Vector3.one * scaleAmount * Time.deltaTime;
             castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out raycast, 100f, JumpMask);
@@ -261,7 +261,7 @@ public sealed class Mage_Meteor : MH_Skill
             yield break;
         }
 
-        var direction = (target - go.transform.position).normalized;
+        Vector3 direction = (target - go.transform.position).normalized;
         float aoe = this.CalculateSkillAoe().CalculateValueCharged(maxCharge, charge, 25);
         float damage = this.CalculateSkillValue().CalculateValueCharged(maxCharge, charge, 25);
         go.GetComponent<MeteorComponent>().Setup(direction, aoe, damage);
@@ -282,7 +282,7 @@ public sealed class Mage_Meteor : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -312,13 +312,13 @@ public sealed class Mage_Meteor : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
-            var roundedAoeDiff = Math.Round(aoeDiff, 1);
-            var roundedChargeTimeDiff = Math.Round(chargeTimeDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedAoeDiff = Math.Round(aoeDiff, 1);
+            double roundedChargeTimeDiff = Math.Round(chargeTimeDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Damage: <color=yellow>Blunt {Math.Round(nextValue * 0.8f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=red>Fire {Math.Round(nextValue * 0.2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
             builder.AppendLine(

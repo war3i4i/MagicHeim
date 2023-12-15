@@ -1,4 +1,5 @@
-﻿using MagicHeim.MH_Enums;
+﻿using Groups;
+using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
 using MagicHeim.UI_s;
 using MonoMod.Utils;
@@ -76,7 +77,7 @@ public static class ClassManager
 
     public static bool CanUpgradeSkill(MH_Skill skill)
     {
-        var requiredLevel = skill.RequiredLevel + (skill.LevelingStep * skill.Level);
+        int requiredLevel = skill.RequiredLevel + (skill.LevelingStep * skill.Level);
         return SkillPoints > 0 && skill.Level < skill.MaxLevel &&
                requiredLevel <= Level;
     }
@@ -105,7 +106,7 @@ public static class ClassManager
 
         requiredAmount = Mathf.RoundToInt(initialAmount * Mathf.Pow(step, skill.Level));
         if (Player.m_debugMode) return true;
-        var inventoryAmount = Utils.CountItems(upradeItem.name);
+        int inventoryAmount = Utils.CountItems(upradeItem.name);
         bool result = inventoryAmount >= requiredAmount;
 
         if (result && removeOnSuccess)
@@ -119,7 +120,7 @@ public static class ClassManager
         bool result = false;
         while (points > 0)
         {
-            if (CanUpgradeSkill(skill) && HaveEnoughItemsForSkillUpgrade(skill, out var amount, true))
+            if (CanUpgradeSkill(skill) && HaveEnoughItemsForSkillUpgrade(skill, out int amount, true))
             {
                 skill.Level++;
                 SkillPoints--;
@@ -150,9 +151,9 @@ public static class ClassManager
         //skills data
         if (_currentClassDefinition != null)
         {
-            var skills = _currentClassDefinition.GetSkills();
+            Dictionary<int, MH_Skill> skills = _currentClassDefinition.GetSkills();
             string data = "";
-            foreach (var skill in skills)
+            foreach (KeyValuePair<int, MH_Skill> skill in skills)
             {
                 if (skill.Value.Level <= 0) continue;
                 int spellCD = Mathf.Max(0, (int)skill.Value.GetCooldown());
@@ -179,7 +180,7 @@ public static class ClassManager
     private static void LoadPlayerSkillData(string data)
     {
         if (data == null) return;
-        var classSkills = _currentClassDefinition.GetSkills();
+        Dictionary<int, MH_Skill> classSkills = _currentClassDefinition.GetSkills();
         string[] split = data.Split(';');
         foreach (string s in split)
         {
@@ -197,7 +198,7 @@ public static class ClassManager
             {
                 int skill = int.Parse(split2[0]);
                 int lvl = int.Parse(split2[1]);
-                var cd = int.Parse(split2[2]);
+                int cd = int.Parse(split2[2]);
                 if (classSkills.ContainsKey(skill))
                 {
                     classSkills[skill].SetLevel(lvl);
@@ -349,7 +350,7 @@ public static class ClassManager
         exp = (int)(exp * (1 + (level - 1) * 0.2f));
         if (Groups.API.IsLoaded())
         {
-            var group = Groups.API.GroupPlayers();
+            List<PlayerReference> group = Groups.API.GroupPlayers();
             if (group.Count <= 1)
             {
                 AddExp(exp);
@@ -357,12 +358,12 @@ public static class ClassManager
             }
 
             if (group.Count > 1) exp /= (group.Count - 1);
-            var pos = Player.m_localPlayer.transform.position;
+            Vector3 pos = Player.m_localPlayer.transform.position;
             ZPackage pkg = new();
             pkg.Write(exp);
             pkg.Write(pos);
-            foreach (var member in group)
-                ZRoutedRpc.instance.InvokeRoutedRPC(member.peerId, $"MH PartyAddEXP", pkg);
+            foreach (PlayerReference member in group)
+                ZRoutedRpc.instance.InvokeRoutedRPC(member.peerId, "MH PartyAddEXP", pkg);
             return;
         }
 

@@ -11,7 +11,7 @@ public class Assassin : MH_ClassDefinition
 
     public override void Init()
     {
-        ResetSkills();
+        
     }
 
 

@@ -17,38 +17,38 @@ public sealed class Mage_ArcaneSpikes : MH_Skill
         _definition.Description = "$mh_mage_arcanespikes_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Damage", 20f,
+            "MIN Lvl Damage", 20f,
             "Damage amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Damage", 40f,
+            "MAX Lvl Damage", 40f,
             "Damage amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 10f,
+            "MIN Lvl Manacost", 10f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 25f,
+            "MAX Lvl Manacost", 25f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 14f,
+            "MIN Lvl Cooldown", 14f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 8f,
+            "MAX Lvl Cooldown", 8f,
             "Cooldown amount (Max Lvl)");
 
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             36, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 4,
+            "Leveling Step", 4,
             "Leveling Step");
 
         _definition.AnimationTime = 0.5f;
@@ -96,7 +96,7 @@ public sealed class Mage_ArcaneSpikes : MH_Skill
         private void OnTriggerEnter(Collider other)
         {
             if (!znv.IsOwner()) return;
-            if (other.TryGetComponent<Character>(out var c))
+            if (other.TryGetComponent<Character>(out Character c))
             {
                 if (!list.Contains(c))
                 {
@@ -123,10 +123,10 @@ public sealed class Mage_ArcaneSpikes : MH_Skill
     public override void Execute(Func<bool> Cond)
     {
         if (!Player.m_localPlayer) return;
-        var cooldown = this.CalculateSkillCooldown();
+        float cooldown = this.CalculateSkillCooldown();
         UnityEngine.Object.Instantiate(Explosion, Player.m_localPlayer.transform.position, Quaternion.identity);
-        var dir = GameCamera.instance.transform.forward;
-        var go = UnityEngine.Object.Instantiate(Prefab, Player.m_localPlayer.transform.position + dir,
+        Vector3 dir = GameCamera.instance.transform.forward;
+        GameObject go = UnityEngine.Object.Instantiate(Prefab, Player.m_localPlayer.transform.position + dir,
             Quaternion.LookRotation(dir));
         go.GetComponent<ArcaneSpikesComponent>().Setup(this.CalculateSkillValue());
         StartCooldown(cooldown);
@@ -147,7 +147,7 @@ public sealed class Mage_ArcaneSpikes : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -168,11 +168,11 @@ public sealed class Mage_ArcaneSpikes : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Damage: <color=yellow>Blunt  {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
             builder.AppendLine(

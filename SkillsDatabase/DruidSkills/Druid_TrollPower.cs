@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using JetBrains.Annotations;
 using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Interfaces;
 using MagicHeim.UI_s;
@@ -21,40 +22,40 @@ public sealed class Druid_TrollPower : MH_Skill
         InactiveGO.SetActive(false);
         _definition._InternalName = "Druid_TrollPower";
         _definition.Name = "$mh_druid_trollpower";
-        _definition.Description = "$mh_druid_trollpower_description";
+        _definition.Description = "$mh_druid_trollpower_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Damage", 30f,
+            "MIN Lvl Damage", 1f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Damage", 105f,
+            "MAX Lvl Damage", 10f,
             "Value amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 25f,
+            "MIN Lvl Manacost", 1f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 35f,
+            "MAX Lvl Manacost", 10f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 18f,
+            "MIN Lvl Cooldown", 10f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 9f,
+            "MAX Lvl Cooldown", 1f,
             "Cooldown amount (Max Lvl)");
 
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 4,
+            "Leveling Step", 1,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_TrollSmash_Icon");
@@ -71,6 +72,7 @@ public sealed class Druid_TrollPower : MH_Skill
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
     {
+        [UsedImplicitly]
         static void Postfix(ZNetScene __instance)
         { 
             if (!Troll_GO)
@@ -82,11 +84,11 @@ public sealed class Druid_TrollPower : MH_Skill
                 Troll_GO.gameObject.transform.localPosition = Vector3.zero;
                 Troll_GO.gameObject.transform.localRotation = Quaternion.identity;
 
-                var mat = MagicHeim.asset.LoadAsset<Material>("DruidMat");
-                foreach (var renderer in Troll_GO.GetComponentsInChildren<Renderer>())
+                Material mat = MagicHeim.asset.LoadAsset<Material>("DruidMat");
+                foreach (Renderer renderer in Troll_GO.GetComponentsInChildren<Renderer>())
                     renderer.sharedMaterial = mat;
 
-                var timed = Troll_GO.AddComponent<TimedDestruction>();
+                TimedDestruction timed = Troll_GO.AddComponent<TimedDestruction>();
                 timed.m_timeout = 3f;
                 timed.m_triggerOnAwake = true;
                 
@@ -108,7 +110,7 @@ public sealed class Druid_TrollPower : MH_Skill
     private class TrollSmash_Local : MonoBehaviour
     {
         private ZNetView _znv;
-        private float _damage = 0;
+        private float _damage;
         private Vector3 _target = NON_Vector;
         
         public void Setup(float damage, Vector3 target)
@@ -191,7 +193,7 @@ public sealed class Druid_TrollPower : MH_Skill
             }
 
             rangeShowup.transform.position = p.transform.position;
-            bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out var raycast,
+            bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out RaycastHit raycast,
                 _definition.MaxLvlValue.Value + 10f,
                 JumpMask);
             if (castHit && raycast.collider)
@@ -217,8 +219,8 @@ public sealed class Druid_TrollPower : MH_Skill
             p.transform.rotation = Quaternion.LookRotation(rot);
             StartCooldown(this.CalculateSkillCooldown());
             p.m_zanim.SetTrigger(ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon]);
-            var vfxPos = target + (rot * 2f);
-            var troll = UnityEngine.Object.Instantiate(Troll_GO, vfxPos, Quaternion.LookRotation((target - vfxPos).normalized));
+            Vector3 vfxPos = target + (rot * 2f);
+            GameObject troll = UnityEngine.Object.Instantiate(Troll_GO, vfxPos, Quaternion.LookRotation((target - vfxPos).normalized));
             troll.GetComponent<TrollSmash_Local>().Setup(this.CalculateSkillValue(), target);
             UnityEngine.Object.Instantiate(Preload, vfxPos, Quaternion.identity);
         }
@@ -243,14 +245,14 @@ public sealed class Druid_TrollPower : MH_Skill
 
     public override string GetSpecialTags()
     {
-        return "<color=red>TEST</color>";
+        return "<color=red>Precast, AoE, Damage, Stagger</color>";
     }
 
     public override string BuildDescription()
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -258,7 +260,7 @@ public sealed class Druid_TrollPower : MH_Skill
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
 
-        builder.AppendLine($"Damage: {Math.Round(currentValue, 1)}");
+        builder.AppendLine($"Damage: <color=yellow>Blunt {Math.Round(currentValue, 1)}</color>");
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
@@ -271,17 +273,14 @@ public sealed class Druid_TrollPower : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
-            builder.AppendLine(
-                $"Damage: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
-            builder.AppendLine(
-                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine(
-                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine("\nNext Level:");
+            builder.AppendLine($"Damage: <color=yellow>Blunt {Math.Round(nextValue, 1)}</color> <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
 

@@ -11,7 +11,6 @@ public class Mage : MH_ClassDefinition
 
     public override void Init()
     {
-        ResetSkills();
         AddSkill("Mage_Energyblast");
         AddSkill("Mage_Teleport");
         AddSkill("Mage_Manaflow");

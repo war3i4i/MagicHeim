@@ -25,13 +25,14 @@ public class MH_SkillDefinition
     public ConfigEntry<float> RequiredItemSecondHalfAmountToUpgrade_Step { get; set; }
     public ConfigEntry<string> RequiredItemFinalToUpgrade { get; set; }
     public ConfigEntry<int> RequiredItemFinalAmountToUpgrade { get; set; }
+    public ConfigEntry<int> AbilityStartLevel { get; set; }
     public List<ConfigEntry<float>> ExternalValues { get; set; }
     public string Animation { get; set; }
     public float AnimationTime { get; set; }
-    public string _InternalName { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public Sprite Icon { get; set; }
     public string Video { get; set; }
+    public string _InternalName { get; set; }
     public int Key => _InternalName.GetStableHashCode();
 }

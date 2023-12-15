@@ -84,7 +84,7 @@ mh_druid_wolf_desc: Transforms you into a wolf
 mh_druid_fish: Fish Form
 mh_druid_fish_desc: Transforms you into a fish
 mh_druid_manaflow: Mana Flow
-mh_druid_manaflow_desc: Increases your max Eitr 
+mh_druid_manaflow_desc: Increases your max Eitr and max Health
 mh_mage_weaponenchant_no_weapon: You need to have a weapon equipped to enchant it
 mh_druid_heal: Heal
 mh_druid_heal_desc: Heals you and nearby players for a small amount of health
@@ -97,3 +97,37 @@ mh_druid_rootball: Root Strike
 mh_druid_rootball_desc: Summons a projectile root strike that deals damage to target enemy and roots it
 mh_druid_spiritwave: Spirit Wave
 mh_druid_spiritwave_desc: Summons a spirit wave that deals damage to enemies on its way and healing allies
+mh_druid_aspeedbuff: Aura of Swiftness
+mh_druid_aspeedbuff_desc: Buff that increases attack speed of all nearby players
+mh_druid_connection: Soul Bind
+mh_druid_connection_desc: Bind to target creature to periodically heal it for % of its max health while increasing its damage on 10% and reducing its damage taken on 10%. For tamed creatures bonuses are x5
+mh_druid_crystals: Crystal Strike
+mh_druid_crystals_desc: Summons crystals in area to deal damage to enemies
+mh_druid_eclipse: Eclipse
+mh_druid_eclipse_desc: On activation periodically deals damage to nearby enemies
+mh_druid_eikthyrpower: Eikthyr Power
+mh_druid_eikthyrpower_desc: Summon Eikthyr that throws lightning at enemies
+mh_druid_elderpower: Elder Power
+mh_druid_elderpower_desc: Summon Elder tenta roots that damage your enemies
+mh_druid_exchange: Exchange
+mh_druid_exchange_desc: Swaps positions with target creature
+mh_druid_grenade: Explosive Potion
+mh_druid_grenade_desc: Throws an explosion potion at the target location dealing massive AoE damage
+mh_druid_natureprotection: Natures Protection
+mh_druid_natureprotection_desc: Buff that nullifies all damage taken by all nearby players
+mh_druid_selfheal: Self Heal
+mh_druid_selfheal_desc: Heals you for a small amount of health
+mh_druid_shield: Absorbtion Shield
+mh_druid_shield_desc: Buff that absorbs damage taken by all nearby players
+mh_druid_staminasphere: Stamina Sphere
+mh_druid_staminasphere_desc: Creates a sphere that restores stamina of all players inside
+mh_druid_tame: Tame
+mh_druid_tame_desc: Tames target creature on cast end
+mh_druid_trollpower: Troll Power
+mh_druid_trollpower_desc: Summon Troll that hits ground dealing damage to enemies
+mh_druid_weaponenchantpoison: Weapon Poison Enchant
+mh_druid_weaponenchantpoison_desc: Enchants your weapon with poison damage
+mh_druid_weaponenchantspirit: Weapon Spirit Enchant
+mh_druid_weaponenchantspirit_desc: Enchants your weapon with spirit damage
+mh_druid_creaturesbuff: Power of alpha
+mh_druid_creaturesbuff_desc: Buff that increases damage of all nearby tamed creatures 

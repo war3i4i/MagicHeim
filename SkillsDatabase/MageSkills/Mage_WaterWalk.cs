@@ -15,23 +15,23 @@ public sealed class Mage_WaterWalk : MH_Skill
         _definition.Description = "$mh_mage_waterwalk_desc";
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 10f,
+            "MIN Lvl Manacost", 10f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 2f,
+            "MAX Lvl Manacost", 2f,
             "Manacost amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             40, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 3,
+            "Leveling Step", 3,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_WaterWalk_Icon");
@@ -71,7 +71,7 @@ public sealed class Mage_WaterWalk : MH_Skill
 
     private IEnumerator WWalk()
     {
-        var manacost = this.CalculateSkillManacost();
+        float manacost = this.CalculateSkillManacost();
         Toggled = true;
         StaticBool_InWater = Toggled;
         Player p = Player.m_localPlayer;
@@ -81,7 +81,7 @@ public sealed class Mage_WaterWalk : MH_Skill
         vfx.transform.SetParent(p.transform);
         for (;;)
         {
-            var useMana = manacost * Time.deltaTime;
+            float useMana = manacost * Time.deltaTime;
             if (!Toggled || p.IsDead() || !p.HaveEitr(useMana))
             {
                 p.m_flying = false;
@@ -163,7 +163,7 @@ public sealed class Mage_WaterWalk : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -174,9 +174,9 @@ public sealed class Mage_WaterWalk : MH_Skill
         {
             float nextManacost = this.CalculateSkillManacost(forLevel + 1);
             float manacostDiff = nextManacost - currentManacost;
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Manacost (Per Second): {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }

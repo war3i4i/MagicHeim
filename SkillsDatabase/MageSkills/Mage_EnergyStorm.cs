@@ -19,37 +19,37 @@ public sealed class Mage_EnergyStorm : MH_Skill
         _definition.Description = "$mh_mage_energystorm";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Damage (Per Second)", 10f,
+            "MIN Lvl Damage (Per Second)", 10f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Damage (Per Second)", 38f,
+            "MAX Lvl Damage (Per Second)", 38f,
             "Value amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 30f,
+            "MIN Lvl Manacost", 30f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 60f,
+            "MAX Lvl Manacost", 60f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 30f,
+            "MIN Lvl Cooldown", 30f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 14f,
+            "MAX Lvl Cooldown", 14f,
             "Cooldown amount (Max Lvl)");
 
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             53, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 2,
+            "Leveling Step", 2,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_EnergyStorm_Icon");
@@ -164,7 +164,7 @@ public sealed class Mage_EnergyStorm : MH_Skill
             }
 
             rangeShowup.transform.position = p.transform.position;
-            bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out var raycast,
+            bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out RaycastHit raycast,
                 _definition.MaxLvlValue.Value + 10f,
                 JumpMask);
             if (castHit && raycast.collider)
@@ -190,7 +190,7 @@ public sealed class Mage_EnergyStorm : MH_Skill
             rot.y = 0;
             p.transform.rotation = Quaternion.LookRotation(rot);
             StartCooldown(this.CalculateSkillCooldown());
-            var go = UnityEngine.Object.Instantiate(EnergyStorm_Prefab, target, Quaternion.identity);
+            GameObject go = UnityEngine.Object.Instantiate(EnergyStorm_Prefab, target, Quaternion.identity);
             go.GetComponent<EnergyStormComponent>().Setup(this.CalculateSkillValue());
             p.m_zanim.SetTrigger(
                 ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon]);
@@ -223,7 +223,7 @@ public sealed class Mage_EnergyStorm : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -244,11 +244,11 @@ public sealed class Mage_EnergyStorm : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Damage (Per Second): <color=blue>Lightning  {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
             builder.AppendLine(

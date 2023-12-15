@@ -25,15 +25,15 @@ public class DragUI : MonoBehaviour, IDragHandler, IEndDragHandler
         UI_X = MagicHeim._thistype.Config.Bind("UI", "UI_X", 960f, "UI X position");
         UI_Y = MagicHeim._thistype.Config.Bind("UI", "UI_Y", 0f, "UI Y position");
         dragRect = transform.parent.GetComponent<RectTransform>();
-        var configPos = new Vector2(UI_X.Value, UI_Y.Value);
+        Vector2 configPos = new Vector2(UI_X.Value, UI_Y.Value);
         dragRect.anchoredPosition = configPos;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        var vec = dragRect.anchoredPosition + eventData.delta;
+        Vector2 vec = dragRect.anchoredPosition + eventData.delta;
         Vector2 sizeDelta = dragRect.sizeDelta * dragRect.localScale + new Vector2(0, 24f * dragRect.localScale.y);
-        var ScreenSize = new Vector2(Screen.width, Screen.height);
+        Vector2 ScreenSize = new Vector2(Screen.width, Screen.height);
         if (vec.x < sizeDelta.x / 2f)
         {
             vec.x = sizeDelta.x / 2f;
@@ -91,10 +91,10 @@ public class ResizeUI : MonoBehaviour, IDragHandler, IEndDragHandler
 
     public void OnDrag(PointerEventData eventData)
     {
-        var vec = eventData.delta;
-        var sizeDelta = dragRect.sizeDelta;
+        Vector2 vec = eventData.delta;
+        Vector2 sizeDelta = dragRect.sizeDelta;
         vec.x = vec.x / sizeDelta.x;
-        var resized = dragRect.localScale + new Vector3(vec.x, vec.x, 0);
+        Vector3 resized = dragRect.localScale + new Vector3(vec.x, vec.x, 0);
         resized.x = Mathf.Clamp(resized.x, 0.6f, 1.5f);
         resized.y = Mathf.Clamp(resized.y, 0.6f, 1.5f);
         resized.z = 1f;
@@ -227,11 +227,11 @@ public static class SkillPanelUI
 
         ExpBar.color = _currentClass.GetColor;
         _skillSlots.Clear();
-        for (var i = 0; i < Mathf.Min(20, MaxSlots.Value); i++)
+        for (int i = 0; i < Mathf.Min(20, MaxSlots.Value); i++)
         {
             PanelButton button = new();
             Transform t = i < 10 ? BottomSkillsTransform : TopSkillsTransform;
-            var gameObject = UnityEngine.Object.Instantiate(SkillElement, t);
+            GameObject gameObject = UnityEngine.Object.Instantiate(SkillElement, t);
             int i1 = i;
             gameObject.GetComponent<UIInputHandler>().m_onLeftClick = _ => DragSkill(i1);
             gameObject.GetComponent<UIInputHandler>().m_onRightClick = _ => TryUseSkill(i1);
@@ -250,12 +250,12 @@ public static class SkillPanelUI
         Status = Change.ToUpdate;
         if (!string.IsNullOrEmpty(data))
         {
-            var skills = data.Split(';');
-            for (var i = 0; i < skills.Length; i++)
+            string[] skills = data.Split(';');
+            for (int i = 0; i < skills.Length; i++)
             {
                 if (i >= _skillSlots.Count)
                     break;
-                int.TryParse(skills[i], out var skillID);
+                int.TryParse(skills[i], out int skillID);
                 SetSkill(i, skillID);
             } 
         }
@@ -276,7 +276,7 @@ public static class SkillPanelUI
         if (index > _skillSlots.Count) return;
         if (Time.unscaledTime - SkillDrag.LastDragTime <= 0.2f)
         {
-            var skill = SkillDrag.LastDragSkill;
+            MH_Skill skill = SkillDrag.LastDragSkill;
             if (skill == null) return;
             SetSkill(index, skill.Key);
             SkillDrag.LastDragSkill = null;
@@ -290,7 +290,7 @@ public static class SkillPanelUI
 
     public static void Reset()
     {
-        foreach (var skillSlot in _skillSlots)
+        foreach (KeyValuePair<int, PanelButton> skillSlot in _skillSlots)
         {
             skillSlot.Value.Skill = null;
         }
@@ -302,7 +302,7 @@ public static class SkillPanelUI
     {
         if (slot > _skillSlots.Count)
             return;
-        _skillSlots[slot].Skill = ClassManager.CurrentClassDef.GetSkills().TryGetValue(skill, out var skillDef)
+        _skillSlots[slot].Skill = ClassManager.CurrentClassDef.GetSkills().TryGetValue(skill, out MH_Skill skillDef)
             ? skillDef
             : null;
         Status = Change.ToUpdate;
@@ -314,7 +314,7 @@ public static class SkillPanelUI
         while (true)
         {
             //exp bar set
-            var currentExp = ClassManager.EXP;
+            long currentExp = ClassManager.EXP;
             if (LastEXP != currentExp)
             {
                 LastEXP = currentExp;
@@ -322,7 +322,7 @@ public static class SkillPanelUI
             }
 
             //skill usage
-            foreach (var button in _skillSlots)
+            foreach (KeyValuePair<int, PanelButton> button in _skillSlots)
             {
                 if (UseAltHotkey[button.Value.index].Value)
                 {
@@ -346,7 +346,7 @@ public static class SkillPanelUI
 
             //main update routine
             restart:
-            foreach (var button in _skillSlots)
+            foreach (KeyValuePair<int, PanelButton> button in _skillSlots)
             {
                 if (button.Value.Skill == null)
                 {
@@ -419,7 +419,7 @@ public static class SkillPanelUI
     {
         if (_currentClass == null) return "-";
         string data = "";
-        foreach (var skill in _skillSlots)
+        foreach (KeyValuePair<int, PanelButton> skill in _skillSlots)
         {
             data += skill.Value.Skill == null ? "-;" : skill.Value.Skill.Key + ";";
         }

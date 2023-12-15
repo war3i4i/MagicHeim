@@ -13,23 +13,23 @@ public sealed class Mage_ManaFlow : MH_Skill
         _definition.Description = "$mh_mage_manaflow_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Eitr Bonus", 100f,
+            "MIN Lvl Eitr Bonus", 100f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Eitr Bonus", 325f,
+            "MAX Lvl Eitr Bonus", 325f,
             "Value amount (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 7,
+            "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
         Level = 1;
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_ManaFlow");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 10,
+            "Leveling Step", 10,
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -57,7 +57,7 @@ public sealed class Mage_ManaFlow : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -70,9 +70,9 @@ public sealed class Mage_ManaFlow : MH_Skill
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float valueDiff = nextValue - currentValue;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Max Eitr Bonus: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
         }
@@ -89,8 +89,8 @@ public sealed class Mage_ManaFlow : MH_Skill
         static void Postfix(ref float eitr)
         {
             if (ClassManager.CurrentClass == Class.None) return;
-            var skill = ClassManager.CurrentClassDef.GetSkill(CachedKey);
-            if (skill == null || skill.Level <= 0) return;
+            MH_Skill skill = ClassManager.CurrentClassDef.GetSkill(CachedKey);
+            if (skill is not { Level: > 0 }) return;
             eitr += skill.Value;
         }
     }

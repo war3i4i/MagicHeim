@@ -42,7 +42,7 @@ public class PossibleSkillFixes
 
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            foreach (var instruction in instructions)
+            foreach (CodeInstruction instruction in instructions)
             {
                 yield return instruction;
                 if (instruction.opcode == System.Reflection.Emit.OpCodes.Call && instruction.OperandIs(InputKey))
@@ -174,8 +174,8 @@ public class PossibleSkillFixes
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> code)
         {
             CodeMatcher matcher = new(code);
-            var target = AccessTools.Method(typeof(Shader), nameof(Shader.EnableKeyword), new[]{typeof(string)});
-            var replaceDisable = AccessTools.Method(typeof(Shader), nameof(Shader.DisableKeyword), new[]{typeof(string)});
+            MethodInfo target = AccessTools.Method(typeof(Shader), nameof(Shader.EnableKeyword), new[]{typeof(string)});
+            MethodInfo replaceDisable = AccessTools.Method(typeof(Shader), nameof(Shader.DisableKeyword), new[]{typeof(string)});
             matcher.MatchForward(false, new CodeMatch(OpCodes.Ldstr, "TESSELATION_ON"), new CodeMatch(OpCodes.Call, target));
             if (matcher.IsInvalid) return matcher.Instructions();
             matcher.Advance(1);

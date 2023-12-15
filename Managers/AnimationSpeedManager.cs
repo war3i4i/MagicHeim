@@ -9,13 +9,13 @@ using UnityEngine;
 public static class AnimationSpeedManager
 {
 	private static readonly Harmony harmony = new("AnimationSpeedManager");
-	private static bool hasMarkerPatch = false;
+	private static bool hasMarkerPatch;
 
 	public delegate double Handler(Character character, double speed);
 
 	private static readonly MethodInfo method = AccessTools.DeclaredMethod(typeof(CharacterAnimEvent), nameof(CharacterAnimEvent.CustomFixedUpdate));
-	private static int index = 0;
-	private static bool changed = false;
+	private static int index;
+	private static bool changed;
 	private static Handler[][] handlers = Array.Empty<Handler[]>();
 	private static readonly Dictionary<int, List<Handler>> handlersPriorities = new();
 

@@ -17,34 +17,34 @@ public sealed class Druid_Fish : MH_Skill
         _definition.Description = "$mh_druid_fish_desc";
         CachedKey = _definition.Key;
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 10f,
+            "MIN Lvl Manacost", 10f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 2f,
+            "MAX Lvl Manacost", 1f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 12f,
+            "MIN Lvl Cooldown", 10f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 3f,
+            "MAX Lvl Cooldown", 1f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 5,
+            "Max Level", 5,
             "Max Skill Level");
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 1,
+            "Leveling Step", 1,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Fish_Icon");
-        _definition.Video = "https://kg.sayless.eu/skills/Mage_EnergyBlast.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_Fish.mp4";
         _definition.Animation =
             ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedTransform];
         _definition.AnimationTime = 1f;
@@ -68,7 +68,7 @@ public sealed class Druid_Fish : MH_Skill
     {
         if (!Player.m_localPlayer) return;
         Player p = Player.m_localPlayer;
-        var manacost = this.CalculateSkillManacost();
+        float manacost = this.CalculateSkillManacost();
         if (!Toggled)
         {
             if (p.HaveEitr(manacost * 3f))
@@ -85,15 +85,15 @@ public sealed class Druid_Fish : MH_Skill
     private IEnumerator ManaDrain()
     {
         Toggled = true;
-        var manacost = this.CalculateSkillManacost();
+        float manacost = this.CalculateSkillManacost();
         Player p = Player.m_localPlayer;
-        var stamina = p.GetStamina();
+        float stamina = p.GetStamina();
         p.m_seman.AddStatusEffect("Druid_FishForm".GetStableHashCode());
         UnityEngine.Object.Instantiate(Fish_Explosion, p.transform.position, Quaternion.identity);
         for (;;)
         {
             if(!p) yield break;
-            var useMana = manacost * Time.deltaTime;
+            float useMana = manacost * Time.deltaTime;
             if (!Toggled || p.IsDead() || !p.HaveEitr(useMana) || !Utils.InWaterFish())
             {
                 Toggled = false;
@@ -198,7 +198,7 @@ public sealed class Druid_Fish : MH_Skill
 
         public override void ModifySpeed(float baseSpeed, ref float speed)
         {
-            speed *= 4f;
+            speed *= 8f;
         }
 
         public override void ModifyRunStaminaDrain(float baseDrain, ref float drain)
@@ -291,29 +291,34 @@ public sealed class Druid_Fish : MH_Skill
 
     public override string GetSpecialTags()
     {
-        return "<color=red>Transform, Movement Speed, Toggle</color>";
+        return "<color=red>Transform, Swim Speed, Toggle</color>";
     }
 
     public override string BuildDescription()
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
         float currentManacost = this.CalculateSkillManacost(forLevel);
+        float currentCooldown = this.CalculateSkillCooldown(forLevel);
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
+        builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
 
         if (Level < maxLevel && Level > 0)
         {
             float nextManacost = this.CalculateSkillManacost(forLevel + 1);
+            float nextCooldown = this.CalculateSkillCooldown(forLevel + 1);
             float manacostDiff = nextManacost - currentManacost;
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            float cooldownDiff = nextCooldown - currentCooldown;
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
-            builder.AppendLine(
-                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine("\nNext Level:");
+            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
         }
 
 

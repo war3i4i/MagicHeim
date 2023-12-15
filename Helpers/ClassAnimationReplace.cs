@@ -67,14 +67,14 @@ public static class ClassAnimationReplace
     public static RuntimeAnimatorController MakeAOC(Dictionary<string, string> replacement,
         RuntimeAnimatorController ORIGINAL)
     {
-        var aoc = new AnimatorOverrideController(ORIGINAL);
-        var anims = new List<KeyValuePair<AnimationClip, AnimationClip>>();
-        foreach (var animation in aoc.animationClips)
+        AnimatorOverrideController aoc = new AnimatorOverrideController(ORIGINAL);
+        List<KeyValuePair<AnimationClip, AnimationClip>> anims = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+        foreach (AnimationClip animation in aoc.animationClips)
         {
             string name = animation.name;
             if (replacement.ContainsKey(name))
             {
-                var newClip = UnityEngine.Object.Instantiate(ExternalAnimations[replacement[name]]);
+                AnimationClip newClip = UnityEngine.Object.Instantiate(ExternalAnimations[replacement[name]]);
                 anims.Add(new KeyValuePair<AnimationClip, AnimationClip>(animation, newClip));
             }
             else
@@ -128,8 +128,8 @@ public static class ClassAnimationReplace
     {
         static void Postfix(ZNetScene __instance)
         {
-            var animation = MagicHeim.asset.LoadAsset<AnimationClip>("MH_Wolf_Jump");
-            var wolf = __instance.GetPrefab("Wolf");
+            AnimationClip animation = MagicHeim.asset.LoadAsset<AnimationClip>("MH_Wolf_Jump");
+            GameObject wolf = __instance.GetPrefab("Wolf");
             Dictionary<string, string> test = new() { { "Jump", "MH_Wolf_Jump" } };
             MH_WolfController = MakeAOC(test, wolf.GetComponentInChildren<Animator>().runtimeAnimatorController);
         }

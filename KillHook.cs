@@ -12,7 +12,7 @@ namespace MagicHeim.KillHooks
             private static void Prefix(Character __instance, long sender, HitData hit)
             {
                 if (__instance.GetHealth() <= 0) return;
-                var attacker = hit.GetAttacker();
+                Character attacker = hit.GetAttacker();
                 if (attacker)
                 {
                     if (attacker.IsPlayer())

@@ -20,25 +20,46 @@ public sealed class Druid_Eclipse : MH_Skill
         _definition.AnimationTime = 0.5f;
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedSummon];
 
+        _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
+            "MIN Lvl Damage", 1f,
+            "Damage amount (Min Lvl)");
+        
+        _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
+            "MAX Lvl Damage", 10f,
+            "Damage amount (Max Lvl)");
+        
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 10f,
+            "MIN Lvl Manacost", 10f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 2f,
+            "MAX Lvl Manacost", 1f,
             "Manacost amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
         
-        
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 3,
+            "Leveling Step", 1,
             "Leveling Step");
+        
+        _definition.MinLvlDuration = MagicHeim.config($"{_definition._InternalName}",
+            "MIN Lvl Tick Speed", 1f,
+            "Tick Speed (Min Lvl)");
+        
+        _definition.MaxLvlDuration = MagicHeim.config($"{_definition._InternalName}",
+            "MAX Lvl Tick Speed", 0.5f,
+            "Tick Speed (Max Lvl)");
+
+        _definition.ExternalValues = new()
+        {
+            MagicHeim.config($"{_definition._InternalName}", "MIN LVl max targets", 1f, "Max targets per tick"),
+            MagicHeim.config($"{_definition._InternalName}", "MAX Lvl max target", 4f, "Max targets per tick"),
+        };
         
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Eclipse_Icon");
@@ -59,6 +80,7 @@ public sealed class Druid_Eclipse : MH_Skill
         static void Postfix(ZNetScene __instance)
         {
             __instance.m_namedPrefabs[Prefab.name.GetStableHashCode()] = Prefab;
+            __instance.m_namedPrefabs[Explosion.name.GetStableHashCode()] = Explosion;
         }
     }
 
@@ -68,7 +90,7 @@ public sealed class Druid_Eclipse : MH_Skill
         Player p = Player.m_localPlayer;
         if (!Toggled)
         {
-            MagicHeim._thistype.StartCoroutine(EclipseCorout(20, 3, 0.5f));
+            MagicHeim._thistype.StartCoroutine(EclipseCorout(this.CalculateSkillValue(), Mathf.FloorToInt(this.CalculateSkillExternalValue(0)), this.CalculateSkillDuration()));
         }
         else 
         {
@@ -81,7 +103,7 @@ public sealed class Druid_Eclipse : MH_Skill
 
     private IEnumerator EclipseCorout(float dmg, int maxTargets, float periodicTime)
     {
-        var manacost = this.CalculateSkillManacost();
+        float manacost = this.CalculateSkillManacost();
         Toggled = true;
         float periodic = periodicTime;
         Player p = Player.m_localPlayer;
@@ -90,7 +112,7 @@ public sealed class Druid_Eclipse : MH_Skill
         eclipse.GetComponent<MH_FollowTargetComponent>().Setup(p);
         for (;;)
         {
-            var useMana = manacost * Time.deltaTime; 
+            float useMana = manacost * Time.deltaTime; 
             if (!Toggled || p.IsDead() || !p.HaveEitr(useMana) || p.InWater())
             {
                 Toggled = false; 
@@ -108,12 +130,12 @@ public sealed class Druid_Eclipse : MH_Skill
             {
                 periodic = periodicTime;
                 
-                var characters8M = Character.s_characters.Where(x => Utils.IsEnemy(x) && Vector3.Distance(x.transform.position, p.transform.position) <= 12f);
+                IEnumerable<Character> characters8M = Character.s_characters.Where(x => Utils.IsEnemy(x) && Vector3.Distance(x.transform.position, p.transform.position) <= 12f);
                 characters8M = characters8M.OrderBy(x => Random.Range(0, 100)).Take(maxTargets);
-                var pPos = p.transform.position;
-                foreach (var character in characters8M)
+                Vector3 pPos = p.transform.position;
+                foreach (Character character in characters8M)
                 {
-                    var explosion = UnityEngine.Object.Instantiate(Explosion, character.transform.position, Quaternion.identity);
+                    GameObject explosion = UnityEngine.Object.Instantiate(Explosion, character.transform.position, Quaternion.identity);
                     explosion.GetComponent<MH_FollowTargetComponent>().Setup(character);
                     HitData hitData = new();
                     hitData.m_skill = Skills.SkillType.ElementalMagic;
@@ -138,29 +160,45 @@ public sealed class Druid_Eclipse : MH_Skill
 
     public override string GetSpecialTags()
     {
-        return "<color=red>Walk On Water, Toggle</color>";
+        return "<color=red>Toggle, AoE, Damage</color>";
     }
 
     public override string BuildDescription()
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
         float currentManacost = this.CalculateSkillManacost(forLevel);
+        float currentValue = this.CalculateSkillValue(forLevel);
+        int maxTargets = Mathf.FloorToInt(this.CalculateSkillExternalValue(0, forLevel));
+        float periodicTime = this.CalculateSkillDuration(forLevel);
+        builder.AppendLine($"Damage: <color=#FF00FF>Piercing  {Math.Round(currentValue, 1)}</color>");
+        builder.AppendLine($"Max Targets: {maxTargets}");
+        builder.AppendLine($"Tick Speed: {Math.Round(periodicTime, 1)}");
         builder.AppendLine($"Manacost (Per Second): {Math.Round(currentManacost, 1)}");
 
         if (Level < maxLevel && Level > 0)
         {
             float nextManacost = this.CalculateSkillManacost(forLevel + 1);
+            float nextValue = this.CalculateSkillValue(forLevel + 1);
+            int nextMaxTargets = Mathf.FloorToInt(this.CalculateSkillExternalValue(0, forLevel + 1));
+            float nextPeriodicTime = this.CalculateSkillDuration(forLevel + 1);
             float manacostDiff = nextManacost - currentManacost;
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            float valueDiff = nextValue - currentValue;
+            int maxTargetsDiff = nextMaxTargets - maxTargets;
+            float periodicTimeDiff = nextPeriodicTime - periodicTime;
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedPeriodicTimeDiff = Math.Round(periodicTimeDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
-            builder.AppendLine(
-                $"Manacost (Per Second): {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine("\nNext Level:");
+            builder.AppendLine($"Damage: <color=#FF00FF>Piercing  {Math.Round(nextValue, 1)}</color> <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine($"Max Targets: {nextMaxTargets} <color=green>({(maxTargetsDiff > 0 ? "+" : "")}{maxTargetsDiff})</color>");
+            builder.AppendLine($"Tick Speed: {Math.Round(nextPeriodicTime, 1)} <color=green>({(roundedPeriodicTimeDiff > 0 ? "+" : "")}{roundedPeriodicTimeDiff})</color>");
+            builder.AppendLine($"Manacost (Per Second): {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
 

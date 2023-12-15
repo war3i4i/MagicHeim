@@ -60,7 +60,7 @@ public static class ConfirmationUI
     private static void UpdateCanvases()
     {
         Canvas.ForceUpdateCanvases();
-        var sizeFillers = UI.GetComponentsInChildren<ContentSizeFitter>().ToList();
+        List<ContentSizeFitter> sizeFillers = UI.GetComponentsInChildren<ContentSizeFitter>().ToList();
         sizeFillers.ForEach(filter => filter.enabled = false);
         sizeFillers.ForEach(filter => filter.enabled = true);
     }

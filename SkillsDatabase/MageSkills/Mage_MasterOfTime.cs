@@ -13,22 +13,22 @@ public sealed class Mage_MasterOfTime : MH_Skill
         _definition.Description = "$mh_mage_masteroftime_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Chance To Reset Skill CD (Percentage)", 2f,
+            "MIN Chance To Reset Skill CD (Percentage)", 2f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Chance To Reset Skill CD (Percentage)", 45f,
+            "MAX Chance To Reset Skill CD (Percentage)", 45f,
             "Value amount (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 7,
+            "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             70, "Required Level");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_MasterOfTime");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 1,
+            "Leveling Step", 1,
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -56,7 +56,7 @@ public sealed class Mage_MasterOfTime : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -69,9 +69,9 @@ public sealed class Mage_MasterOfTime : MH_Skill
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float valueDiff = nextValue - currentValue;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Chance to reset skill cooldown: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
         }
@@ -84,10 +84,10 @@ public sealed class Mage_MasterOfTime : MH_Skill
     public static void TryToCheckSkill(ref float cd)
     {
         if (ClassManager.CurrentClass == Class.None) return;
-        var skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);
-        if (skillDef == null || skillDef.Level <= 0) return;
-        var chance = skillDef.CalculateSkillValue(skillDef.Level);
-        var random = UnityEngine.Random.Range(0, 100);
+        MH_Skill skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);
+        if (skillDef is not { Level: > 0 }) return;
+        float chance = skillDef.CalculateSkillValue(skillDef.Level);
+        int random = UnityEngine.Random.Range(0, 100);
         if (random <= chance)
         {
             cd = 0f;

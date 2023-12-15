@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using JetBrains.Annotations;
 using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Interfaces;
 
@@ -19,45 +20,45 @@ public sealed class Druid_Rootball : MH_Skill
         _definition.Description = "$mh_druid_rootball_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Damage", 8f,
+            "MIN Lvl Damage", 1f,
             "Damage amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Damage", 60f,
+            "MAX Lvl Damage", 10f,
             "Damage amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 15f,
+            "MIN Lvl Manacost", 1f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 25f,
+            "MAX Lvl Manacost", 10f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 12f,
+            "MIN Lvl Cooldown", 10f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 6f,
+            "MAX Lvl Cooldown", 1f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MinLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Duration", 2f,
+            "MIN Lvl Duration", 1f,
             "Duration amount (Min Lvl)");
         
         _definition.MaxLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Duration", 4f,
+            "MAX Lvl Duration", 4f,
             "Duration amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 6,
+            "Leveling Step", 1,
             "Leveling Step");
 
         _definition.AnimationTime = 0.8f;
@@ -80,6 +81,7 @@ public sealed class Druid_Rootball : MH_Skill
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
     {
+        [UsedImplicitly]
         static void Postfix(ZNetScene __instance)
         {
             __instance.m_namedPrefabs[_Prefab.name.GetStableHashCode()] = _Prefab;
@@ -126,8 +128,7 @@ public sealed class Druid_Rootball : MH_Skill
                         hit.m_statusEffectHash = "Druid_Rootball_Debuff".GetStableHashCode();
                         hit.m_skillLevel = duration;
                         hit.m_skill = Skills.SkillType.ElementalMagic;
-                        hit.m_damage.m_blunt = damage / 2f;
-                        hit.m_damage.m_poison = damage / 2f;
+                        hit.m_damage.m_blunt = damage;
                         hit.m_point = collider.ClosestPoint(transform.position);
                         hit.m_ranged = true;
                         hit.SetAttacker(Player.m_localPlayer);
@@ -146,9 +147,9 @@ public sealed class Druid_Rootball : MH_Skill
             {
                 count += Time.deltaTime;
 
-                var oldPos = transform.position;
+                Vector3 oldPos = transform.position;
                 transform.position += dir * speed * Time.deltaTime;
-                var newPos = transform.position;
+                Vector3 newPos = transform.position;
                 Vector3 normalized = newPos - oldPos;
                 RaycastHit[] array = Physics.SphereCastAll(transform.position, 0.15f, normalized.normalized,
                     normalized.magnitude, mask);
@@ -184,10 +185,10 @@ public sealed class Druid_Rootball : MH_Skill
         Vector3 rot = (target - p.transform.position).normalized;
         rot.y = 0;
         p.transform.rotation = Quaternion.LookRotation(rot);
-        var go = UnityEngine.Object.Instantiate(_Prefab,
+        GameObject go = UnityEngine.Object.Instantiate(_Prefab,
             p.transform.position + Vector3.up * 1.2f + GameCamera.instance.transform.forward * 0.5f,
             GameCamera.instance.transform.rotation);
-        var direction = (target - go.transform.position).normalized;
+        Vector3 direction = (target - go.transform.position).normalized;
         float damage = this.CalculateSkillValue();
         go.GetComponent<RootballComponent>().Setup(direction, damage, this.CalculateSkillDuration());
         StartCooldown(cooldown);
@@ -272,7 +273,7 @@ public sealed class Druid_Rootball : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -280,7 +281,7 @@ public sealed class Druid_Rootball : MH_Skill
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
 
-        builder.AppendLine($"Damage: <color=#FF00FF>Piercing {Math.Round(currentValue, 1)}</color>");
+        builder.AppendLine($"Damage: <color=yellow>Blunt {Math.Round(currentValue, 1)}</color>");
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
@@ -293,16 +294,14 @@ public sealed class Druid_Rootball : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
-            builder.AppendLine($"Damage: <color=#FF00FF>Piercing {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
-            builder.AppendLine(
-                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine(
-                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine("\nNext Level:");
+            builder.AppendLine($"Damage: <color=yellow>Blunt {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
+            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
 
@@ -312,5 +311,5 @@ public sealed class Druid_Rootball : MH_Skill
     public override bool CanRightClickCast => false;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
-    public override Color SkillColor => new Color(1f, 0.76f, 0.21f);
+    public override Color SkillColor => new Color(0.29f, 1f, 0.41f);
 }

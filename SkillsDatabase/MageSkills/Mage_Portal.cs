@@ -17,36 +17,36 @@ public sealed class Mage_Portal : MH_Skill
         _definition.Description = "$mh_mage_portal_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Distance", 30f,
+            "MIN Lvl Distance", 30f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Distance", 60f,
+            "MAX Lvl Distance", 60f,
             "Value amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 40f,
+            "MIN Lvl Manacost", 40f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 40f,
+            "MAX Lvl Manacost", 40f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 30f,
+            "MIN Lvl Cooldown", 30f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 18f,
+            "MAX Lvl Cooldown", 18f,
             "Cooldown amount (Max Lvl)");
 
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             60, "Required Level");
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 2,
+            "Leveling Step", 2,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_Portal_Icon");
@@ -111,7 +111,7 @@ public sealed class Mage_Portal : MH_Skill
 
         public string GetHoverText()
         {
-            return Localization.instance.Localize($"[<color=yellow><b>$KEY_Use</b></color>] Use Portal");
+            return Localization.instance.Localize("[<color=yellow><b>$KEY_Use</b></color>] Use Portal");
         }
 
         public string GetHoverName()
@@ -154,7 +154,7 @@ public sealed class Mage_Portal : MH_Skill
             }
 
             rangeShowup.transform.position = p.transform.position;
-            bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out var raycast,
+            bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out RaycastHit raycast,
                 _definition.MaxLvlValue.Value + 10f,
                 JumpMask);
             if (castHit && raycast.collider)
@@ -181,9 +181,9 @@ public sealed class Mage_Portal : MH_Skill
             p.transform.rotation = Quaternion.LookRotation(rot);
             StartCooldown(this.CalculateSkillCooldown());
             Vector3 dir = (target - p.transform.position).normalized;
-            var fromPortal =
+            GameObject fromPortal =
                 UnityEngine.Object.Instantiate(Portal_Prefab, p.transform.position + dir * 2f, Quaternion.identity);
-            var toPortal = UnityEngine.Object.Instantiate(Portal_Prefab, target, Quaternion.identity);
+            GameObject toPortal = UnityEngine.Object.Instantiate(Portal_Prefab, target, Quaternion.identity);
             fromPortal.GetComponent<PortalComponent>().SetTarget(target + dir * 2f + Vector3.up * 0.2f);
             toPortal.GetComponent<PortalComponent>().SetTarget(p.transform.position);
             p.m_zanim.SetTrigger("staff_summon");
@@ -216,7 +216,7 @@ public sealed class Mage_Portal : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -237,11 +237,11 @@ public sealed class Mage_Portal : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Distance: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
             builder.AppendLine(

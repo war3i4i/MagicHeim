@@ -7,7 +7,7 @@ public static class Logger
         if (Application.platform == RuntimePlatform.WindowsPlayer)
         {
             ConsoleManager.SetConsoleColor(ConsoleColor.Cyan);
-            ConsoleManager.StandardOutStream.Write($"[MagicHeim]");
+            ConsoleManager.StandardOutStream.Write("[MagicHeim]");
             ConsoleManager.SetConsoleColor(color);
             ConsoleManager.StandardOutStream.Write($" {obj}\n");
             ConsoleManager.SetConsoleColor(ConsoleColor.White);

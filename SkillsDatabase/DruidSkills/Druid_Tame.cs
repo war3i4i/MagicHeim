@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using JetBrains.Annotations;
 using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Interfaces;
 using MagicHeim.UI_s;
@@ -14,39 +15,39 @@ public sealed class Druid_Tame : MH_Skill
         _definition._InternalName = "Druid_Tame";
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon];
         _definition.Name = "$mh_druid_tame";
-        _definition.Description = "$mh_druid_tame_description";
+        _definition.Description = "$mh_druid_tame_desc";
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 80f,
+            "MIN Lvl Manacost", 1f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 45f,
+            "MAX Lvl Manacost", 10f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 45f,
+            "MIN Lvl Cooldown", 10f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 18f,
+            "MAX Lvl Cooldown", 1f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MinLvlChargeTime = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Charge Time", 8,
+            "MIN Lvl Charge Time", 10,
             "Charge Time amount (Min Lvl)");
         _definition.MaxLvlChargeTime = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Charge Time", 3,
+            "MAX Lvl Charge Time", 1,
             "Charge Time amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 2,
+            "Leveling Step", 1,
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -62,6 +63,7 @@ public sealed class Druid_Tame : MH_Skill
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
     {
+        [UsedImplicitly]
         static void Postfix(ZNetScene __instance)
         {
             __instance.m_namedPrefabs[Prefab.name.GetStableHashCode()] = Prefab;
@@ -75,14 +77,14 @@ public sealed class Druid_Tame : MH_Skill
         if (!Player.m_localPlayer) return;
         Player p = Player.m_localPlayer;
         p.m_collider.enabled = false;
-        bool castHit = Physics.Raycast(GameCamera.instance.transform.position, p.GetLookDir(), out var raycast, 50f, Script_Layermask);
+        bool castHit = Physics.Raycast(GameCamera.instance.transform.position, p.GetLookDir(), out RaycastHit raycast, 50f, Script_Layermask);
         p.m_collider.enabled = true;
         if (castHit && raycast.collider && raycast.collider.GetComponentInParent<Character>() is { } enemy)
         {
             if (Vector3.Distance(enemy.transform.position, p.transform.position) > 30f)
             {
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
-                    $"<color=#00FF00>Too</color><color=yellow> far</color>");
+                    "<color=#00FF00>Too</color><color=yellow> far</color>");
                 p.AddEitr(this.CalculateSkillManacost());
                 return;
             }
@@ -90,7 +92,7 @@ public sealed class Druid_Tame : MH_Skill
             if (enemy.GetComponent<Tameable>() is not { } tame)
             {
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
-                    $"<color=#00FF00>Not</color><color=yellow> tameable</color>");
+                    "<color=#00FF00>Not</color><color=yellow> tameable</color>");
                 p.AddEitr(this.CalculateSkillManacost());
                 return;
             }
@@ -98,7 +100,7 @@ public sealed class Druid_Tame : MH_Skill
             if (enemy.IsTamed())
             {
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
-                    $"<color=#00FF00>Already</color><color=yellow> tamed</color>");
+                    "<color=#00FF00>Already</color><color=yellow> tamed</color>");
                 p.AddEitr(this.CalculateSkillManacost());
                 return;
             }
@@ -108,7 +110,7 @@ public sealed class Druid_Tame : MH_Skill
         else
         {
             p.AddEitr(this.CalculateSkillManacost());
-            MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"<color=#00FFFF>No</color><color=yellow> target</color>");
+            MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "<color=#00FFFF>No</color><color=yellow> target</color>");
         }
         
     }
@@ -179,60 +181,41 @@ public sealed class Druid_Tame : MH_Skill
 
     public override string GetSpecialTags()
     {
-        return "<color=red>Chargable, Projectile, AoE, Damage</color>";
+        return "<color=red>Target Tameable Creature, Tame on cast finish</color>";
     }
 
     public override string BuildDescription()
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
-        float currentValue = this.CalculateSkillValue(forLevel);
-        float currentAoe = this.CalculateSkillAoe(forLevel);
         float currentChargeTime = this.CalculateSkillChargeTime(forLevel);
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
-
-        builder.AppendLine(
-            $"Damage: <color=yellow>Blunt {Math.Round(currentValue * 0.8f, 1)}</color> + <color=red>Fire {Math.Round(currentValue * 0.2f, 1)}</color>");
+        
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
-        builder.AppendLine($"Area of Effect: {Math.Round(currentAoe, 1)}");
         builder.AppendLine($"Charge Time: {Math.Round(currentChargeTime, 1)}");
 
         if (Level < maxLevel && Level > 0)
         {
-            float nextValue = this.CalculateSkillValue(forLevel + 1);
-            float nextAoe = this.CalculateSkillAoe(forLevel + 1);
             float nextChargeTime = this.CalculateSkillChargeTime(forLevel + 1);
             float nextCooldown = this.CalculateSkillCooldown(forLevel + 1);
             float nextManacost = this.CalculateSkillManacost(forLevel + 1);
-            float valueDiff = nextValue - currentValue;
-            float aoeDiff = nextAoe - currentAoe;
             float chargeTimeDiff = nextChargeTime - currentChargeTime;
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
+            double roundedChargeTimeDiff = Math.Round(chargeTimeDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
-            var roundedAoeDiff = Math.Round(aoeDiff, 1);
-            var roundedChargeTimeDiff = Math.Round(chargeTimeDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
-
-            builder.AppendLine($"\nNext Level:");
-            builder.AppendLine(
-                $"Damage: <color=yellow>Blunt {Math.Round(nextValue * 0.8f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=red>Fire {Math.Round(nextValue * 0.2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
-            builder.AppendLine(
-                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine(
-                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
-            builder.AppendLine(
-                $"Area of Effect: {Math.Round(nextAoe, 1)} <color=green>({(roundedAoeDiff > 0 ? "+" : "")}{roundedAoeDiff})</color>");
-            builder.AppendLine(
-                $"Charge Time: {Math.Round(nextChargeTime, 1)} <color=green>({(roundedChargeTimeDiff > 0 ? "+" : "")}{roundedChargeTimeDiff})</color>");
+            builder.AppendLine("\nNext Level:");
+            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine($"Charge Time: {Math.Round(nextChargeTime, 1)} <color=green>({(roundedChargeTimeDiff > 0 ? "+" : "")}{roundedChargeTimeDiff})</color>");
         }
 
 

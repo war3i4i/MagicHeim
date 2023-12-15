@@ -65,19 +65,23 @@ public abstract class MH_Skill
         : 0;
 
 
-    public string InternalName => _definition._InternalName;
+    public int AbilityStartLevel => _definition.AbilityStartLevel.Value;
 
     public string ExternalDescription()
     {
         string result = $"\nMax Level: <color=yellow>{MaxLevel}</color>";
         if (Level >= MaxLevel) return result;
-        var requiredLevel = RequiredLevel + (LevelingStep * Level);
+        int requiredLevel = RequiredLevel + (LevelingStep * Level);
         bool canUpgrade = ClassManager.Level >= requiredLevel;
         result +=
             $"\n\nLeveling Step: <color=yellow>{LevelingStep}</color>\n(Can be {(Level > 0 ? "upgraded" : "learned")} on LVL: <color={(canUpgrade ? "green" : "red")}>{requiredLevel}</color>)";
         return result;
     }
 
+    public void OnAdd()
+    {
+        _definition.AbilityStartLevel = MagicHeim.config($"{_definition._InternalName}", "Ability Start Level", Level, "Ability Start Level");
+    }
 
     public void SetLevel(int level)
     {
@@ -88,8 +92,8 @@ public abstract class MH_Skill
     {
         if (Player.m_debugMode) return true;
         Player p = Player.m_localPlayer;
-        var costType = _costType;
-        var cost = this.CalculateSkillManacost();
+        CostType costType = _costType;
+        float cost = this.CalculateSkillManacost();
         if (costType == CostType.Eitr)
         {
             if (!p.HaveEitr(cost))

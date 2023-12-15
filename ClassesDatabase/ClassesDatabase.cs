@@ -10,7 +10,7 @@ public static class ClassesDatabase
 
     public static MH_ClassDefinition GetClassDefinition(Class @class)
     {
-        return GLOBAL_ClassesDefinitions.TryGetValue(@class, out var definition) ? definition : null;
+        return GLOBAL_ClassesDefinitions.TryGetValue(@class, out MH_ClassDefinition definition) ? definition : null;
     }
 
     private static void AddClass(Class @class, MH_ClassDefinition classDefinition)
@@ -24,7 +24,7 @@ public static class ClassesDatabase
         AddClass(Class.Warrior, new Warrior("Warrior", "Warrior Description"));
         AddClass(Class.Mage, new Mage("Mage", "$mh_mageclass_description"));
         AddClass(Class.Druid, new Druid("Druid", "$mh_druidclass_description"));
-        foreach (var classesDefinition in GLOBAL_ClassesDefinitions)
+        foreach (KeyValuePair<Class, MH_ClassDefinition> classesDefinition in GLOBAL_ClassesDefinitions)
             classesDefinition.Value.Init();
     }
     
@@ -34,7 +34,7 @@ public static class ClassesDatabase
     {
         static void Postfix(ZNetScene __instance)
         {
-            foreach (var classesDefinition in GLOBAL_ClassesDefinitions)
+            foreach (KeyValuePair<Class, MH_ClassDefinition> classesDefinition in GLOBAL_ClassesDefinitions)
             {
                 __instance.m_namedPrefabs[classesDefinition.Value.OnSelect_VFX.name.GetStableHashCode()] =
                     classesDefinition.Value.OnSelect_VFX;

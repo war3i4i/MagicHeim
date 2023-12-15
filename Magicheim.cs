@@ -25,9 +25,9 @@ namespace MagicHeim
             Localizer.Load(); 
             _thistype = this;
             MH_SyncedConfig = new ConfigFile(Path.Combine(Paths.ConfigPath, "kg.magicheim_synced.cfg"), true);
-            var stream = Assembly.GetExecutingAssembly()
+            Stream stream = Assembly.GetExecutingAssembly()
                 .GetManifestResourceStream("MagicHeim.Asset.MagicHeimUnityCode.dll");
-            var buffer = new byte[stream!.Length];
+            byte[] buffer = new byte[stream!.Length];
             stream.Read(buffer, 0, buffer.Length);
             try
             {
@@ -69,7 +69,7 @@ namespace MagicHeim
         {
             if (!Game.instance || !ZNet.instance || !ZNet.instance.IsServer()) return;
             if (Path.GetFileName(e.Name) != "kg.magicheim_synced.cfg") return;
-            MagicHeim_Logger.Logger.Log($"Reloading Config");
+            MagicHeim_Logger.Logger.Log("Reloading Config");
             DelayedReload(MH_SyncedConfig);
         }
         
@@ -134,10 +134,15 @@ namespace MagicHeim
         
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                Utils.CheckProblems_ZNS();
+            }
+            
             TurnOffUIs();
             if (OptionsUI.CurrentChoosenButton >= 0)
             {
-                foreach (var key in (KeyCode[])Enum.GetValues(typeof(KeyCode)))
+                foreach (KeyCode key in (KeyCode[])Enum.GetValues(typeof(KeyCode)))
                 { 
                     if (!Input.GetKeyDown(key)) continue;
                     OptionsUI.ButtonPressed(key);
@@ -147,7 +152,7 @@ namespace MagicHeim
 
             if (OptionsUI.CurrentChoosenButtonAdditional >= 0)
             {
-                foreach (var key in (KeyCode[])Enum.GetValues(typeof(KeyCode)))
+                foreach (KeyCode key in (KeyCode[])Enum.GetValues(typeof(KeyCode)))
                 {
                     if (!Input.GetKeyDown(key)) continue;
                     OptionsUI.ButtonPressedAdditional(key);

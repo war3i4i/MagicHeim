@@ -63,8 +63,8 @@ public static class MH_API
     {
         if (Type.GetType("MagicHeim.API.API, MagicHeim") is not { } mh_API)
         {
-            var defaultRetInt = new Func<int>(DefaultRetInt).Method;
-            var defaultRetLong = new Func<long>(DefaultRetLong).Method;
+            MethodInfo defaultRetInt = new Func<int>(DefaultRetInt).Method;
+            MethodInfo defaultRetLong = new Func<long>(DefaultRetLong).Method;
             MI_GetClass = defaultRetInt;
             MI_GetLevel = defaultRetInt;
             MI_GetEXP = defaultRetLong;
@@ -105,7 +105,7 @@ public static class API
     internal static bool CanUseAbilities()
     {
         if (AbilityCondList == null) return true;
-        foreach (var invoke in AbilityCondList.GetInvocationList())
+        foreach (Delegate invoke in AbilityCondList.GetInvocationList())
         {
             if (!((Func<bool>)invoke)())
             {

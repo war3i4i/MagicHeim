@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using JetBrains.Annotations;
 using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Interfaces;
 using MagicHeim.SkillsDatabase.GlobalMechanics;
@@ -23,31 +24,31 @@ public sealed class Druid_Connection : MH_Skill
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon];
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Value", 0.01f,
-            "Healing amount (Min Lvl)");
+            "MIN Lvl Healing", 1f,
+            "Healing amount max hp percent (Min Lvl)");
         
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Value", 0.08f,
-            "Healing amount (Max Lvl)");
+            "MAX Lvl Healing", 8f,
+            "Healing amount max hp percent (Max Lvl)");
         
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 10f,
+            "MIN Lvl Manacost", 10f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 2f,
+            "MAX Lvl Manacost", 1f,
             "Manacost amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
         
         
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 3,
+            "Leveling Step", 1,
             "Leveling Step");
         
 
@@ -66,6 +67,7 @@ public sealed class Druid_Connection : MH_Skill
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
     {
+        [UsedImplicitly]
         static void Postfix(ZNetScene __instance)
         {
             __instance.m_namedPrefabs[Prefab.name.GetStableHashCode()] = Prefab;
@@ -85,33 +87,26 @@ public sealed class Druid_Connection : MH_Skill
             return; 
         }
         p.m_collider.enabled = false;
-        bool castHit = Physics.Raycast(GameCamera.instance.transform.position, p.GetLookDir(), out var raycast, 40f, Script_Layermask);
+        bool castHit = Physics.Raycast(GameCamera.instance.transform.position, p.GetLookDir(), out RaycastHit raycast, 100f, Script_Layermask);
         p.m_collider.enabled = true;
         if (castHit && raycast.collider && raycast.collider.GetComponentInParent<Character>() is {} enemy)
         {
             if (Vector3.Distance(enemy.transform.position, p.transform.position) > 50f)
             {
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
-                    $"<color=#00FF00>Too</color><color=yellow> far</color>");
+                    "<color=#00FF00>Too</color><color=yellow> far</color>");
                 p.AddEitr(this.CalculateSkillManacost());
                 return;
             }
             
-            if (!Toggled)
-            {
-                float percentHeal = this.CalculateSkillValue();
-                MagicHeim._thistype.StartCoroutine(ConnectionCorout(enemy, percentHeal));
-            }
-            else 
-            {
-                Toggled = false;
-            }
+            float percentHeal = this.CalculateSkillValue();
+            MagicHeim._thistype.StartCoroutine(ConnectionCorout(enemy, percentHeal));
         }
         else
         {
             p.AddEitr(this.CalculateSkillManacost());
             MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
-                $"<color=#00FFFF>No</color><color=yellow> target</color>");
+                "<color=#00FFFF>No</color><color=yellow> target</color>");
         }
     }
 
@@ -148,7 +143,7 @@ public sealed class Druid_Connection : MH_Skill
             lr.gameObject.SetActive(false);
         }
 
-        private float counter = 0f;
+        private float counter;
 
         private void FixedUpdate()
         {
@@ -177,7 +172,7 @@ public sealed class Druid_Connection : MH_Skill
     
     private IEnumerator ConnectionCorout(Character target, float healingPercent)
     {
-        var manacost = this.CalculateSkillManacost();
+        float manacost = this.CalculateSkillManacost();
         if (!target.IsPlayer() && target.IsTamed()) healingPercent *= 4f;
         Toggled = true;
         float periodic = 0f;
@@ -191,7 +186,7 @@ public sealed class Druid_Connection : MH_Skill
         LineRenderer.GetComponent<ConnectionLineRenderer>().Setup(p, target);
         for (;;)
         {
-            var useMana = manacost * Time.deltaTime; 
+            float useMana = manacost * Time.deltaTime; 
             if (!Toggled || p.IsDead() || !p.HaveEitr(useMana) || p.InWater() || !target || target.IsDead() || Vector3.Distance(target.transform.position, p.transform.position) > 45f)
             {
                 Toggled = false; 
@@ -209,8 +204,8 @@ public sealed class Druid_Connection : MH_Skill
             {
                 periodic = 1f;
                 target.m_seman.AddStatusEffect("SE_DruidConnection_Buff".GetStableHashCode(), true);
-                var maxHP = target.GetMaxHealth();
-                var healAmount = maxHP * healingPercent;
+                float maxHP = target.GetMaxHealth();
+                float healAmount = maxHP * healingPercent;
                 target.Heal(healAmount);
             } 
             p.UseEitr(useMana); 
@@ -299,37 +294,42 @@ public sealed class Druid_Connection : MH_Skill
 
     public override string GetSpecialTags()
     {
-        return "<color=red>Walk On Water, Toggle</color>";
+        return "<color=red>Toggle, Target Creature, Heal % Max HP, Buff</color>";
     }
 
     public override string BuildDescription()
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
         float currentManacost = this.CalculateSkillManacost(forLevel);
+        float currentValue = this.CalculateSkillValue(forLevel);
+        
+        builder.AppendLine($"Heal: {Math.Round(currentValue, 1)}% Max HP");
         builder.AppendLine($"Manacost (Per Second): {Math.Round(currentManacost, 1)}");
-
         if (Level < maxLevel && Level > 0)
         {
             float nextManacost = this.CalculateSkillManacost(forLevel + 1);
+            float nextValue = this.CalculateSkillValue(forLevel + 1);
+            float healDiff = nextValue - currentValue;
             float manacostDiff = nextManacost - currentManacost;
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedHealDiff = Math.Round(healDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
-            builder.AppendLine(
-                $"Manacost (Per Second): {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine("\nNext Level:");
+            builder.AppendLine($"Heal: {Math.Round(nextValue, 1)}% Max HP <color=green>({(roundedHealDiff > 0 ? "+" : "")}{roundedHealDiff})</color>");
+            builder.AppendLine($"Manacost (Per Second): {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
 
         return builder.ToString();
     }
 
-    public override bool CanRightClickCast => true;
+    public override bool CanRightClickCast => false;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
-    public override Color SkillColor => new Color(0.09f, 0.05f, 0.17f);
+    public override Color SkillColor => new Color(1f, 0.92f, 0.24f);
 }

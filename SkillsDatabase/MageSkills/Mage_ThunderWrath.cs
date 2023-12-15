@@ -17,37 +17,37 @@ public sealed class Mage_ThunderWrath : MH_Skill
         _definition.Description = "$mh_mage_thunderwrath_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Damage", 35f,
+            "MIN Lvl Damage", 35f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Damage", 90f,
+            "MAX Lvl Damage", 90f,
             "Value amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 10f,
+            "MIN Lvl Manacost", 10f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 25f,
+            "MAX Lvl Manacost", 25f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 45f,
+            "MIN Lvl Cooldown", 45f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 18f,
+            "MAX Lvl Cooldown", 18f,
             "Cooldown amount (Max Lvl)");
 
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             64, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 1,
+            "Leveling Step", 1,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_ThunderWrath_Icon");
@@ -96,7 +96,7 @@ public sealed class Mage_ThunderWrath : MH_Skill
         rangeShowup.GetComponent<CircleProjector>().Update();
         float damage = this.CalculateSkillValue();
         Vector3 initTarget;
-        if (Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out var testRaycast,
+        if (Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out RaycastHit testRaycast,
                 40f, Script_Layermask) && testRaycast.collider)
         {
             initTarget = testRaycast.point;
@@ -110,16 +110,16 @@ public sealed class Mage_ThunderWrath : MH_Skill
         }
 
         SkillChargeUI.ShowCharge(this, maxUsages);
-        var go = UnityEngine.Object.Instantiate(Thunder_Prefab, initTarget, Quaternion.identity);
+        GameObject go = UnityEngine.Object.Instantiate(Thunder_Prefab, initTarget, Quaternion.identity);
         float count = 0;
         while (Cond())
         {
             rangeShowup.transform.position = p.transform.position;
-            if (Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out var raycast, 50f,
+            if (Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out RaycastHit raycast, 50f,
                     Script_Layermask2) && raycast.collider)
             {
-                var target = raycast.point;
-                var nPos = Vector3.MoveTowards(go.transform.position, target, 5f * Time.deltaTime);
+                Vector3 target = raycast.point;
+                Vector3 nPos = Vector3.MoveTowards(go.transform.position, target, 5f * Time.deltaTime);
                 ZoneSystem.instance.FindFloor(nPos + Vector3.up * 5f, out nPos.y);
                 go.transform.position = nPos;
             }
@@ -134,18 +134,18 @@ public sealed class Mage_ThunderWrath : MH_Skill
 
                 UnityEngine.Object.Instantiate(Thunder_Explosion, go.transform.position, Quaternion.identity);
                 count = 0;
-                var list = new List<Character>();
+                List<Character> list = new List<Character>();
                 Character.GetCharactersInRange(go.transform.position, 10f, list);
                 if (list.Count > 0)
                 {
-                    foreach (var c in list)
+                    foreach (Character c in list)
                     {
                         if (!Utils.IsEnemy(c) && c != Player.m_localPlayer)
                         {
                             continue;
                         }
 
-                        var hit = new HitData();
+                        HitData hit = new HitData();
                         hit.m_damage.m_lightning = damage;
                         hit.m_skill = Skills.SkillType.ElementalMagic;
                         if (c != Player.m_localPlayer) hit.SetAttacker(p);
@@ -187,7 +187,7 @@ public sealed class Mage_ThunderWrath : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -208,11 +208,11 @@ public sealed class Mage_ThunderWrath : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Damage: <color=blue>Lightning {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
             builder.AppendLine(

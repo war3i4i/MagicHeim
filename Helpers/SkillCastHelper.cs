@@ -60,13 +60,13 @@ public class SkillCastHelper
         if (!Player.m_localPlayer) return false;
         if (Player.m_localPlayer.IsTeleporting())
         {
-            MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"Can't use skills while teleporting");
+            MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "Can't use skills while teleporting");
             return false;
         }
 
         if (Player.m_localPlayer.IsAttached())
         {
-            MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"Can't use skills while attached");
+            MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "Can't use skills while attached");
             return false;
         }
 
@@ -74,19 +74,19 @@ public class SkillCastHelper
         {
             if (cl.GetSkill(Druid_Eagle.CachedKey) is { Toggled: true })
             {
-                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"Can't use skills in Eagle form");
+                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "Can't use skills in Eagle form");
                 return false;
             }
 
             if (cl.GetSkill(Druid_Fish.CachedKey) is { Toggled: true })
             {
-                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"Can't use skills in Fish form");
+                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "Can't use skills in Fish form");
                 return false;
             }
 
             if (cl.GetSkill(Druid_Wolf.CachedKey) is { Toggled: true })
             {
-                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"Can't use skills in Wolf form");
+                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "Can't use skills in Wolf form");
                 return false;
             }
         }

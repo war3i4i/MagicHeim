@@ -26,7 +26,7 @@ public static class SkillDrag
         LastDragSkill = skill;
         if (DragObject) UnityEngine.Object.Destroy(DragObject);
         if (Routine != null) MagicHeim._thistype.StopCoroutine(Routine);
-        if (skill == null || skill.Level <= 0) return;
+        if (skill is not { Level: > 0 }) return;
         LastDragTime = Time.unscaledTime;
         DragObject = UnityEngine.Object.Instantiate(UI);
         DragObject.transform.Find("Canvas/icon").GetComponent<Image>().sprite = skill.Icon;

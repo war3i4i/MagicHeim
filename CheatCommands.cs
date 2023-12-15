@@ -1,4 +1,5 @@
 ﻿using MagicHeim.MH_Enums;
+using MagicHeim.MH_Interfaces;
 
 namespace MagicHeim;
 
@@ -17,7 +18,7 @@ public class CheatCommands
 
         static bool Prefix(Chat __instance) 
         {
-            var text = __instance.m_input.text;
+            string text = __instance.m_input.text;
             //non cheat
 
             if (text == showExp && ClassManager.CurrentClass != Class.None)
@@ -34,19 +35,19 @@ public class CheatCommands
 
             if (text.Trim() == testRoom)
             {
-                var room = UnityEngine.Object.Instantiate(MagicHeim.asset.LoadAsset<GameObject>("TestRoom"),
+                GameObject room = UnityEngine.Object.Instantiate(MagicHeim.asset.LoadAsset<GameObject>("TestRoom"),
                     Player.m_localPlayer.transform.position + Vector3.up * 100f, Quaternion.identity);
-                var spawn = room.transform.Find("Spawn");
+                Transform spawn = room.transform.Find("Spawn");
                 Player.m_localPlayer.transform.position = spawn.position;
             }
 
             if (text.Trim() == resetSkills)
             {
-                var classDef = ClassManager.CurrentClassDef;
+                MH_ClassDefinition classDef = ClassManager.CurrentClassDef;
                 if (classDef != null)
                 {
-                    var skills = classDef.GetSkills();
-                    foreach (var skill in skills)
+                    Dictionary<int, MH_Skill> skills = classDef.GetSkills();
+                    foreach (KeyValuePair<int, MH_Skill> skill in skills)
                     {
                         skill.Value.StartCooldown(0, true); 
                     } 
@@ -64,7 +65,7 @@ public class CheatCommands
             if (text.StartsWith(setLevel))
             {
                 string level = text.Substring(setLevel.Length);
-                if (int.TryParse(level, out var levelInt))
+                if (int.TryParse(level, out int levelInt))
                 {
                     ClassManager.SetLevel(levelInt);
                     __instance.AddString($"<color=#00FF00>Level Set To {levelInt}</color>");
@@ -79,8 +80,8 @@ public class CheatCommands
 
             if (text.StartsWith(addExp))
             {
-                var exp = text.Substring(addExp.Length);
-                if (int.TryParse(exp, out var expInt))
+                string exp = text.Substring(addExp.Length);
+                if (int.TryParse(exp, out int expInt))
                 {
                     ClassManager.AddExp(expInt);
                     __instance.AddString($"<color=#00FF00>Added {expInt} exp</color>");
@@ -95,7 +96,7 @@ public class CheatCommands
 
             if (text.StartsWith(setClass))
             {
-                var className = text.Substring(setClass.Length);
+                string className = text.Substring(setClass.Length);
                 if (Enum.TryParse(className, true, out Class classEnum))
                 {
                     ClassManager.SetClass(classEnum);

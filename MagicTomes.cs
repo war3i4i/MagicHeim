@@ -63,7 +63,7 @@ public static class MagicTomes
         public static void Postfix(ItemDrop.ItemData item, bool crafting, ref string __result)
         {
             if (crafting || item == null || !item.m_dropPrefab) return;
-            if (MagicTomeDictionary.TryGetValue(item.m_dropPrefab, out var expGain))
+            if (MagicTomeDictionary.TryGetValue(item.m_dropPrefab, out ConfigEntry<int> expGain))
             {
                 __result = $"Right Mouse Button click to get <color=yellow>{expGain.Value}</color> EXP";
             }
@@ -81,7 +81,7 @@ public static class MagicTomes
                 grid.m_inventory != Player.m_localPlayer.m_inventory) return true;
             if (item != null && Player.m_localPlayer)
             {
-                foreach (var chestItem in MagicTomeDictionary)
+                foreach (KeyValuePair<GameObject, ConfigEntry<int>> chestItem in MagicTomeDictionary)
                 {
                     if (item.m_dropPrefab == chestItem.Key)
                     {
@@ -126,8 +126,8 @@ public static class MagicTomes
             if (__instance.IsPlayer() || !__instance.m_nview.IsOwner() || __instance.IsTamed()) return;
             Heightmap.Biome biome = EnvMan.instance.m_currentBiome;
             float rand = Random.value;
-            var dropChance = __instance.IsBoss() ? DropChance_Bosses.Value : DropChance.Value;
-            if (TomesByBiomes.TryGetValue(biome, out var book) && rand <= dropChance / 100f)
+            float dropChance = __instance.IsBoss() ? DropChance_Bosses.Value : DropChance.Value;
+            if (TomesByBiomes.TryGetValue(biome, out GameObject book) && rand <= dropChance / 100f)
             {
                 if (__instance.IsBoss())
                 {

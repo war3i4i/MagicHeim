@@ -17,43 +17,43 @@ public sealed class Druid_Crystals : MH_Skill
     {
         _definition._InternalName = "Druid_Crystals";
         _definition.Name = "$mh_druid_crystals";
-        _definition.Description = "$mh_mage_druid_crystals_desc";
+        _definition.Description = "$mh_druid_crystals_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Damage", 30f,
+            "MIN Lvl Damage", 1f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Damage", 105f,
+            "MAX Lvl Damage", 10f,
             "Value amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 25f,
+            "MIN Lvl Manacost", 1f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 35f,
+            "MAX Lvl Manacost", 10f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 18f,
+            "MIN Lvl Cooldown", 10f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 9f,
+            "MAX Lvl Cooldown", 1f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 4,
+            "Leveling Step", 1,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Crystals_Icon");
-        _definition.Video = "https://kg.sayless.eu/skills/Druid_Crystals.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_Crystals.mp4";
         RangeShowup = MagicHeim.asset.LoadAsset<GameObject>("Druid_AreaShowup");
         TargetPoint = MagicHeim.asset.LoadAsset<GameObject>("Druid_TrollSmash_AreaShowup");
         Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_Crystals_Prefab");
@@ -107,7 +107,7 @@ public sealed class Druid_Crystals : MH_Skill
             }
 
             rangeShowup.transform.position = p.transform.position;
-            bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out var raycast, maxDistance + 20f, JumpMask);
+            bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out RaycastHit raycast, 100f, JumpMask);
             if (castHit && raycast.collider)
             {
                 targetPoint.SetActive(true);
@@ -158,7 +158,7 @@ public sealed class Druid_Crystals : MH_Skill
         UnityEngine.Object.Instantiate(Prefab, pos, Quaternion.identity);
         Collider[] array = Physics.OverlapSphere(pos, 6f, m_rayMaskSolids, QueryTriggerInteraction.UseGlobal);
         HashSet<GameObject> hashSet = new HashSet<GameObject>();
-        var damage = this.CalculateSkillValue();
+        float damage = this.CalculateSkillValue();
         foreach (Collider collider in array)
         {
             GameObject gameObject = Projectile.FindHitObject(collider);
@@ -189,14 +189,14 @@ public sealed class Druid_Crystals : MH_Skill
 
     public override string GetSpecialTags()
     {
-        return "<color=red>Precast, Random Element, AoE, Damage</color>";
+        return "<color=red>Precast, AoE, Damage</color>";
     }
 
     public override string BuildDescription()
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -204,7 +204,7 @@ public sealed class Druid_Crystals : MH_Skill
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
 
-        builder.AppendLine($"Damage (Random Element): {Math.Round(currentValue, 1)}");
+        builder.AppendLine($"Damage: <color=yellow>Blunt  {Math.Round(currentValue, 1)}</color>");
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
@@ -217,17 +217,14 @@ public sealed class Druid_Crystals : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
-            builder.AppendLine(
-                $"Damage (Random Element): {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
-            builder.AppendLine(
-                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine(
-                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine("\nNext Level:");
+            builder.AppendLine($"Damage: <color=yellow>Blunt  {Math.Round(nextValue, 1)}</color> <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
 
@@ -237,5 +234,5 @@ public sealed class Druid_Crystals : MH_Skill
     public override bool CanRightClickCast => false;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
-    public override Color SkillColor => new Color(0.99f, 1f, 0.15f);
+    public override Color SkillColor => new Color(0.35f, 1f, 0.38f);
 }

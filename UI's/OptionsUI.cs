@@ -53,8 +53,8 @@ public static class OptionsUI
     public static void UpdateValues()
     {
         if (!LatestUI) return;
-        var hotkeys = SkillPanelUI.MH_Hotkeys;
-        var additional = SkillPanelUI.MH_AdditionalHotkeys;
+        ConfigEntry<KeyCode>[] hotkeys = SkillPanelUI.MH_Hotkeys;
+        ConfigEntry<KeyCode>[] additional = SkillPanelUI.MH_AdditionalHotkeys;
         for (int i = 0; i < 10; ++i)
         {
             LatestUI.transform.Find($"Keys/Key{i + 1}/Label").GetComponent<Text>().text = $"Use Skill {i + 1}";
@@ -68,8 +68,8 @@ public static class OptionsUI
                 .SetActive(SkillPanelUI.UseAltHotkey[i].Value);
         }
 
-        LatestUI.transform.Find($"Keys/Key11/Label").GetComponent<Text>().text = $"Open SkillBook";
-        LatestUI.transform.Find($"Keys/Key11/Background/key").GetComponent<Text>().text =
+        LatestUI.transform.Find("Keys/Key11/Label").GetComponent<Text>().text = "Open SkillBook";
+        LatestUI.transform.Find("Keys/Key11/Background/key").GetComponent<Text>().text =
             hotkeys[10].Value.ToString().Replace("Alpha", "").Replace("Mouse", "M");
     }
 
@@ -78,9 +78,9 @@ public static class OptionsUI
     {
         static void Postfix(Settings __instance)
         {
-            var hotkeys = SkillPanelUI.MH_Hotkeys;
-            var additional = SkillPanelUI.MH_AdditionalHotkeys;
-            var MH = __instance.transform.Find("panel/Tabs/MagicHeim");
+            ConfigEntry<KeyCode>[] hotkeys = SkillPanelUI.MH_Hotkeys;
+            ConfigEntry<KeyCode>[] additional = SkillPanelUI.MH_AdditionalHotkeys;
+            Transform MH = __instance.transform.Find("panel/Tabs/MagicHeim");
             toDropColor.Clear();
             for (int i = 0; i < 10; ++i)
             {
@@ -110,7 +110,7 @@ public static class OptionsUI
                 });
             }
 
-            MH.transform.Find("Keys/Key11/Label").GetComponent<Text>().text = $"Open Skillbook";
+            MH.transform.Find("Keys/Key11/Label").GetComponent<Text>().text = "Open Skillbook";
             MH.transform.Find("Keys/Key11/Background/key").GetComponent<Text>().text =
                 hotkeys[10].Value.ToString().Replace("Alpha", "").Replace("Mouse", "M");
             MH.transform.Find("Keys/Key11/Background").GetComponent<Button>().onClick
@@ -141,9 +141,9 @@ public static class OptionsUI
 
     private static void Reset() 
     {
-        var hotkeys = SkillPanelUI.MH_Hotkeys;
-        var additional = SkillPanelUI.MH_AdditionalHotkeys;
-        var useAlt = SkillPanelUI.UseAltHotkey;
+        ConfigEntry<KeyCode>[] hotkeys = SkillPanelUI.MH_Hotkeys;
+        ConfigEntry<KeyCode>[] additional = SkillPanelUI.MH_AdditionalHotkeys;
+        ConfigEntry<bool>[] useAlt = SkillPanelUI.UseAltHotkey;
         for (int i = 0; i < 10; i++)
         {
             hotkeys[i].Value = SkillPanelUI.DefaultHotkeys[i];
@@ -165,15 +165,15 @@ public static class OptionsUI
     [HarmonyPatch(typeof(FejdStartup), nameof(FejdStartup.Awake))]
     static class Menu_Start_Patch
     {
-        private static bool firstInit = false;
+        private static bool firstInit;
 
         static void Postfix(FejdStartup __instance)
         {
             if (!firstInit) return;
             firstInit = false;
-            var settingsPrefab = __instance.m_settingsPrefab;
-            var controls = settingsPrefab.transform.Find("panel/TabButtons/Controlls");
-            var newButton = Object.Instantiate(controls);
+            GameObject settingsPrefab = __instance.m_settingsPrefab;
+            Transform controls = settingsPrefab.transform.Find("panel/TabButtons/Controlls");
+            Transform newButton = Object.Instantiate(controls);
             newButton.SetParent(controls.parent, false);
             newButton.name = "MagicHeim";
             newButton.SetAsLastSibling();
@@ -181,8 +181,8 @@ public static class OptionsUI
                 new Vector2(0, newButton.GetComponent<RectTransform>().sizeDelta.y);
             newButton.transform.Find("Text").GetComponent<TMP_Text>().text =
                 "<color=#00FFFF>Magic</color><color=yellow>Heim</color>";
-            var tabHandler = settingsPrefab.transform.Find("panel/TabButtons").GetComponent<TabHandler>();
-            var page = settingsPrefab.transform.Find("panel/Tabs");
+            TabHandler tabHandler = settingsPrefab.transform.Find("panel/TabButtons").GetComponent<TabHandler>();
+            Transform page = settingsPrefab.transform.Find("panel/Tabs");
             GameObject newPage = Object.Instantiate(MagicHeim.asset.LoadAsset<GameObject>("MagicHeimSettings"));
             newPage.transform.SetParent(page);
             newPage.name = "MagicHeim";

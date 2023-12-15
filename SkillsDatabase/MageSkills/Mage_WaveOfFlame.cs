@@ -15,38 +15,38 @@ public sealed class Mage_WaveOfFlame : MH_Skill
         _definition.Description = "$mh_mage_waveofflame_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Damage", 50f,
+            "MIN Lvl Damage", 50f,
             "Damage amount (Min Lvl)");
 
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Damage", 100f,
+            "MAX Lvl Damage", 100f,
             "Damage amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 40f,
+            "MIN Lvl Manacost", 40f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 70f,
+            "MAX Lvl Manacost", 70f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 30f,
+            "MIN Lvl Cooldown", 30f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 12f,
+            "MAX Lvl Cooldown", 12f,
             "Cooldown amount (Max Lvl)");
 
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             50, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 2,
+            "Leveling Step", 2,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_WaveOfFlame_Icon");
@@ -78,7 +78,7 @@ public sealed class Mage_WaveOfFlame : MH_Skill
     {
         if (!Player.m_localPlayer) return;
         Player p = Player.m_localPlayer;
-        var damage = this.CalculateSkillValue();
+        float damage = this.CalculateSkillValue();
         UnityEngine.Object.Instantiate(Prefab, p.transform.position, Quaternion.identity);
         Collider[] array = Physics.OverlapSphere(p.transform.position + Vector3.up * 1f, 8.5f, Script_Layermask2,
             QueryTriggerInteraction.UseGlobal);
@@ -123,7 +123,7 @@ public sealed class Mage_WaveOfFlame : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -145,11 +145,11 @@ public sealed class Mage_WaveOfFlame : MH_Skill
             float manacostDiff = nextManacost - currentManacost;
             float valueDiff = nextValue - currentValue;
 
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
-            var roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Damage: <color=red>Fire {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=yellow>Blunt {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
             builder.AppendLine(

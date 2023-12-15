@@ -20,36 +20,36 @@ public sealed class Mage_AncientTotem : MH_Skill
         _definition.Description = "$mh_mage_ancienttotem_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Damage Increase", 10f,
+            "MIN Lvl Damage Increase", 10f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Damage Increase", 40f,
+            "MAX Lvl Damage Increase", 40f,
             "Value amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 25f,
+            "MIN Lvl Manacost", 25f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 65f,
+            "MAX Lvl Manacost", 65f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 90f,
+            "MIN Lvl Cooldown", 90f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 30f,
+            "MAX Lvl Cooldown", 30f,
             "Cooldown amount (Max Lvl)");
 
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             26, "Required Level");
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 6,
+            "Leveling Step", 6,
             "Leveling Step");
 
 
@@ -163,7 +163,7 @@ public sealed class Mage_AncientTotem : MH_Skill
             }
 
             rangeShowup.transform.position = p.transform.position;
-            bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out var raycast,
+            bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out RaycastHit raycast,
                 _definition.MaxLvlValue.Value + 10f,
                 JumpMask);
             if (castHit && raycast.collider)
@@ -189,7 +189,7 @@ public sealed class Mage_AncientTotem : MH_Skill
             rot.y = 0;
             p.transform.rotation = Quaternion.LookRotation(rot);
             StartCooldown(this.CalculateSkillCooldown());
-            var go = UnityEngine.Object.Instantiate(TotemPrefab, target, Quaternion.identity);
+            GameObject go = UnityEngine.Object.Instantiate(TotemPrefab, target, Quaternion.identity);
             go.GetComponent<AncientTotemComponent>().Setup(this.CalculateSkillValue());
             p.m_zanim.SetTrigger(
                 ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon]);
@@ -290,7 +290,7 @@ public sealed class Mage_AncientTotem : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -311,11 +311,11 @@ public sealed class Mage_AncientTotem : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Elemental Damage Increase Debuff: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
             builder.AppendLine(

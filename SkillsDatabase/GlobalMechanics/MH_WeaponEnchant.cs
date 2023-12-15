@@ -32,7 +32,7 @@ public class MH_WeaponEnchant : ItemData
 
     public override void Load()
     {
-        var split = Value.Split(';');
+        string[] split = Value.Split(';');
         time = long.Parse(split[0]);
         value = int.Parse(split[1]);
         type = (Type)Enum.Parse(typeof(Type), split[2]);
@@ -45,7 +45,7 @@ static class ItemDrop_DropItem_Patch
 {
     static void Postfix(ref ItemDrop __result)
     {
-        var data = __result.m_itemData?.Data().Get<MH_WeaponEnchant>();
+        MH_WeaponEnchant data = __result.m_itemData?.Data().Get<MH_WeaponEnchant>();
         if (data != null && __result.m_nview && __result.m_nview.IsValid())
         {
             __result.m_nview.m_zdo.Set("MH_WeaponEnchant", (int)data.type);
@@ -61,10 +61,10 @@ static class ItemDrop_Start_Patch
         if (!__instance.m_nview || !__instance.m_nview.IsValid()) return;
         if (__instance.m_nview.m_zdo.GetInt("MH_WeaponEnchant") is int val && val > 0)
         {
-            var MeshFilter = __instance.GetComponentInChildren<MeshFilter>();
+            MeshFilter MeshFilter = __instance.GetComponentInChildren<MeshFilter>();
             if (MeshFilter == null || (MH_WeaponEnchant.Type)val == MH_WeaponEnchant.Type.None) return;
-            var _VFX = MH_WeaponEnchants_VFXs.WeaponEnchantVFXs[(MH_WeaponEnchant.Type)val];
-            var go = UnityEngine.Object.Instantiate(_VFX, __instance.transform);
+            GameObject _VFX = MH_WeaponEnchants_VFXs.WeaponEnchantVFXs[(MH_WeaponEnchant.Type)val];
+            GameObject go = UnityEngine.Object.Instantiate(_VFX, __instance.transform);
             PSMeshRendererUpdater update = go.GetComponent<PSMeshRendererUpdater>();
             update.MeshObject = __instance.gameObject;
             update.UpdateMeshEffect(); 
@@ -80,9 +80,9 @@ static class VisEquipment_Patch_Left
         if (__instance != Player.m_localPlayer?.m_visEquipment) return;
         __instance.m_nview.m_zdo.Set("mh_mage_weaponenchantLeft", 0);
         if (name == "") return;
-        var leftItem = Player.m_localPlayer.m_leftItem;
+        ItemDrop.ItemData leftItem = Player.m_localPlayer.m_leftItem;
         if (leftItem == null) return;
-        var data = leftItem.Data().Get<MH_WeaponEnchant>();
+        MH_WeaponEnchant data = leftItem.Data().Get<MH_WeaponEnchant>();
         if (data == null) return;
         if (data.time + data.duration < EnvMan.instance.m_totalSeconds)
         {
@@ -102,9 +102,9 @@ static class VisEquipment_Patch_Right
         if (__instance != Player.m_localPlayer?.m_visEquipment) return;
         __instance.m_nview.m_zdo.Set("mh_mage_weaponenchantRight", 0);
         if (name == "") return;
-        var rightItem = Player.m_localPlayer.m_rightItem;
+        ItemDrop.ItemData rightItem = Player.m_localPlayer.m_rightItem;
         if (rightItem == null) return;
-        var data = rightItem.Data().Get<MH_WeaponEnchant>();
+        MH_WeaponEnchant data = rightItem.Data().Get<MH_WeaponEnchant>();
         if (data == null) return;
         if (data.time + data.duration < EnvMan.instance.m_totalSeconds)
         {
@@ -121,7 +121,7 @@ static class ItemDrop__Patch
 {
     static void Postfix(ItemDrop.ItemData __instance, ref HitData.DamageTypes __result)
     {
-        var data = __instance.Data().Get<MH_WeaponEnchant>();
+        MH_WeaponEnchant data = __instance.Data().Get<MH_WeaponEnchant>();
         if (data == null) return;
         if (data.type is MH_WeaponEnchant.Type.None) return;
         if (data.time + data.duration < EnvMan.instance.m_totalSeconds)
@@ -158,7 +158,7 @@ public class GetTooltipPatch
     public static void Postfix(ItemDrop.ItemData item, bool crafting, ref string __result)
     {
         if (crafting) return;
-        var data = item.Data().Get<MH_WeaponEnchant>();
+        MH_WeaponEnchant data = item.Data().Get<MH_WeaponEnchant>();
         if (data == null) return;
         if (data.time + data.duration < EnvMan.instance.m_totalSeconds)
         {

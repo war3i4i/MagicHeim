@@ -63,13 +63,13 @@ public static class ClassSelectionUI
         FemaleClasses = UI.transform.Find("Canvas/MainTab/ChooseClass/Female");
         LOADING = UI.transform.Find("Canvas/MainTab/SkillInfo/LOADING");
         SelectedClass = Class.Warrior;
-        var classes = (Class[])Enum.GetValues(typeof(Class));
-        foreach (var @class in classes)
+        Class[] classes = (Class[])Enum.GetValues(typeof(Class));
+        foreach (Class @class in classes)
         {
             if (@class == Class.None) continue;
-            var classDefintion = ClassesDatabase.ClassesDatabase.GetClassDefinition(@class);
-            var maleTransform = MaleClasses.Find(@class.ToString());
-            var femaleTransform = FemaleClasses.Find(@class.ToString());
+            MH_ClassDefinition classDefintion = ClassesDatabase.ClassesDatabase.GetClassDefinition(@class);
+            Transform maleTransform = MaleClasses.Find(@class.ToString());
+            Transform femaleTransform = FemaleClasses.Find(@class.ToString());
             ResetColors.Add(maleTransform);
             ResetColors.Add(femaleTransform);
             maleTransform.transform.Find("Selection").GetComponent<Image>().color = new Color(classDefintion.GetColor.r,
@@ -128,7 +128,7 @@ public static class ClassSelectionUI
         {
             return;
         }
-        var player = Player.m_localPlayer;
+        Player player = Player.m_localPlayer;
         if (!player) return;
         ClassManager.SetClass(SelectedClass);
         UnityEngine.Object.Instantiate(ClassesDatabase.ClassesDatabase.GetClassDefinition(SelectedClass).OnSelect_VFX,
@@ -154,7 +154,7 @@ public static class ClassSelectionUI
         LOADING.gameObject.SetActive(false);
         SkillVideo.Stop();
         ClassIcon.transform.parent.GetComponent<Image>().color = Color.white;
-        foreach (var t in ResetColors)
+        foreach (Transform t in ResetColors)
         {
             t.Find("Selection").gameObject.SetActive(false);
             t.GetComponent<Image>().color = Color.white;
@@ -185,10 +185,10 @@ public static class ClassSelectionUI
         ClassName.GetComponent<Text>().color = classDefinition.GetColor;
         ClassIcon.sprite = toActivate.Find("Img").GetComponent<Image>().sprite;
         ClassDescription.text = Localization.instance.Localize(classDefinition.Description);
-        var skills = classDefinition.GetSkills();
-        foreach (var skill in skills)
+        Dictionary<int, MH_Skill> skills = classDefinition.GetSkills();
+        foreach (KeyValuePair<int, MH_Skill> skill in skills)
         {
-            var skillPreview = UnityEngine.Object.Instantiate(SkillPreviewElement, SkillPreviewTransform);
+            GameObject skillPreview = UnityEngine.Object.Instantiate(SkillPreviewElement, SkillPreviewTransform);
             skillPreview.name = skill.Value.Name;
             skillPreview.transform.Find("Icon").GetComponent<Image>().sprite = skill.Value.Icon;
             if (skill.Value.Video != null)
@@ -224,7 +224,7 @@ public static class ClassSelectionUI
     public static void Show()
     {
         Default();
-        var toChoose = ClassManager.CurrentClass == Class.None ? Class.Mage : ClassManager.CurrentClass;
+        Class toChoose = ClassManager.CurrentClass == Class.None ? Class.Mage : ClassManager.CurrentClass;
         if (IsMale)
         {
             MaleClasses.gameObject.SetActive(true);

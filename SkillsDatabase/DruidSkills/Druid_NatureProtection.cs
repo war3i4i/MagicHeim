@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using JetBrains.Annotations;
 using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Interfaces;
 
@@ -16,43 +17,43 @@ public sealed class Druid_NatureProtection : MH_Skill
         _definition.Description = "$mh_druid_natureprotection_desc";
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 20f,
+            "MIN Lvl Manacost", 1f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 55f,
+            "MAX Lvl Manacost", 10f,
             "Manacost amount (Max Lvl)");
         
         _definition.MinLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Duration", 6f,
+            "MIN Lvl Duration", 5f,
             "Duration amount (Min Lvl)");
         
         _definition.MaxLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Duration", 12f,
+            "MAX Lvl Duration", 15f,
             "Duration amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 120f,
+            "MIN Lvl Cooldown", 10f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 40f,
+            "MAX Lvl Cooldown", 1f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 5,
+            "Leveling Step", 1,
             "Leveling Step");
 
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_NatureProtection_Icon");
         CachedIcon = _definition.Icon;
-        _definition.Video = "https://kg.sayless.eu/skills/MH_Mage_ArcaneShield.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_NatureProtection.mp4";
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageWave];
         _definition.AnimationTime = 0.8f;
         Buff = MagicHeim.asset.LoadAsset<GameObject>("Druid_NatureProtection_Buff");
@@ -68,6 +69,7 @@ public sealed class Druid_NatureProtection : MH_Skill
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
     {
+        [UsedImplicitly]
         static void Postfix(ZNetScene __instance)
         {
             __instance.m_namedPrefabs[Buff.name.GetStableHashCode()] = Buff;
@@ -80,11 +82,11 @@ public sealed class Druid_NatureProtection : MH_Skill
     { 
         if (!Player.m_localPlayer) return;
         Player p = Player.m_localPlayer;
-        var duration = this.CalculateSkillDuration();
-        var players = Player.GetAllPlayers()
+        float duration = this.CalculateSkillDuration();
+        List<Player> players = Player.GetAllPlayers()
             .Where(x => Vector3.Distance(x.transform.position, p.transform.position) <= 10f).ToList();
         UnityEngine.Object.Instantiate(Explosion, p.transform.position, Quaternion.identity);
-        foreach (var player in players)
+        foreach (Player player in players)
         {
             if (!Utils.IsPlayerInGroup(player)) continue;
             player.GetSEMan().AddStatusEffect("Druid_NatureProtection_Buff".GetStableHashCode(), true, 0, duration);
@@ -107,7 +109,7 @@ public sealed class Druid_NatureProtection : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -127,17 +129,14 @@ public sealed class Druid_NatureProtection : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            var roundedDurationDiff = Math.Round(durationDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedDurationDiff = Math.Round(durationDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
-            builder.AppendLine(
-                $"Duration: {Math.Round(nextDuration, 1)} <color=green>({(roundedDurationDiff > 0 ? "+" : "")}{roundedDurationDiff})</color>");
-            builder.AppendLine(
-                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine(
-                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine("\nNext Level:");
+            builder.AppendLine($"Duration: {Math.Round(nextDuration, 1)} <color=green>({(roundedDurationDiff > 0 ? "+" : "")}{roundedDurationDiff})</color>");
+            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
 
@@ -151,7 +150,7 @@ public sealed class Druid_NatureProtection : MH_Skill
             name = "Druid_NatureProtection_Buff";
             m_tooltip = "Immortality";
             m_icon = CachedIcon;
-            m_name = "Nature Protection";
+            m_name = "Natures Protection";
             m_ttl = 60;
             m_startEffects = new EffectList
             {
@@ -171,7 +170,6 @@ public sealed class Druid_NatureProtection : MH_Skill
         {
             m_ttl = skillLevel;
         }
-        
 
         public override void OnDamaged(HitData hit, Character attacker)
         {

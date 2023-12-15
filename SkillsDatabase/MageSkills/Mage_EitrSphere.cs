@@ -16,44 +16,44 @@ public sealed class Mage_EitrSphere : MH_Skill
         _definition.Description = "$mh_mage_eitrsphere_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Eitr Regen (Per Second)", 2f,
+            "MIN Lvl Eitr Regen (Per Second)", 2f,
             "Armor Bonus amount (Min Lvl)");
 
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Eitr Regen (Per Second)", 25f,
+            "MAX Lvl Eitr Regen (Per Second)", 25f,
             "Armor Bonus amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 20f,
+            "MIN Lvl Manacost", 20f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 10f,
+            "MAX Lvl Manacost", 10f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 300f,
+            "MIN Lvl Cooldown", 300f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 120f,
+            "MAX Lvl Cooldown", 120f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MinLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Duration", 10f,
+            "MIN Lvl Duration", 10f,
             "Duration amount (Min Lvl)");
         _definition.MaxLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Duration", 25f,
+            "MAX Lvl Duration", 25f,
             "Duration amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             50, "Required Level");
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 3,
+            "Leveling Step", 3,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_EitrSphere_Icon");
@@ -112,7 +112,7 @@ public sealed class Mage_EitrSphere : MH_Skill
             if (time == Time.frameCount) return;
             if (!IsInsideMultiplier(Player.m_localPlayer.transform.position)) return;
             time = Time.frameCount;
-            var eitrRegen = nview.m_zdo.GetFloat("eitrRegen");
+            float eitrRegen = nview.m_zdo.GetFloat("eitrRegen");
             Player.m_localPlayer.AddEitr(eitrRegen * Time.fixedDeltaTime);
         }
     }
@@ -121,7 +121,7 @@ public sealed class Mage_EitrSphere : MH_Skill
     {
         if (!Player.m_localPlayer) return;
         Player p = Player.m_localPlayer;
-        var sphere = UnityEngine.Object.Instantiate(Sphere_Prefab, p.transform.position, Quaternion.identity);
+        GameObject sphere = UnityEngine.Object.Instantiate(Sphere_Prefab, p.transform.position, Quaternion.identity);
         sphere.GetComponent<AoeMechanic>().Setup(this.CalculateSkillValue(), this.CalculateSkillDuration());
         UnityEngine.Object.Instantiate(Sphere_Explosion, p.transform.position, Quaternion.identity);
         StartCooldown(this.CalculateSkillCooldown());
@@ -141,7 +141,7 @@ public sealed class Mage_EitrSphere : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -166,12 +166,12 @@ public sealed class Mage_EitrSphere : MH_Skill
             float manacostDiff = nextManacost - currentManacost;
             float valueDiff = nextValue - currentValue;
 
-            var roundedDurationDiff = Math.Round(durationDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
-            var roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedDurationDiff = Math.Round(durationDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Eitr Regen (Per Second): {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
             builder.AppendLine(

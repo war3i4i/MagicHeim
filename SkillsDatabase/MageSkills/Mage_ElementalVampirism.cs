@@ -13,22 +13,22 @@ public sealed class Mage_ElementalVampirism : MH_Skill
         _definition.Description = "$mh_mage_elementalvampirism_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Elemental Damage Vamp (Percentage)", 1f,
+            "MIN Elemental Damage Vamp (Percentage)", 1f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Elemental Damage Vamp (Percentage)", 4f,
+            "MAX Elemental Damage Vamp (Percentage)", 4f,
             "Value amount (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 7,
+            "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             66, "Required Level");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_Elementalvampirism");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 2,
+            "Leveling Step", 2,
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -56,7 +56,7 @@ public sealed class Mage_ElementalVampirism : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -69,9 +69,9 @@ public sealed class Mage_ElementalVampirism : MH_Skill
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float valueDiff = nextValue - currentValue;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Elemental Damage Vamp: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
         }
@@ -87,11 +87,11 @@ public sealed class Mage_ElementalVampirism : MH_Skill
     {
         public static float SimulateDamageElemental(HitData other, Character c)
         {
-            var hit = other.Clone();
+            HitData hit = other.Clone();
             if (c.m_baseAI != null && !c.m_baseAI.IsAlerted() && hit.m_backstabBonus > 1f &&
                 Time.time - c.m_backstabTime > 300f) hit.ApplyModifier(hit.m_backstabBonus);
             if (c.IsStaggering() && !c.IsPlayer()) hit.ApplyModifier(2f);
-            var damageModifiers = c.GetDamageModifiers();
+            HitData.DamageModifiers damageModifiers = c.GetDamageModifiers();
             hit.ApplyResistance(damageModifiers, out _);
             return hit.GetTotalDamage();
         }
@@ -99,10 +99,10 @@ public sealed class Mage_ElementalVampirism : MH_Skill
         static void Prefix(Character __instance, HitData hit)
         {
             if (hit.m_skill != Skills.SkillType.ElementalMagic || ClassManager.CurrentClass == Class.None) return;
-            var skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);
-            if (skillDef == null || skillDef.Level <= 0 || hit.GetAttacker() != Player.m_localPlayer) return;
-            var dmg = SimulateDamageElemental(hit, __instance);
-            var heal = dmg * (skillDef.CalculateSkillValue(skillDef.Level) / 100);
+            MH_Skill skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);
+            if (skillDef is not { Level: > 0 } || hit.GetAttacker() != Player.m_localPlayer) return;
+            float dmg = SimulateDamageElemental(hit, __instance);
+            float heal = dmg * (skillDef.CalculateSkillValue(skillDef.Level) / 100);
             Player.m_localPlayer.Heal(heal);
         }
     }

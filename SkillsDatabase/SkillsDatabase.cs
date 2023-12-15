@@ -22,11 +22,12 @@ public static class SkillsDatabase
     public static List<MH_Skill> GetAllSkill()
     {
         return GLOBAL_SkillDefinitions.Values.ToList();
-    }
+    } 
 
     private static void AddSkill(MH_Skill skill)
     {
         GLOBAL_SkillDefinitions.Add(skill.Key, skill);
+        skill.OnAdd();
     }
 
     public static void Init()

@@ -13,22 +13,22 @@ public sealed class Mage_ElementalKnowledge : MH_Skill
         _definition.Description = "$mh_mage_elementalknowledge_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Elemental Damage Bonus (Percentage)", 5f,
+            "MIN Elemental Damage Bonus (Percentage)", 5f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Elemental Damage Bonus (Percentage)", 25f,
+            "MAX Elemental Damage Bonus (Percentage)", 25f,
             "Value amount (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 7,
+            "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             6, "Required Level");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_ElementalKnowledge");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 9,
+            "Leveling Step", 9,
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -56,7 +56,7 @@ public sealed class Mage_ElementalKnowledge : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -69,9 +69,9 @@ public sealed class Mage_ElementalKnowledge : MH_Skill
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float valueDiff = nextValue - currentValue;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Elemental Magic Damage Bonus: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
         }
@@ -89,8 +89,8 @@ public sealed class Mage_ElementalKnowledge : MH_Skill
         {
             if (hit.m_skill != Skills.SkillType.ElementalMagic || ClassManager.CurrentClass == Class.None ||
                 hit.GetAttacker() != Player.m_localPlayer) return;
-            var skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);
-            if (skillDef == null || skillDef.Level <= 0) return;
+            MH_Skill skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);
+            if (skillDef is not { Level: > 0 }) return;
             hit.ApplyModifier(1 + skillDef.CalculateSkillValue() / 100f);
         }
     }

@@ -48,7 +48,7 @@ public static class SkillChargeUI
         while (Data.Count > 0)
         {
             float dt = Time.deltaTime;
-            foreach (var data in Data)
+            foreach (KeyValuePair<int, ChargeData> data in Data)
             {
                 data.Value._time += dt;
                 data.Value._toFill.fillAmount = data.Value._time / data.Value._maxTime;
@@ -89,7 +89,7 @@ public static class SkillChargeUI
 
     private static void RemoveAllCharges()
     {
-        foreach (var data in Data)
+        foreach (KeyValuePair<int, ChargeData> data in Data)
         {
             UnityEngine.Object.Destroy(data.Value._go);
         }

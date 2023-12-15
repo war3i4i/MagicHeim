@@ -18,37 +18,37 @@ public sealed class Mage_Teleport : MH_Skill
         _definition.Description = "$mh_mage_teleport_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Distance", 15f,
+            "MIN Lvl Distance", 15f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Distance", 50f,
+            "MAX Lvl Distance", 50f,
             "Value amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 25f,
+            "MIN Lvl Manacost", 25f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 45f,
+            "MAX Lvl Manacost", 45f,
             "Manacost amount (Max Lvl)");
  
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 18f,
+            "MIN Lvl Cooldown", 18f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 8f,
+            "MAX Lvl Cooldown", 8f,
             "Cooldown amount (Max Lvl)");
 
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             14, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 6,
+            "Leveling Step", 6,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_Teleport_Icon");
@@ -94,7 +94,7 @@ public sealed class Mage_Teleport : MH_Skill
         p.m_nview.m_zdo.Set("MH_HideCharacter", true);
         p.m_zanim.SetTrigger("emote_stop");
         p.m_collider.isTrigger = true;
-        var distance = global::Utils.DistanceXZ(startPos, targetPos);
+        float distance = global::Utils.DistanceXZ(startPos, targetPos);
         float time = 0.5f;
         float count = 0;
         Player.m_localPlayer.transform.rotation = Quaternion.LookRotation((targetPos - startPos).normalized);
@@ -110,9 +110,9 @@ public sealed class Mage_Teleport : MH_Skill
             p.m_lastGroundTouch = 0;
             p.m_maxAirAltitude = 0f;
             count += Time.deltaTime / time;
-            var point = startPos + (targetPos - startPos) / 2 + Vector3.up;
-            var m1 = Vector3.Lerp(startPos, point, count);
-            var m2 = Vector3.Lerp(point, targetPos, count);
+            Vector3 point = startPos + (targetPos - startPos) / 2 + Vector3.up;
+            Vector3 m1 = Vector3.Lerp(startPos, point, count);
+            Vector3 m2 = Vector3.Lerp(point, targetPos, count);
             p.m_body.position = Vector3.Lerp(m1, m2, count);
             yield return null;
         }
@@ -149,7 +149,7 @@ public sealed class Mage_Teleport : MH_Skill
             }
 
             rangeShowup.transform.position = p.transform.position;
-            bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out var raycast,
+            bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(), out RaycastHit raycast,
                 _definition.MaxLvlValue.Value + 10f,
                 JumpMask);
             if (castHit && raycast.collider)
@@ -206,7 +206,7 @@ public sealed class Mage_Teleport : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -227,11 +227,11 @@ public sealed class Mage_Teleport : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Distance: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
             builder.AppendLine(

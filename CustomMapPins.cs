@@ -41,7 +41,7 @@ public static class CustomMapPins
 
     public static void RegisterCustomPin(GameObject go, string name, Sprite icon)
     {
-        var comp = go.AddComponent<CustomPinhandler>();
+        CustomPinhandler comp = go.AddComponent<CustomPinhandler>();
         comp.pinName = name;
         comp.icon = icon;
     }

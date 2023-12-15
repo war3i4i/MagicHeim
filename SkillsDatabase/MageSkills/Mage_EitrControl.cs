@@ -13,22 +13,22 @@ public sealed class Mage_EitrControl : MH_Skill
         _definition.Description = "$mh_mage_eitrcontrol_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Eitr Regen Speed Bonus (Percentage)", 20f,
+            "MIN Eitr Regen Speed Bonus (Percentage)", 20f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Eitr Regen Speed Bonus (Percentage)", 100f,
+            "MAX Eitr Regen Speed Bonus (Percentage)", 100f,
             "Value amount (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 7,
+            "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             16, "Required Level");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_EitrControl");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 7,
+            "Leveling Step", 7,
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -56,7 +56,7 @@ public sealed class Mage_EitrControl : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -69,9 +69,9 @@ public sealed class Mage_EitrControl : MH_Skill
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float valueDiff = nextValue - currentValue;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Eitr Regen Bonus: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
         }
@@ -88,8 +88,8 @@ public sealed class Mage_EitrControl : MH_Skill
         static void Postfix(SEMan __instance, ref float eitrMultiplier)
         {
             if (ClassManager.CurrentClass == Class.None || __instance.m_character != Player.m_localPlayer) return;
-            var skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);
-            if (skillDef == null || skillDef.Level <= 0) return;
+            MH_Skill skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);
+            if (skillDef is not { Level: > 0 }) return;
             eitrMultiplier += skillDef.CalculateSkillValue() / 100;
         }
     }

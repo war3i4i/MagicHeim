@@ -11,7 +11,6 @@ public class Druid : MH_ClassDefinition
 
     public override void Init()
     {
-        ResetSkills(); 
         AddSkill("Druid_Eagle");
         AddSkill("Druid_Wolf");
         AddSkill("Druid_Fish");

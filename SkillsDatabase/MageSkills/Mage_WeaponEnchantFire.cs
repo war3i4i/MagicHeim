@@ -19,44 +19,44 @@ public sealed class Mage_WeaponEnchantFire : MH_Skill
         _definition.Description = "$mh_mage_weaponenchantfire_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Damage", 4f,
+            "MIN Lvl Damage", 4f,
             "Armor Bonus amount (Min Lvl)");
 
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Damage", 30f,
+            "MAX Lvl Damage", 30f,
             "Armor Bonus amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 50f,
+            "MIN Lvl Manacost", 50f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 100f,
+            "MAX Lvl Manacost", 100f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 1200f,
+            "MIN Lvl Cooldown", 1200f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 600f,
+            "MAX Lvl Cooldown", 600f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MinLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Duration", 150f,
+            "MIN Lvl Duration", 150f,
             "Duration amount (Min Lvl)");
         _definition.MaxLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Duration", 600f,
+            "MAX Lvl Duration", 600f,
             "Duration amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             20, "Required Level");
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 5,
+            "Leveling Step", 5,
             "Leveling Step");
 
 
@@ -86,7 +86,7 @@ public sealed class Mage_WeaponEnchantFire : MH_Skill
     {
         if (!Player.m_localPlayer) return;
         Player p = Player.m_localPlayer;
-        var weapon = p.GetCurrentWeapon();
+        ItemDrop.ItemData weapon = p.GetCurrentWeapon();
         if (weapon == null || weapon == p.m_unarmedWeapon.m_itemData)
         {
             p.AddEitr(this.CalculateSkillManacost());
@@ -94,7 +94,7 @@ public sealed class Mage_WeaponEnchantFire : MH_Skill
             return;
         }
 
-        var data = weapon.Data().GetOrCreate<MH_WeaponEnchant>();
+        MH_WeaponEnchant data = weapon.Data().GetOrCreate<MH_WeaponEnchant>();
         data.time = (long)EnvMan.instance.m_totalSeconds;
         data.value = (int)this.CalculateSkillValue();
         data.type = MH_WeaponEnchant.Type.Fire;
@@ -197,7 +197,7 @@ public sealed class Mage_WeaponEnchantFire : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -222,12 +222,12 @@ public sealed class Mage_WeaponEnchantFire : MH_Skill
             float manacostDiff = nextManacost - currentManacost;
             float valueDiff = nextValue - currentValue;
 
-            var roundedDurationDiff = Math.Round(durationDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
-            var roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedDurationDiff = Math.Round(durationDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Bonus Fire Damage: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
             builder.AppendLine(

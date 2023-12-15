@@ -16,31 +16,32 @@ public sealed class Druid_Exchange : MH_Skill
         _definition.Name = "$mh_druid_exchange";
         _definition.Description = "$mh_druid_exchange_desc";
         CachedKey = _definition.Key;
+        
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 5f,
+            "MIN Lvl Manacost", 1f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 12f,
+            "MAX Lvl Manacost", 10f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 9f,
+            "MIN Lvl Cooldown", 10f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 3f,
+            "MAX Lvl Cooldown", 1f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 2,
+            "Leveling Step", 1,
             "Leveling Step");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Exchange_Icon");
         _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_Exchange.mp4";
@@ -73,14 +74,14 @@ public sealed class Druid_Exchange : MH_Skill
         Player p = Player.m_localPlayer;
         float cooldown = this.CalculateSkillCooldown();
         p.m_collider.enabled = false;
-        bool castHit = Physics.Raycast(GameCamera.instance.transform.position, p.GetLookDir(), out var raycast, 70f, Script_Layermask);
+        bool castHit = Physics.Raycast(GameCamera.instance.transform.position, p.GetLookDir(), out RaycastHit raycast, 70f, Script_Layermask);
         p.m_collider.enabled = true;
         if (castHit && raycast.collider && raycast.collider.GetComponentInParent<Character>() is {} enemy && enemy.m_nview.m_persistent)
         {
             if (Vector3.Distance(enemy.transform.position, p.transform.position) > 50f)
             {
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
-                    $"<color=#00FF00>Too</color><color=yellow> far</color>");
+                    "<color=#00FF00>Too</color><color=yellow> far</color>");
                 p.AddEitr(this.CalculateSkillManacost());
                 return;
             }
@@ -92,7 +93,7 @@ public sealed class Druid_Exchange : MH_Skill
         {
             p.AddEitr(this.CalculateSkillManacost());
             MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
-                $"<color=#00FFFF>No</color><color=yellow> target</color>");
+                "<color=#00FFFF>No</color><color=yellow> target</color>");
         }
     } 
      
@@ -132,7 +133,7 @@ public sealed class Druid_Exchange : MH_Skill
             float parabola = Utils.GetParabolaHeight(4f, counter, 1f);
             Vector3 toEnemyPos = Vector3.Lerp(p.transform.position + Vector3.up * 1.4f, target.transform.position + Vector3.up * 1.4f, counter);
             Vector3 toPlayerPos = Vector3.Lerp(target.transform.position + Vector3.up * 1.4f, p.transform.position + Vector3.up * 1.4f, counter);
-            var direction = (toEnemyPos - p.transform.position).normalized;
+            Vector3 direction = (toEnemyPos - p.transform.position).normalized;
             toEnemyPos += Vector3.Cross(direction, Vector3.up) * parabola;
             toPlayerPos -= Vector3.Cross(direction, Vector3.up) * parabola;
             toEnemy.transform.position = toEnemyPos;
@@ -144,8 +145,8 @@ public sealed class Druid_Exchange : MH_Skill
         ZNetScene.instance.Destroy(toEnemy);
         ZNetScene.instance.Destroy(toPlayer);
         
-        var playerpos = p.transform.position;
-        var targetpos = target.transform.position; 
+        Vector3 playerpos = p.transform.position;
+        Vector3 targetpos = target.transform.position; 
         Object.Instantiate(Explosion, playerpos, Quaternion.identity);
         Object.Instantiate(Explosion, targetpos, Quaternion.identity);
         Physics.IgnoreCollision(p.m_collider, target.m_collider, true);
@@ -162,14 +163,14 @@ public sealed class Druid_Exchange : MH_Skill
 
     public override string GetSpecialTags()
     {
-        return "<color=red>Target Hover Skill, Single Target, Damage</color>";
+        return "<color=red>Target Enemy, Single Target, Swap Positions</color>";
     }
 
     public override string BuildDescription()
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -181,16 +182,15 @@ public sealed class Druid_Exchange : MH_Skill
 
         if (Level < maxLevel && Level > 0)
         {
-            float nextValue = this.CalculateSkillValue(forLevel + 1);
             float nextCooldown = this.CalculateSkillCooldown(forLevel + 1);
             float nextManacost = this.CalculateSkillManacost(forLevel + 1);
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
             
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
             builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
@@ -202,5 +202,5 @@ public sealed class Druid_Exchange : MH_Skill
     public override bool CanRightClickCast => false;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
-    public override Color SkillColor => new Color(1f, 0.76f, 0.21f);
+    public override Color SkillColor => new Color(0.4f, 1f, 0.64f);
 }

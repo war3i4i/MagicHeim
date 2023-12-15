@@ -13,22 +13,22 @@ public sealed class Mage_ElementalResistance : MH_Skill
         _definition.Description = "$mh_mage_elementalresistance_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Elemental Damage Resistance (Percentage)", 3f,
+            "MIN Elemental Damage Resistance (Percentage)", 3f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Elemental Damage Resistance (Percentage)", 30f,
+            "MAX Elemental Damage Resistance (Percentage)", 30f,
             "Value amount (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 7,
+            "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             48, "Required Level");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_ElementalResistance");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 4,
+            "Leveling Step", 4,
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -56,7 +56,7 @@ public sealed class Mage_ElementalResistance : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -69,9 +69,9 @@ public sealed class Mage_ElementalResistance : MH_Skill
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float valueDiff = nextValue - currentValue;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Elemental Damage Damage Reduction: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
         }
@@ -88,8 +88,8 @@ public sealed class Mage_ElementalResistance : MH_Skill
         static void Postfix(SEMan __instance, ref HitData hit)
         {
             if (ClassManager.CurrentClass == Class.None || __instance.m_character != Player.m_localPlayer) return;
-            var skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);
-            if (skillDef == null || skillDef.Level <= 0) return;
+            MH_Skill skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);
+            if (skillDef is not { Level: > 0 }) return;
             hit.m_damage.m_fire *= Mathf.Clamp01(1 - skillDef.CalculateSkillValue(skillDef.Level) / 100);
             hit.m_damage.m_frost *= Mathf.Clamp01(1 - skillDef.CalculateSkillValue(skillDef.Level) / 100);
             hit.m_damage.m_lightning *= Mathf.Clamp01(1 - skillDef.CalculateSkillValue(skillDef.Level) / 100);

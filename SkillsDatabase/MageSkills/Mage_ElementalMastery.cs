@@ -13,22 +13,22 @@ public sealed class Mage_ElementalMastery : MH_Skill
         _definition.Description = "$mh_mage_elementalmastery_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Skill Level Bonus", 10f,
+            "MIN Skill Level Bonus", 10f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Skill Level Bonus", 20f,
+            "MAX Skill Level Bonus", 20f,
             "Value amount (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 7,
+            "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             58, "Required Level");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_ElementalMastery");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 3,
+            "Leveling Step", 3,
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -56,7 +56,7 @@ public sealed class Mage_ElementalMastery : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -69,9 +69,9 @@ public sealed class Mage_ElementalMastery : MH_Skill
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float valueDiff = nextValue - currentValue;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Elemental Magic Skill Level Bonus: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
         }
@@ -88,8 +88,8 @@ public sealed class Mage_ElementalMastery : MH_Skill
         static void Postfix(SEMan __instance, Skills.SkillType skill, ref float level)
         {
             if (skill != Skills.SkillType.ElementalMagic || ClassManager.CurrentClass == Class.None) return;
-            var skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);
-            if (skillDef == null || skillDef.Level <= 0) return;
+            MH_Skill skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);
+            if (skillDef is not { Level: > 0 }) return;
             level += skillDef.CalculateSkillValue(skillDef.Level);
         }
     }

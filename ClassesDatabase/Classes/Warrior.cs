@@ -11,7 +11,7 @@ public class Warrior : MH_ClassDefinition
 
     public override void Init()
     {
-        ResetSkills();
+       
     }
 
 

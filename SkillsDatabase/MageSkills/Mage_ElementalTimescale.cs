@@ -13,22 +13,22 @@ public sealed class Mage_ElementalTimescale : MH_Skill
         _definition.Description = "$mh_mage_elementaltimescale_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Skills Cooldown Time Reduction (Percentage)", 5f,
+            "MIN Skills Cooldown Time Reduction (Percentage)", 5f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Skills Cooldown Time Reduction (Percentage)", 20f,
+            "MAX Skills Cooldown Time Reduction (Percentage)", 20f,
             "Value amount (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 7,
+            "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             28, "Required Level");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_ElementalTimescale");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 6,
+            "Leveling Step", 6,
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -56,7 +56,7 @@ public sealed class Mage_ElementalTimescale : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -69,9 +69,9 @@ public sealed class Mage_ElementalTimescale : MH_Skill
             float nextValue = this.CalculateSkillValue(forLevel + 1);
             float valueDiff = nextValue - currentValue;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Skills Cooldown Time Reduction: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
         }
@@ -85,8 +85,8 @@ public sealed class Mage_ElementalTimescale : MH_Skill
     public static void TryToCheckSkill(ref float cooldown)
     {
         if (ClassManager.CurrentClass == Class.None) return;
-        var skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);
-        if (skillDef == null || skillDef.Level <= 0) return;
+        MH_Skill skillDef = ClassManager.CurrentClassDef.GetSkill(CachedKey);
+        if (skillDef is not { Level: > 0 }) return;
         cooldown *= Mathf.Clamp01(1 - skillDef.CalculateSkillValue() / 100f);
     }
 

@@ -11,7 +11,7 @@ public class Archer : MH_ClassDefinition
 
     public override void Init()
     {
-        ResetSkills();
+        
     }
 
 

@@ -20,37 +20,37 @@ public sealed class Druid_SpiritWave : MH_Skill
                 ClassAnimationReplace.MH_Animation.TwoHandedProjectile];
         _definition.AnimationTime = 0.8f;
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Damage", 20f,
+            "MIN Lvl Damage", 1f,
             "Damage amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Damage", 60f,
+            "MAX Lvl Damage", 10f,
             "Damage amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 20f,
+            "MIN Lvl Manacost", 1f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 40f,
+            "MAX Lvl Manacost", 10f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 30f,
+            "MIN Lvl Cooldown", 10f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 18f,
+            "MAX Lvl Cooldown", 1f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 6,
+            "Leveling Step", 1,
             "Leveling Step");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_SpiritWave_Icon");
         _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_SpiritWave.mp4";
@@ -83,7 +83,7 @@ public sealed class Druid_SpiritWave : MH_Skill
         private void OnTriggerEnter(Collider other)
         {
             if (!znv.IsOwner()) return;
-            if (other.TryGetComponent<Character>(out var c))
+            if (other.TryGetComponent<Character>(out Character c))
             {
                 if (!list.Contains(c))
                 {
@@ -142,8 +142,8 @@ public sealed class Druid_SpiritWave : MH_Skill
         Vector3 rot = (target - p.transform.position).normalized;
         rot.y = 0;
         p.transform.rotation = Quaternion.LookRotation(rot);
-        var proj = Object.Instantiate(_Prefab, p.transform.position + Vector3.up + p.transform.forward * 0.3f, GameCamera.instance.transform.rotation);
-        var rotTo = (target - proj.transform.position).normalized;
+        GameObject proj = Object.Instantiate(_Prefab, p.transform.position + Vector3.up + p.transform.forward * 0.3f, GameCamera.instance.transform.rotation);
+        Vector3 rotTo = (target - proj.transform.position).normalized;
         proj.GetComponent<SpiritWaveComponent>().Setup(rotTo, this.CalculateSkillValue());
         StartCooldown(this.CalculateSkillCooldown());
     }
@@ -162,7 +162,7 @@ public sealed class Druid_SpiritWave : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -184,16 +184,15 @@ public sealed class Druid_SpiritWave : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine($"Damage: <color=#FF00FF>Piercing {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color> + <color=yellow>Blunt {Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
             builder.AppendLine($"Healing: <color=#00FF00>{Math.Round(nextValue / 2f, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
             builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine(
-                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
 
@@ -203,5 +202,5 @@ public sealed class Druid_SpiritWave : MH_Skill
     public override bool CanRightClickCast => false;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
-    public override Color SkillColor => new Color(1f, 0.98f, 0.91f);
+    public override Color SkillColor => new Color(0.96f, 1f, 0.79f);
 }

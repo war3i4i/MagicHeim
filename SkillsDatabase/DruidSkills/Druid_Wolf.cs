@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Interfaces;
 using UnityEngine.InputSystem.LowLevel;
@@ -22,7 +23,7 @@ public sealed class Druid_Wolf : MH_Skill
     private static double AnimSpeedManager(Character c, double speed)
     {
         if (c != Player.m_localPlayer || !c.InAttack()) return speed;
-        var se = c.m_seman.GetStatusEffect(CachedAnimHash) as SE_Druid_WolfForm;
+        SE_Druid_WolfForm se = c.m_seman.GetStatusEffect(CachedAnimHash) as SE_Druid_WolfForm;
         if (se == null) return speed;
         return speed * (1 + se.aspeed / 100f);
     }
@@ -34,34 +35,46 @@ public sealed class Druid_Wolf : MH_Skill
         _definition.Description = "$mh_druid_wolf_desc";
         CachedKey = _definition.Key;
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 10f,
+            "MIN Lvl Manacost", 10f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 2f,
+            "MAX Lvl Manacost", 1f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 12f,
+            "MIN Lvl Cooldown", 10f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 3f,
+            "MAX Lvl Cooldown", 10f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 5,
+            "Max Level", 5,
             "Max Skill Level");
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 1,
+            "Leveling Step", 1,
             "Leveling Step");
 
+        _definition.ExternalValues = new()
+        {
+            MagicHeim.config($"{_definition._InternalName}",
+                "MIN LVL Attack Speed", 1f,  "Attack Speed amount (Min Lvl)"),
+            MagicHeim.config($"{_definition._InternalName}",
+                "MAX LVL Attack Speed", 10f, "Attack Speed amount (Max Lvl)"),
+            MagicHeim.config($"{_definition._InternalName}",
+                "MIN LVL Movement Speed", 1f, "Movement Speed amount (Min Lvl)"),
+            MagicHeim.config($"{_definition._InternalName}",
+                "MAX LVL Movement Speed", 10f, "Movement Speed amount (Max Lvl)")
+        };
+        
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Wolf_Icon");
-        _definition.Video = "https://kg.sayless.eu/skills/Mage_EnergyBlast.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_Wolf.mp4";
 
         _definition.Animation =
             ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedTransform];
@@ -73,6 +86,7 @@ public sealed class Druid_Wolf : MH_Skill
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
     {
+        [UsedImplicitly]
         static void Postfix(ZNetScene __instance)
         {
             __instance.m_namedPrefabs[Wolf_Explosion.name.GetStableHashCode()] = Wolf_Explosion;
@@ -85,7 +99,7 @@ public sealed class Druid_Wolf : MH_Skill
     {
         if (!Player.m_localPlayer) return;
         Player p = Player.m_localPlayer;
-        var manacost = this.CalculateSkillManacost();
+        float manacost = this.CalculateSkillManacost();
         if (!Toggled)
         {
             if (p.HaveEitr(manacost * 3f))
@@ -103,15 +117,15 @@ public sealed class Druid_Wolf : MH_Skill
     {
         int latestAttack = 1;
         Toggled = true;
-        var manacost = this.CalculateSkillManacost();
+        float manacost = this.CalculateSkillManacost();
         Player p = Player.m_localPlayer;
-        var stamina = p.GetStamina();
-        p.m_seman.AddStatusEffect("Druid_WolfForm".GetStableHashCode(), false, (int)this.CalculateSkillValue(), this.CalculateSkillExternalValue(0));
+        float stamina = p.GetStamina();
+        p.m_seman.AddStatusEffect("Druid_WolfForm".GetStableHashCode(), false, Mathf.CeilToInt(this.CalculateSkillExternalValue(0)), Mathf.CeilToInt(this.CalculateSkillExternalValue(2)));
         UnityEngine.Object.Instantiate(Wolf_Explosion, p.transform.position, Quaternion.identity);
         for (;;)
         {
             if(!p) yield break;
-            var useMana = manacost * Time.deltaTime;
+            float useMana = manacost * Time.deltaTime;
             if (!Toggled || p.IsDead() || !p.HaveEitr(useMana) || Utils.InWater())
             {
                 Toggled = false;
@@ -225,8 +239,8 @@ public sealed class Druid_Wolf : MH_Skill
     
     public class SE_Druid_WolfForm : StatusEffect
     {
-        public int aspeed = 0;
-        public int mspeed = 0;
+        public int aspeed;
+        public int mspeed;
         
         public SE_Druid_WolfForm()
         {
@@ -327,31 +341,40 @@ public sealed class Druid_Wolf : MH_Skill
 
     public override string GetSpecialTags()
     {
-        return "<color=red>Transform, Movement Speed, Toggle</color>";
+        return "<color=red>Transform, Movement Speed, AttackSpeed, Toggle</color>";
     }
 
     public override string BuildDescription()
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
         float currentManacost = this.CalculateSkillManacost(forLevel);
+        int currentAttackSpeed = (int)this.CalculateSkillExternalValue(0, forLevel);
+        int currentMovementSpeed = (int)this.CalculateSkillExternalValue(2, forLevel);
+        builder.AppendLine($"Attack Speed: {currentAttackSpeed}%");
+        builder.AppendLine($"Movement Speed: {currentMovementSpeed}%");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
         if (Level < maxLevel && Level > 0)
         {
+            int nextAttackSpeed = (int)this.CalculateSkillExternalValue(0, forLevel + 1);
+            int nextMovementSpeed = (int)this.CalculateSkillExternalValue(2, forLevel + 1);
             float nextManacost = this.CalculateSkillManacost(forLevel + 1);
+            int attackSpeedDiff = nextAttackSpeed - currentAttackSpeed;
+            int moveSpeedDiff = nextMovementSpeed - currentMovementSpeed;
             float manacostDiff = nextManacost - currentManacost;
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
-            builder.AppendLine(
-                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine("\nNext Level:");
+            builder.AppendLine($"Attack Speed: {nextAttackSpeed}% <color=green>({(attackSpeedDiff > 0 ? "+" : "")}{attackSpeedDiff})</color>");
+            builder.AppendLine($"Movement Speed: {nextMovementSpeed}% <color=green>({(moveSpeedDiff > 0 ? "+" : "")}{moveSpeedDiff})</color>");
+            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
-
+ 
 
         return builder.ToString();
     }

@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using JetBrains.Annotations;
 using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Interfaces;
 
@@ -19,35 +20,35 @@ public sealed class Druid_Eagle : MH_Skill
         _definition.Description = "$mh_druid_eagle_desc";
         CachedKey = _definition.Key;
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 10f,
+            "MIN Lvl Manacost", 10f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 2f,
+            "MAX Lvl Manacost", 1f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 12f,
+            "MIN Lvl Cooldown", 12f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 3f,
+            "MAX Lvl Cooldown", 3f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 5,
+            "Max Level", 5,
             "Max Skill Level");
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 1,
+            "Leveling Step", 1,
             "Leveling Step");
 
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedTransform];
         _definition.AnimationTime = 1f;
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Eagle_Icon");
-        _definition.Video = "https://kg.sayless.eu/skills/Mage_EnergyBlast.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_Eagle.mp4";
         Eagle_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_Eagle_Prefab");
         Eagle_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Druid_Eagle_Explosion");
         RevealAbility = MagicHeim.asset.LoadAsset<GameObject>("Druid_Eagle_Reveal");
@@ -61,15 +62,16 @@ public sealed class Druid_Eagle : MH_Skill
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
     {
+        [UsedImplicitly]
         static void Postfix(ZNetScene __instance)
         {
             __instance.m_namedPrefabs[Eagle_Prefab.name.GetStableHashCode()] = Eagle_Prefab;
             __instance.m_namedPrefabs[Eagle_Explosion.name.GetStableHashCode()] = Eagle_Explosion;
             __instance.m_namedPrefabs[RevealAbility.name.GetStableHashCode()] = RevealAbility;
-            foreach (var prefab in __instance.m_prefabs.Where(c => c.GetComponent<CharacterDrop>()).Select(c => c.GetComponent<CharacterDrop>()))
+            foreach (CharacterDrop prefab in __instance.m_prefabs.Where(c => c.GetComponent<CharacterDrop>()).Select(c => c.GetComponent<CharacterDrop>()))
             {
                 if (prefab.m_drops.Count <= 0) continue;
-                foreach (var drop in prefab.m_drops)
+                foreach (CharacterDrop.Drop drop in prefab.m_drops)
                 {
                     if (drop.m_prefab.GetComponent<ItemDrop>() is { } item && item.m_itemData.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Trophy)
                     {
@@ -99,7 +101,7 @@ public sealed class Druid_Eagle : MH_Skill
             znv = GetComponent<ZNetView>();
         }
 
-        private float counter = 0f;
+        private float counter;
         private void Update()
         {
             counter += Time.deltaTime;
@@ -115,16 +117,16 @@ public sealed class Druid_Eagle : MH_Skill
         private void OnTriggerEnter(Collider other)
         {
             if (!znv.IsOwner()) return;
-            if (other.TryGetComponent<Character>(out var c))
+            if (other.TryGetComponent<Character>(out Character c))
             {
                 if (list.Add(c) && Utils.IsEnemy(c) && c.m_nview.IsValid())
                 {
                     string goName = global::Utils.GetPrefabName(c.gameObject);
-                    GameObject go = ObjectToTrophy.TryGetValue(goName, out var trophyGo) ? trophyGo : ZNetScene.instance.GetPrefab("Trophy" + goName);
+                    GameObject go = ObjectToTrophy.TryGetValue(goName, out GameObject trophyGo) ? trophyGo : ZNetScene.instance.GetPrefab("Trophy" + goName);
                     if (c.transform.Find("RevealIcon"))
                         Destroy(c.transform.Find("RevealIcon").gameObject);
                     
-                    var reveal = Instantiate(RevealAbility_Character, c.transform);
+                    GameObject reveal = Instantiate(RevealAbility_Character, c.transform);
                     reveal.name = "RevealIcon";
                     if (!go || go.GetComponent<ItemDrop>() is not { } trophy)
                     {
@@ -133,7 +135,7 @@ public sealed class Druid_Eagle : MH_Skill
                     }
                     float height = c.m_collider.height - 1.7f;
                     reveal.transform.GetChild(0).transform.localPosition += Vector3.up * height; 
-                    var sr = reveal.transform.GetChild(0).GetComponent<SpriteRenderer>();
+                    SpriteRenderer sr = reveal.transform.GetChild(0).GetComponent<SpriteRenderer>();
                     sr.sprite = trophy.m_itemData.m_shared.m_icons[0];
                     sr.size = new Vector2(6f, 6f);
                 }
@@ -145,7 +147,7 @@ public sealed class Druid_Eagle : MH_Skill
     {
         if (!Player.m_localPlayer) return;
         Player p = Player.m_localPlayer;
-        var manacost = this.CalculateSkillManacost();
+        float manacost = this.CalculateSkillManacost();
         if (!Toggled)
         {
             if (p.HaveEitr(manacost * 3f))
@@ -162,7 +164,7 @@ public sealed class Druid_Eagle : MH_Skill
 
     private IEnumerator EagleForm()
     {
-        var manacost = this.CalculateSkillManacost(); 
+        float manacost = this.CalculateSkillManacost(); 
         Toggled = true;
         Player p = Player.m_localPlayer; 
         float stamina = p.GetStamina();
@@ -172,16 +174,16 @@ public sealed class Druid_Eagle : MH_Skill
         p.m_collider.isTrigger = true;
         p.m_body.useGravity = false;
         p.m_body.position += Vector3.up;
-        var position = p.transform.position;
+        Vector3 position = p.transform.position;
         UnityEngine.Object.Instantiate(Eagle_Explosion, position + Vector3.up, Quaternion.identity);
-        var go = UnityEngine.Object.Instantiate(Eagle_Prefab, position, Quaternion.LookRotation(GameCamera.instance.transform.forward));
-        var rbody = go.GetComponent<Rigidbody>();
+        GameObject go = UnityEngine.Object.Instantiate(Eagle_Prefab, position, Quaternion.LookRotation(GameCamera.instance.transform.forward));
+        Rigidbody rbody = go.GetComponent<Rigidbody>();
         go.transform.position = position;
         for (;;)
         {
             if(!p) yield break;
-            var pos = p.m_body.position;
-            var fwd = GameCamera.instance.transform.forward;
+            Vector3 pos = p.m_body.position;
+            Vector3 fwd = GameCamera.instance.transform.forward;
             float mod = ZInput.GetButton("Run") || ZInput.GetButton("JoyRun") ? 12f : 8f;
             if (ZInput.GetButton("Forward") || ZInput.GetJoyLeftStickY() < 0)
                 pos += fwd * (mod * Time.deltaTime);
@@ -210,14 +212,14 @@ public sealed class Druid_Eagle : MH_Skill
                 : pos.y;
             if (pos.y < 31) pos.y = 31;
             p.m_body.position = pos;
-            var transform = rbody.transform;
+            Transform transform = rbody.transform;
             transform.position = pos;
             transform.rotation = rot; 
             p.m_maxAirAltitude = 0f;
             p.m_lastGroundTouch = 0f;
             rbody.angularVelocity = Vector3.zero;
             rbody.velocity = Vector3.zero;
-            var useMana = manacost * Time.deltaTime;
+            float useMana = manacost * Time.deltaTime;
             if (!p.HaveEitr(useMana) || !Toggled || p.IsDead())
             {
                 Toggled = false;
@@ -255,22 +257,27 @@ public sealed class Druid_Eagle : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
         float currentManacost = this.CalculateSkillManacost(forLevel);
+        float currentCooldown = this.CalculateSkillCooldown(forLevel);
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
+        builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
 
         if (Level < maxLevel && Level > 0)
         {
             float nextManacost = this.CalculateSkillManacost(forLevel + 1);
+            float nextCooldown = this.CalculateSkillCooldown(forLevel + 1);
             float manacostDiff = nextManacost - currentManacost;
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            float cooldownDiff = nextCooldown - currentCooldown;
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
-            builder.AppendLine(
-                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine("\nNext Level:");
+            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
         }
 
 

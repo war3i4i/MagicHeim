@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using JetBrains.Annotations;
 using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Interfaces;
 
@@ -15,50 +16,50 @@ public sealed class Druid_NatureBuff : MH_Skill
         _definition.Description = "$mh_druid_naturebuff_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl MoveSpeed (Percentage)", 20f,
+            "MIN Lvl MoveSpeed (Percentage)", 20f,
             "Heal amount (Min Lvl)");
 
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl MoveSpeed (Percentage)", 100f,
+            "MAX Lvl MoveSpeed (Percentage)", 100f,
             "Heal amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 20f,
+            "MIN Lvl Manacost", 1f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 55f,
+            "MAX Lvl Manacost", 10f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 60f,
+            "MIN Lvl Cooldown", 10f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 20f,
+            "MAX Lvl Cooldown", 1f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MinLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Duration", 20f,
+            "MIN Lvl Duration", 5f,
             "Duration amount (Min Lvl)");
         _definition.MaxLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Duration", 60f,
+            "MAX Lvl Duration", 15f,
             "Duration amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
 
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 4,
+            "Leveling Step", 1,
             "Leveling Step");
 
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_NatureBuff_Icon");
-        _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_Heal.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_NatureBuff.mp4";
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedSummon];
         _definition.AnimationTime = 1.2f;
         Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_NatureBuff_Buff");
@@ -73,6 +74,7 @@ public sealed class Druid_NatureBuff : MH_Skill
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))] 
     static class ZNetScene_Awake_Patch
     {
+        [UsedImplicitly]
         static void Postfix(ZNetScene __instance)
         { 
             __instance.m_namedPrefabs[Prefab.name.GetStableHashCode()] = Prefab;
@@ -88,10 +90,9 @@ public sealed class Druid_NatureBuff : MH_Skill
             Vector3.Distance(p.transform.position, Player.m_localPlayer.transform.position) <= 20f &&
             Utils.IsPlayerInGroup(p)).ToList();
 
-        foreach (var player in list)
+        foreach (Player player in list)
         {
-            player.m_seman.AddStatusEffect("Druid_NatureBuff_Buff".GetStableHashCode(), false, (int)this.CalculateSkillDuration(),
-                this.CalculateSkillValue());
+            player.m_seman.AddStatusEffect("Druid_NatureBuff_Buff".GetStableHashCode(), false,  Mathf.CeilToInt(this.CalculateSkillValue()), this.CalculateSkillDuration());
         }
 
         StartCooldown(this.CalculateSkillCooldown());
@@ -107,7 +108,7 @@ public sealed class Druid_NatureBuff : MH_Skill
             name = "Druid_NatureBuff_Buff";
             m_tooltip = "MS Bonus";
             m_icon = CachedIcon;
-            m_name = "Nature Buff";
+            m_name = "Druid Nature Buff";
             m_ttl = 100;
             m_startEffects = new EffectList
             {
@@ -125,8 +126,8 @@ public sealed class Druid_NatureBuff : MH_Skill
 
         public override void SetLevel(int itemLevel, float skillLevel)
         {
-            m_ttl = skillLevel;
             msBonus = itemLevel;
+            m_ttl = skillLevel;
         }
 
         public override void ModifySpeed(float baseSpeed, ref float speed)
@@ -183,51 +184,46 @@ public sealed class Druid_NatureBuff : MH_Skill
 
     public override string GetSpecialTags()
     {
-        return "<color=red>Buff, Affects Party Members Nearby</color>";
+        return "<color=red>Buff, Affects Party Members Nearby, Movement Speed bonus</color>";
     }
 
     public override string BuildDescription()
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
-        float currentValue = this.CalculateSkillValue(forLevel);
+        int currentValue = Mathf.CeilToInt(this.CalculateSkillValue(forLevel));
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
         float duration = this.CalculateSkillDuration(forLevel);
 
-        builder.AppendLine($"MoveSpeed Increase: {Math.Round(currentValue, 1)}%");
+        builder.AppendLine($"MoveSpeed Increase: {currentValue}%");
         builder.AppendLine($"Duration: {Math.Round(duration, 1)}s");
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
         if (Level < maxLevel && Level > 0)
         {
-            float nextValue = this.CalculateSkillValue(forLevel + 1);
+            int nextValue = Mathf.CeilToInt(this.CalculateSkillValue(forLevel + 1));
             float nextCooldown = this.CalculateSkillCooldown(forLevel + 1); 
             float nextManacost = this.CalculateSkillManacost(forLevel + 1);
             float nextDuration = this.CalculateSkillDuration(forLevel + 1);
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
-            float valueDiff = nextValue - currentValue;
+            int valueDiff = nextValue - currentValue;
             float durationDiff = nextDuration - duration;
 
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
-            var roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
-            builder.AppendLine(
-                $"MoveSpeed Increase: {Math.Round(nextValue, 1)}% <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
-            builder.AppendLine(
-                $"Duration: {Math.Round(nextDuration, 1)}s <color=green>({(durationDiff > 0 ? "+" : "")}{Math.Round(durationDiff, 1)})</color>");
-            builder.AppendLine(
-                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine(
-                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine("\nNext Level:");
+            builder.AppendLine($"MoveSpeed Increase: {nextValue}% <color=green>({(valueDiff > 0 ? "+" : "")}{valueDiff})</color>");
+            builder.AppendLine($"Duration: {Math.Round(nextDuration, 1)} <color=green>({(durationDiff > 0 ? "+" : "")}{Math.Round(durationDiff, 1)})</color>");
+            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
 

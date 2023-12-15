@@ -16,44 +16,44 @@ public sealed class Mage_ThunderShock : MH_Skill
         _definition.Description = "$mh_mage_thundershock_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Damage", 25f,
+            "MIN Lvl Damage", 25f,
             "Damage amount (Min Lvl)");
 
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Damage", 50f,
+            "MAX Lvl Damage", 50f,
             "Damage amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 15f,
+            "MIN Lvl Manacost", 15f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 30f,
+            "MAX Lvl Manacost", 30f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 24f,
+            "MIN Lvl Cooldown", 24f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 12f,
+            "MAX Lvl Cooldown", 12f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MinLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Duration", 3f,
+            "MIN Lvl Duration", 3f,
             "Duration amount (Min Lvl)");
         _definition.MaxLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Duration", 6f,
+            "MAX Lvl Duration", 6f,
             "Duration amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             62, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 1,
+            "Leveling Step", 1,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Mage_ThunderShock_Icon");
@@ -90,12 +90,12 @@ public sealed class Mage_ThunderShock : MH_Skill
         if (!Player.m_localPlayer) return;
         Player p = Player.m_localPlayer;
         bool castHit = Physics.Raycast(Utils.GetPerfectEyePosition(), p.GetLookDir(),
-            out var raycast, 30f, Script_Layermask2);
+            out RaycastHit raycast, 30f, Script_Layermask2);
         Vector3 target;
         if (castHit && raycast.collider)
         {
-            var duration = this.CalculateSkillDuration();
-            var damage = this.CalculateSkillValue();
+            float duration = this.CalculateSkillDuration();
+            float damage = this.CalculateSkillValue();
             target = raycast.point;
             Collider[] array = Physics.OverlapSphere(target, 8f, Script_Layermask2, QueryTriggerInteraction.UseGlobal);
             HashSet<GameObject> hashSet = new HashSet<GameObject>();
@@ -128,7 +128,7 @@ public sealed class Mage_ThunderShock : MH_Skill
         {
             p.AddEitr(this.CalculateSkillManacost());
             MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
-                $"<color=#00FFFF>Too Far</color>");
+                "<color=#00FFFF>Too Far</color>");
         }
     }
 
@@ -146,7 +146,7 @@ public sealed class Mage_ThunderShock : MH_Skill
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -173,12 +173,12 @@ public sealed class Mage_ThunderShock : MH_Skill
             float valueDiff = nextValue - currentValue;
 
 
-            var roundedDurationDiff = Math.Round(durationDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
-            var roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedDurationDiff = Math.Round(durationDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
+            builder.AppendLine("\nNext Level:");
             builder.AppendLine(
                 $"Damage: <color=blue>Lightning {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color></color>");
             builder.AppendLine(

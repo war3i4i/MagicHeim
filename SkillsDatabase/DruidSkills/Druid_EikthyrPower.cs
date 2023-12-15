@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using JetBrains.Annotations;
 using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Interfaces;
 
@@ -18,46 +19,46 @@ public sealed class Druid_EikthyrPower : MH_Skill
         InactiveGO.SetActive(false);
         _definition._InternalName = "Druid_EikthyrPower";
         _definition.Name = "$mh_druid_eikthyrpower";
-        _definition.Description = "$mh_druid_eikthyrpower_description";
+        _definition.Description = "$mh_druid_eikthyrpower_desc";
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon];
         _definition.AnimationTime = 0.5f;
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Damage", 30f,
+            "MIN Lvl Damage", 1f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Damage", 105f,
+            "MAX Lvl Damage", 10f,
             "Value amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Manacost", 25f,
+            "MIN Lvl Manacost", 1f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Manacost", 35f,
+            "MAX Lvl Manacost", 10f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MIN Lvl Cooldown", 18f,
+            "MIN Lvl Cooldown", 10f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            $"MAX Lvl Cooldown", 9f,
+            "MAX Lvl Cooldown", 1f,
             "Cooldown amount (Max Lvl)");
 
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Max Level", 10,
+            "Max Level", 10,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
-            $"Required Level To Learn",
+            "Required Level To Learn",
             1, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            $"Leveling Step", 4,
+            "Leveling Step", 1,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_EikthyrPower_Icon");
-        _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_TrollSmash.mp4";
+        _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_EikthyrPower.mp4";
         Preload = MagicHeim.asset.LoadAsset<GameObject>("Druid_EikthyrPower_Preload");
         Explosion = MagicHeim.asset.LoadAsset<GameObject>("Druid_EikthyrPower_Explosion");
         Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_EikthyrPower_Prefab");
@@ -70,6 +71,7 @@ public sealed class Druid_EikthyrPower : MH_Skill
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
     {
+        [UsedImplicitly]
         static void Postfix(ZNetScene __instance)
         { 
             if (!Eikthyr_GO)
@@ -81,11 +83,11 @@ public sealed class Druid_EikthyrPower : MH_Skill
                 Eikthyr_GO.gameObject.transform.localPosition = Vector3.zero;
                 Eikthyr_GO.gameObject.transform.localRotation = Quaternion.identity;
 
-                var mat = MagicHeim.asset.LoadAsset<Material>("DruidMat");
-                foreach (var renderer in Eikthyr_GO.GetComponentsInChildren<Renderer>())
+                Material mat = MagicHeim.asset.LoadAsset<Material>("DruidMat");
+                foreach (Renderer renderer in Eikthyr_GO.GetComponentsInChildren<Renderer>())
                     renderer.sharedMaterial = mat;
 
-                var timed = Eikthyr_GO.AddComponent<TimedDestruction>();
+                TimedDestruction timed = Eikthyr_GO.AddComponent<TimedDestruction>();
                 timed.m_timeout = 3f;
                 timed.m_triggerOnAwake = true;
                 Eikthyr_GO.AddComponent<ZNetView>();
@@ -105,7 +107,7 @@ public sealed class Druid_EikthyrPower : MH_Skill
     private class EikthyrPower_Local : MonoBehaviour
     {
         private ZNetView _znv;
-        private float _damage = 0;
+        private float _damage;
         private Vector3 _target = NON_Vector;
         
         public void Setup(float damage, Vector3 target)
@@ -126,12 +128,12 @@ public sealed class Druid_EikthyrPower : MH_Skill
         private void DoDamage()
         {
             if (_target == NON_Vector) return;
-            var t = transform;
+            Transform t = transform;
             Vector3 start = t.position + t.forward * 4f + Vector3.up * 2f;
             Quaternion rot = Quaternion.LookRotation((_target - start).normalized);
             Instantiate(Explosion, start, rot); 
             
-            var movable = Instantiate(Prefab, start, rot);
+            GameObject movable = Instantiate(Prefab, start, rot);
             movable.GetComponent<MovableComponent>().Setup(_damage);
         }
     }
@@ -201,8 +203,8 @@ public sealed class Druid_EikthyrPower : MH_Skill
         p.transform.rotation = Quaternion.LookRotation(rot);
         Vector3 spawnPoint = p.transform.position + Vector3.up * 3f - GameCamera.instance.transform.forward * 2f - p.transform.right * 1.5f;
         Quaternion spawnRot = (target - spawnPoint).normalized == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation((target - spawnPoint).normalized);
-        var go = UnityEngine.Object.Instantiate(Eikthyr_GO, spawnPoint, spawnRot);
-        var vfx = UnityEngine.Object.Instantiate(Preload, go.transform.position + go.transform.forward + Vector3.up, Quaternion.identity);
+        GameObject go = UnityEngine.Object.Instantiate(Eikthyr_GO, spawnPoint, spawnRot);
+        UnityEngine.Object.Instantiate(Preload, go.transform.position + go.transform.forward + Vector3.up, Quaternion.identity);
         float damage = this.CalculateSkillValue();
         go.GetComponent<EikthyrPower_Local>().Setup(damage, target);
         StartCooldown(cooldown); 
@@ -217,14 +219,14 @@ public sealed class Druid_EikthyrPower : MH_Skill
 
     public override string GetSpecialTags()
     {
-        return "<color=red>TEST</color>";
+        return "<color=red>Projectile, Damage</color>";
     }
 
     public override string BuildDescription()
     {
         StringBuilder builder = new();
         builder.AppendLine(Localization.instance.Localize(Description));
-        builder.AppendLine($"\n");
+        builder.AppendLine("\n");
 
         int maxLevel = MaxLevel;
         int forLevel = Level > 0 ? Level : 1;
@@ -232,7 +234,7 @@ public sealed class Druid_EikthyrPower : MH_Skill
         float currentCooldown = this.CalculateSkillCooldown(forLevel);
         float currentManacost = this.CalculateSkillManacost(forLevel);
 
-        builder.AppendLine($"Damage: {Math.Round(currentValue, 1)}");
+        builder.AppendLine($"Damage: <color=blue>Lightning {Math.Round(currentValue, 1)}</color>");
         builder.AppendLine($"Cooldown: {Math.Round(currentCooldown, 1)}");
         builder.AppendLine($"Manacost: {Math.Round(currentManacost, 1)}");
 
@@ -245,17 +247,14 @@ public sealed class Druid_EikthyrPower : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            var roundedValueDiff = Math.Round(valueDiff, 1);
-            var roundedCooldownDiff = Math.Round(cooldownDiff, 1);
-            var roundedManacostDiff = Math.Round(manacostDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
+            double roundedManacostDiff = Math.Round(manacostDiff, 1);
 
-            builder.AppendLine($"\nNext Level:");
-            builder.AppendLine(
-                $"Damage: {Math.Round(nextValue, 1)} <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
-            builder.AppendLine(
-                $"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
-            builder.AppendLine(
-                $"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
+            builder.AppendLine("\nNext Level:");
+            builder.AppendLine($"Damage: <color=blue>Lightning {Math.Round(nextValue, 1)}</color> <color=green>({(roundedValueDiff > 0 ? "+" : "")}{roundedValueDiff})</color>");
+            builder.AppendLine($"Cooldown: {Math.Round(nextCooldown, 1)} <color=green>({(roundedCooldownDiff > 0 ? "+" : "")}{roundedCooldownDiff})</color>");
+            builder.AppendLine($"Manacost: {Math.Round(nextManacost, 1)} <color=green>({(roundedManacostDiff > 0 ? "+" : "")}{roundedManacostDiff})</color>");
         }
 
 

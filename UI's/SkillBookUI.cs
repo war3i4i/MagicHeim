@@ -100,7 +100,7 @@ public static class SkillBookUI
     private static void UpdateCanvases()
     {
         Canvas.ForceUpdateCanvases();
-        var sizeFillers = Content.GetComponentsInChildren<ContentSizeFitter>().ToList();
+        List<ContentSizeFitter> sizeFillers = Content.GetComponentsInChildren<ContentSizeFitter>().ToList();
         sizeFillers.ForEach(filter => filter.enabled = false);
         sizeFillers.ForEach(filter => filter.enabled = true);
     }
@@ -114,12 +114,12 @@ public static class SkillBookUI
         EXP_Fillbar.fillAmount = ClassManager.EXP / (float)ClassManager.GetExpForLevel(ClassManager.Level);
         EXP_Fillbar.color = ClassManager.CurrentClassDef.GetColor;
 
-        var currentClass = ClassManager.CurrentClassDef;
-        var activeSkills = currentClass.GetSkills().Values.Where(x => x.IsPassive == isPassive).ToList();
+        MH_ClassDefinition currentClass = ClassManager.CurrentClassDef;
+        List<MH_Skill> activeSkills = currentClass.GetSkills().Values.Where(x => x.IsPassive == isPassive).ToList();
 
         Dictionary<int, List<MH_Skill>> skillsByRequiredLevel = new Dictionary<int, List<MH_Skill>>();
         List<List<MH_Skill>> toOrder = new List<List<MH_Skill>>();
-        foreach (var skill in activeSkills)
+        foreach (MH_Skill skill in activeSkills)
         {
             if (ShowOnlyLearned && skill.Level == 0)
             {
@@ -142,14 +142,14 @@ public static class SkillBookUI
 
         toOrder.Clear();
 
-        foreach (var skill in skillsByRequiredLevel.OrderBy(x => x.Key))
+        foreach (KeyValuePair<int, List<MH_Skill>> skill in skillsByRequiredLevel.OrderBy(x => x.Key))
         {
-            var skillGroup = UnityEngine.Object.Instantiate(LevelGroup, Content);
+            GameObject skillGroup = UnityEngine.Object.Instantiate(LevelGroup, Content);
             skillGroup.transform.Find("BG/Text").GetComponent<Text>().text =
                 $"Required Level: <color=yellow>{skill.Key}</color>";
-            foreach (var list in skill.Value)
+            foreach (MH_Skill list in skill.Value)
             {
-                var skillData = UnityEngine.Object.Instantiate(SkillData, skillGroup.transform);
+                GameObject skillData = UnityEngine.Object.Instantiate(SkillData, skillGroup.transform);
                 skillData.transform.Find("Text").GetComponent<Text>().text = Localization.instance.Localize(list.Name);
                 if (list.IsPassive)
                 {
