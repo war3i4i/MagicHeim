@@ -5,6 +5,7 @@ using MagicHeim.AnimationHelpers;
 using MagicHeim.MH_Interfaces;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.Serialization;
+using Logger = MagicHeim_Logger.Logger;
 
 namespace MagicHeim.SkillsDatabase.DruidSkills;
 
@@ -262,7 +263,7 @@ public sealed class Druid_Wolf : MH_Skill
             speed *= (1 + mspeed / 100f);
         }
 
-        public override void Setup(Character character)
+        public override void Setup(Character character) 
         {
             base.Setup(character);
             ZDOID zdoID = Player.m_localPlayer.GetZDOID();

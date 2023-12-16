@@ -97,14 +97,14 @@ mh_druid_rootball: Root Strike
 mh_druid_rootball_desc: Summons a projectile root strike that deals damage to target enemy and roots it
 mh_druid_spiritwave: Spirit Wave
 mh_druid_spiritwave_desc: Summons a spirit wave that deals damage to enemies on its way and healing allies
-mh_druid_aspeedbuff: Aura of Swiftness
+mh_druid_aspeedbuff: Swiftness
 mh_druid_aspeedbuff_desc: Buff that increases attack speed of all nearby players
 mh_druid_connection: Soul Bind
 mh_druid_connection_desc: Bind to target creature to periodically heal it for % of its max health while increasing its damage on 10% and reducing its damage taken on 10%. For tamed creatures bonuses are x5
 mh_druid_crystals: Crystal Strike
 mh_druid_crystals_desc: Summons crystals in area to deal damage to enemies
 mh_druid_eclipse: Eclipse
-mh_druid_eclipse_desc: On activation periodically deals damage to nearby enemies
+mh_druid_eclipse_desc: On activation periodically deals damage to nearby enemies 
 mh_druid_eikthyrpower: Eikthyr Power
 mh_druid_eikthyrpower_desc: Summon Eikthyr that throws lightning at enemies
 mh_druid_elderpower: Elder Power
@@ -125,9 +125,28 @@ mh_druid_tame: Tame
 mh_druid_tame_desc: Tames target creature on cast end
 mh_druid_trollpower: Troll Power
 mh_druid_trollpower_desc: Summon Troll that hits ground dealing damage to enemies
-mh_druid_weaponenchantpoison: Weapon Poison Enchant
+mh_druid_weaponenchantpoison: Weapon Poison Enchant 
 mh_druid_weaponenchantpoison_desc: Enchants your weapon with poison damage
 mh_druid_weaponenchantspirit: Weapon Spirit Enchant
 mh_druid_weaponenchantspirit_desc: Enchants your weapon with spirit damage
 mh_druid_creaturesbuff: Power of alpha
-mh_druid_creaturesbuff_desc: Buff that increases damage of all nearby tamed creatures 
+mh_druid_creaturesbuff_desc: Buff that increases damage of all nearby tamed creatures
+mh_druid_hardenskin: Harden Skin
+mh_druid_hardenskin_desc: You have a % chance on hit to nullify damage
+mh_druid_foodknowledge_health: "Food Knowledge: Health"
+mh_druid_foodknowledge_health_desc: Increases % of health you get from food
+mh_druid_foodknowledge_stamina: "Food Knowledge: Stamina"
+mh_druid_foodknowledge_stamina_desc: Increases % of stamina you get from food
+mh_druid_foodknowledge_eitr: "Food Knowledge: Eitr"
+mh_druid_foodknowledge_eitr_desc: Increases % of eitr you get from food
+mh_druid_bodyofpoison: Body of Poison
+mh_druid_bodyofpoison_desc: Poison can't damage you, instead it heals you for % of the damage dealt
+mh_druid_poisontouch: Poison Touch
+mh_druid_poisontouch_desc: You have a % chance on hit (with weapon) to poison your enemy
+mh_druid_bluntmastery: Blunt Mastery
+mh_druid_bluntmastery_desc: Increases the Clubs skill level
+mh_druid_healingbonus: Life Perception
+mh_druid_healingbonus_desc: Increases the amount of health you get from healing
+mh_druid_innercontrol: Inner Control
+mh_druid_innercontrol_desc: Increase your max Stamina amount
+mh_druidclass_description: "Probably op as shit but hey what can I do when I make a class that's able to fly :D"

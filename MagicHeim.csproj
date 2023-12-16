@@ -61,6 +61,7 @@
         <Compile Include="MH_Definitions\MH_Skill.cs" />
         <Compile Include="PossibleSkillFixes.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_AspeedBuff.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_BodyOfPoison.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Connection.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_CreaturesBuff.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Eagle.cs" />
@@ -68,9 +69,14 @@
         <Compile Include="SkillsDatabase\DruidSkills\Druid_ElderPower.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Exchange.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Fish.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_FoodKnowledge.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Grenade.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_HardenSkin.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_HealingBonus.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_InnerControl.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Moonfire.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_NatureProtection.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_PoisonTouch.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_SelfHeal.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_SpiritWave.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_NatureBuff.cs" />
@@ -86,6 +92,7 @@
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Tame.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_StaminaSphere.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Crystals.cs" />
+        <Compile Include="SkillsDatabase\DruidSkills\Druid_BluntMastery.cs" />
         <Compile Include="SkillsDatabase\GlobalMechanics\MH_BasicComponents.cs" />
         <Compile Include="SkillsDatabase\GlobalMechanics\MH_WeaponEnchant.cs" />
         <Compile Include="SkillsDatabase\MageSkills\Mage_AncientTotem.cs" />

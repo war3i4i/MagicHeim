@@ -171,7 +171,7 @@ public sealed class Druid_Grenade : MH_Skill
             float cooldownDiff = nextCooldown - currentCooldown;
             float manacostDiff = nextManacost - currentManacost;
 
-            double roundedValueDiff = Math.Round(valueDiff, 1);
+            double roundedValueDiff = Math.Round(valueDiff / 2, 1);
             double roundedCooldownDiff = Math.Round(cooldownDiff, 1);
             double roundedManacostDiff = Math.Round(manacostDiff, 1);
 

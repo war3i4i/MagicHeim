@@ -75,7 +75,6 @@ public sealed class Mage_WaterWalk : MH_Skill
         Toggled = true;
         StaticBool_InWater = Toggled;
         Player p = Player.m_localPlayer;
-        p.m_nview.m_zdo.Set("MOanticheat", true);
         if (vfx) ZNetScene.instance.Destroy(vfx.gameObject);
         vfx = UnityEngine.Object.Instantiate(WaterWalk_Prefab, p.transform.position, Quaternion.identity);
         vfx.transform.SetParent(p.transform);
@@ -84,8 +83,7 @@ public sealed class Mage_WaterWalk : MH_Skill
             float useMana = manacost * Time.deltaTime;
             if (!Toggled || p.IsDead() || !p.HaveEitr(useMana))
             {
-                p.m_flying = false;
-                p.m_nview.m_zdo.Set("MOanticheat", false);
+                PossibleSkillFixes.IsFlying_Inject = false;
                 Toggled = false;
                 StaticBool_InWater = Toggled;
                 if (vfx) ZNetScene.instance.Destroy(vfx.gameObject);
@@ -110,7 +108,7 @@ public sealed class Mage_WaterWalk : MH_Skill
                 if (___m_waterLevel + 0.08f > __instance.transform.position.y)
                 {
                     IsInWaterWalk = true;
-                    p.m_flying = true;
+                    PossibleSkillFixes.IsFlying_Inject = true;
                     x = p.transform.transform.position.x;
                     z = p.transform.transform.position.z;
                     p.transform.transform.position = new Vector3(x, ___m_waterLevel, z);
@@ -119,7 +117,7 @@ public sealed class Mage_WaterWalk : MH_Skill
                     if (ZInput.GetButton("Jump") && IsInWaterWalk)
                     {
                         IsInWaterWalk = false;
-                        p.m_flying = false;
+                        PossibleSkillFixes.IsFlying_Inject = false;
                         p.transform.transform.position = new Vector3(x, ___m_waterLevel + 0.2f, z);
                         Player.m_localPlayer.m_lastGroundTouch = 0f;
                         Player.m_localPlayer.Jump();
@@ -128,7 +126,7 @@ public sealed class Mage_WaterWalk : MH_Skill
                 else
                 {
                     IsInWaterWalk = false;
-                    p.m_flying = false;
+                    PossibleSkillFixes.IsFlying_Inject = false;
                 }
             }
         }

@@ -183,4 +183,58 @@ public class PossibleSkillFixes
             return matcher.Instructions();
         }
     }
-}
+
+
+    public static bool IsFlying_Inject;
+    
+    [HarmonyPatch]
+    private static class Character_UpdateMotion_Patch
+    {
+        [HarmonyTargetMethods] 
+        private static IEnumerable<MethodInfo> TargetMethods()
+        {
+            yield return AccessTools.Method(typeof(Character), nameof(Character.UpdateMotion));
+            yield return AccessTools.Method(typeof(Character), nameof(Character.AddPushbackForce));
+        }
+        
+        [UsedImplicitly]
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> code)
+        {
+            var fldTarget = AccessTools.Field(typeof(Character), nameof(Character.m_flying));
+            var replace = AccessTools.Method(typeof(Character), nameof(Character.IsFlying));
+            var matcher = new CodeMatcher(code);
+            matcher.MatchForward(false, new CodeMatch(OpCodes.Ldfld, fldTarget));
+            if (matcher.IsInvalid) return matcher.Instructions(); 
+            matcher.Set(OpCodes.Callvirt, replace);
+            return matcher.Instructions();
+        }
+    } 
+    
+    [HarmonyPatch] 
+    private static class InventoryGui_ShowHide
+    { 
+        [HarmonyTargetMethods] 
+        private static IEnumerable<MethodInfo> Methods()
+        {
+            yield return AccessTools.Method(typeof(InventoryGui), nameof(InventoryGui.Show));
+            yield return AccessTools.Method(typeof(InventoryGui), nameof(InventoryGui.Hide));
+        }
+
+        [UsedImplicitly]
+        private static bool Prefix()
+        {
+            return !TextInput.IsVisible();
+        }
+    }
+    
+    [HarmonyPatch(typeof(Character),nameof(Character.IsFlying))]
+    private static class Character_IsFlying_Patch
+    {
+        [UsedImplicitly]
+        private static void Postfix(Character __instance, ref bool __result)
+        {
+            if (__instance == Player.m_localPlayer)
+                __result |= IsFlying_Inject;
+        }
+    }
+} 

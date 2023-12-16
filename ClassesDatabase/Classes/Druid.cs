@@ -37,6 +37,15 @@ public class Druid : MH_ClassDefinition
         AddSkill("Druid_StaminaSphere"); 
         AddSkill("Druid_Crystals"); 
         AddSkill("Druid_AspeedBuff"); 
+        AddSkill("Druid_HardenSkin"); 
+        AddSkill("Druid_FoodKnowledge_Health"); 
+        AddSkill("Druid_FoodKnowledge_Stamina"); 
+        AddSkill("Druid_FoodKnowledge_Eitr"); 
+        AddSkill("Druid_BodyOfPoison"); 
+        AddSkill("Druid_InnerControl");
+        AddSkill("Druid_BluntMastery"); 
+        AddSkill("Druid_PoisonTouch"); 
+        AddSkill("Druid_HealingBonus"); 
         SortSkills();
     }
  

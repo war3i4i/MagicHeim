@@ -23,7 +23,7 @@ namespace MagicHeim
         private void Awake() 
         {
             Localizer.Load(); 
-            _thistype = this;
+            _thistype = this; 
             MH_SyncedConfig = new ConfigFile(Path.Combine(Paths.ConfigPath, "kg.magicheim_synced.cfg"), true);
             Stream stream = Assembly.GetExecutingAssembly()
                 .GetManifestResourceStream("MagicHeim.Asset.MagicHeimUnityCode.dll");
@@ -134,11 +134,7 @@ namespace MagicHeim
         
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                Utils.CheckProblems_ZNS();
-            }
-            
+          
             TurnOffUIs();
             if (OptionsUI.CurrentChoosenButton >= 0)
             {

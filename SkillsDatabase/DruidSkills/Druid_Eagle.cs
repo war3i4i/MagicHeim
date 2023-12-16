@@ -44,9 +44,7 @@ public sealed class Druid_Eagle : MH_Skill
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
             "Leveling Step", 1,
             "Leveling Step");
-
-        _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedTransform];
-        _definition.AnimationTime = 1f;
+        
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Eagle_Icon");
         _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_Eagle.mp4";
         Eagle_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_Eagle_Prefab");
@@ -162,7 +160,7 @@ public sealed class Druid_Eagle : MH_Skill
     }
 
 
-    private IEnumerator EagleForm()
+    /*private IEnumerator EagleForm()
     {
         float manacost = this.CalculateSkillManacost(); 
         Toggled = true;
@@ -181,7 +179,7 @@ public sealed class Druid_Eagle : MH_Skill
         go.transform.position = position;
         for (;;)
         {
-            if(!p) yield break;
+            if(!p) yield break; 
             Vector3 pos = p.m_body.position;
             Vector3 fwd = GameCamera.instance.transform.forward;
             float mod = ZInput.GetButton("Run") || ZInput.GetButton("JoyRun") ? 12f : 8f;
@@ -220,6 +218,85 @@ public sealed class Druid_Eagle : MH_Skill
             rbody.angularVelocity = Vector3.zero;
             rbody.velocity = Vector3.zero;
             float useMana = manacost * Time.deltaTime;
+            if (!p.HaveEitr(useMana) || !Toggled || p.IsDead())
+            {
+                Toggled = false;
+                p.m_collider.isTrigger = false;
+                p.m_nview.m_zdo.Set("MH_HideCharacter", false);
+                p.m_body.velocity = Vector3.zero;
+                p.m_body.useGravity = true;
+                p.m_lastGroundTouch = 0f;
+                p.m_maxAirAltitude = 0f;
+                p.m_nview.InvokeRPC(ZNetView.Everybody, "MH_HideCharacter", false);
+                UnityEngine.Object.Instantiate(Eagle_Explosion, p.transform.position, Quaternion.identity);
+                if (go) ZNetScene.instance.Destroy(go.gameObject);
+                StartCooldown(this.CalculateSkillCooldown());
+                yield break;
+            }
+
+            p.UseEitr(useMana);
+            p.m_stamina = stamina;
+            if (p.m_stamina > p.m_maxStamina) p.m_stamina = p.m_maxStamina;
+            yield return null;
+        }
+    }*/
+    
+        private IEnumerator EagleForm()
+    {
+        var manacost = this.CalculateSkillManacost(); 
+        Toggled = true;
+        Player p = Player.m_localPlayer; 
+        float stamina = p.GetStamina();
+        p.m_nview.InvokeRPC(ZNetView.Everybody, "MH_HideCharacter", true);
+        p.m_nview.m_zdo.Set("MH_HideCharacter", true); 
+        p.m_zanim.SetTrigger("emote_stop");
+        p.m_collider.isTrigger = true;
+        UnityEngine.Object.Instantiate(Eagle_Explosion, p.transform.position + Vector3.up, Quaternion.identity);
+        GameObject go;
+        go = UnityEngine.Object.Instantiate(Eagle_Prefab, p.transform.position + Vector3.up,
+            Quaternion.LookRotation(GameCamera.instance.transform.forward));
+        var rbody = go.GetComponent<Rigidbody>();
+        go.transform.position = p.transform.position + Vector3.up;
+        for (;;)
+        {
+            if(!p) yield break;
+            rbody.angularVelocity = Vector3.zero;
+            rbody.velocity = Vector3.zero;
+            go.transform.rotation = Quaternion.LookRotation(GameCamera.instance.transform.forward);
+            var pos = go.transform.position;
+            var fwd = GameCamera.instance.transform.forward;
+            float mod = ZInput.GetButton("Run") || ZInput.GetButton("JoyRun") ? 10f : 6f;
+            if (ZInput.GetButton("Forward") || ZInput.GetJoyLeftStickY() < 0)
+            {
+                pos += fwd * (mod * Time.deltaTime);
+            }
+            else if (ZInput.GetButton("Backward") || ZInput.GetJoyLeftStickY() > 0)
+            {
+                pos -= fwd * (mod * Time.deltaTime); 
+            }
+            else
+            if (ZInput.GetButton("Crouch"))
+            {
+                go.transform.rotation = Quaternion.LookRotation(-go.transform.up + go.transform.forward * 2f);
+                pos.y -= mod * Time.deltaTime;
+            }
+            else
+            if (ZInput.GetButton("Jump"))
+            {
+                go.transform.rotation = Quaternion.LookRotation(go.transform.up + go.transform.forward * 2f);
+                pos.y += mod * Time.deltaTime;
+            }
+
+            pos.y = pos.y < ZoneSystem.instance.GetGroundHeight(pos) + 1 
+                ? ZoneSystem.instance.GetGroundHeight(pos) + 1 
+                : pos.y;
+            if (pos.y < 31) pos.y = 31;
+            go.transform.position = pos;
+            p.m_body.position = pos;
+            p.transform.rotation = go.transform.rotation;
+            p.m_maxAirAltitude = 0f;
+            p.m_lastGroundTouch = 0f;
+            var useMana = manacost * Time.deltaTime;
             if (!p.HaveEitr(useMana) || !Toggled || p.IsDead())
             {
                 Toggled = false;

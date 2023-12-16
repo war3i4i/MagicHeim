@@ -62,7 +62,7 @@ public sealed class Druid_StaminaSphere : MH_Skill
         _definition.AnimationTime = 0.8f;
         Sphere_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_StaminaSphere_Prefab");
         Sphere_Prefab.AddComponent<AoeMechanic>();
-        Sphere_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Druid_StaminaSphere_Prefab");
+        Sphere_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Druid_StaminaSphere_Explosion");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
         this.InitRequiredItemSecondHalf("Coins", 10, 1.88f);

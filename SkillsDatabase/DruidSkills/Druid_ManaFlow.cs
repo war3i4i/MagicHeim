@@ -95,8 +95,10 @@ public sealed class Druid_ManaFlow : MH_Skill
 
     //action 
     [HarmonyPatch(typeof(Player), nameof(Player.GetTotalFoodValue))]
+    [HarmonyPriority(Priority.Last)]
     static class Player_GetTotalFoodValue_Patch
     {
+        [HarmonyPriority(Priority.Last)]
         static void Postfix(ref float hp, ref float eitr)
         {
             if (ClassManager.CurrentClass == Class.None) return;

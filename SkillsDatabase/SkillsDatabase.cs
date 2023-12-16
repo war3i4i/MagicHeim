@@ -94,5 +94,14 @@ public static class SkillsDatabase
         AddSkill(new Druid_CreatuesBuff());
         AddSkill(new Druid_Crystals());
         AddSkill(new Druid_AspeedBuff());
+        AddSkill(new Druid_HardenSkin());
+        AddSkill(new Druid_FoodKnowledge_Health());
+        AddSkill(new Druid_FoodKnowledge_Stamina());
+        AddSkill(new Druid_FoodKnowledge_Eitr());
+        AddSkill(new Druid_BodyOfPoison());
+        AddSkill(new Druid_BluntMastery());
+        AddSkill(new Druid_InnerControl());
+        AddSkill(new Druid_PoisonTouch());
+        AddSkill(new Druid_HealingBonus());
     }
 }
