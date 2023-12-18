@@ -25,11 +25,11 @@ public sealed class Druid_ManaFlow : MH_Skill
             "Required Level To Learn",
             1, "Required Level");
 
-        _definition.ExternalValues = new()
-        {
+        _definition.ExternalValues =
+        [
             MagicHeim.config($"{_definition._InternalName}", "MIN Lvl HP Bonus", 10f, "HP Bonus"),
             MagicHeim.config($"{_definition._InternalName}", "MAX Lvl HP Bonus", 100f, "HP Bonus")
-        };
+        ];
         
         
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_ManaFlow_Icon");

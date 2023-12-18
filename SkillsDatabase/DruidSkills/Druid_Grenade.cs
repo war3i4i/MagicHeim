@@ -115,7 +115,7 @@ public sealed class Druid_Grenade : MH_Skill
                         hit.m_point = c.m_collider.ClosestPointOnBounds(transform.position) + Vector3.up;
                         c.DamageMH(hit);
                     }
-                    ZNetScene.instance.Destroy(this.gameObject);
+                    ZNetScene.instance.Destroy(gameObject);
                 }
             }
         }

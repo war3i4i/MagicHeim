@@ -72,9 +72,9 @@ public static class ClassAnimationReplace
         foreach (AnimationClip animation in aoc.animationClips)
         {
             string name = animation.name;
-            if (replacement.ContainsKey(name))
+            if (replacement.TryGetValue(name, out var value))
             {
-                AnimationClip newClip = UnityEngine.Object.Instantiate(ExternalAnimations[replacement[name]]);
+                AnimationClip newClip = UnityEngine.Object.Instantiate(ExternalAnimations[value]);
                 anims.Add(new KeyValuePair<AnimationClip, AnimationClip>(animation, newClip));
             }
             else

@@ -55,11 +55,11 @@ public sealed class Druid_Eclipse : MH_Skill
             "MAX Lvl Tick Speed", 0.5f,
             "Tick Speed (Max Lvl)");
 
-        _definition.ExternalValues = new()
-        {
+        _definition.ExternalValues =
+        [
             MagicHeim.config($"{_definition._InternalName}", "MIN LVl max targets", 1f, "Max targets per tick"),
-            MagicHeim.config($"{_definition._InternalName}", "MAX Lvl max target", 4f, "Max targets per tick"),
-        };
+            MagicHeim.config($"{_definition._InternalName}", "MAX Lvl max target", 4f, "Max targets per tick")
+        ];
         
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Eclipse_Icon");
@@ -208,5 +208,5 @@ public sealed class Druid_Eclipse : MH_Skill
     public override bool CanRightClickCast => true;
     public override bool IsPassive => false;
     public override CostType _costType => CostType.Eitr;
-    public override Color SkillColor => new Color(0.09f, 0.05f, 0.17f);
+    public override Color SkillColor => new Color(0.52f, 0.27f, 0.79f);
 }

@@ -144,8 +144,8 @@ public static class SkillPanelUI
 
     public static ResizeUI Resizer;
 
-    public static readonly List<KeyCode> DefaultHotkeys = new List<KeyCode>()
-    {
+    public static readonly List<KeyCode> DefaultHotkeys =
+    [
         KeyCode.Alpha1,
         KeyCode.Alpha2,
         KeyCode.Alpha3,
@@ -166,8 +166,8 @@ public static class SkillPanelUI
         KeyCode.Keypad8,
         KeyCode.Keypad9,
         KeyCode.Keypad0,
-        KeyCode.K,
-    };
+        KeyCode.K
+    ];
 
     private static MH_ClassDefinition _currentClass;
 
@@ -417,7 +417,7 @@ public static class SkillPanelUI
 
     public static string Serialize()
     {
-        if (_currentClass == null) return "-";
+        if (_currentClass == null) return "";
         string data = "";
         foreach (KeyValuePair<int, PanelButton> skill in _skillSlots)
         {
@@ -444,6 +444,7 @@ public static class SkillPanelUI
 
     public static void Show(MH_ClassDefinition definition, string data = "")
     {
+        if (definition == null) return;
         _currentClass = definition;
         Default();
         UI.SetActive(true);
@@ -456,12 +457,12 @@ public static class SkillPanelUI
         UI.SetActive(false);
     }
 
-    public static void ShowVisualOnly()
+    private static void ShowVisualOnly()
     {
         UI.SetActive(true);
     }
-    
-    public static void HideVisualOnly()
+
+    private static void HideVisualOnly()
     {
         UI.SetActive(false);
     }
@@ -486,7 +487,7 @@ public static class SkillPanelUI
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> HideUI(IEnumerable<CodeInstruction> code)
         {
-            List<CodeInstruction> list = new(code);
+            List<CodeInstruction> list = [..code];
             list.Insert(146, CodeInstruction.Call(()=> HideUImethod()));
             return list.AsEnumerable();
         }

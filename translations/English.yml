@@ -147,6 +147,7 @@ mh_druid_bluntmastery: Blunt Mastery
 mh_druid_bluntmastery_desc: Increases the Clubs skill level
 mh_druid_healingbonus: Life Perception
 mh_druid_healingbonus_desc: Increases the amount of health you get from healing
-mh_druid_innercontrol: Inner Control
+mh_druid_innercontrol: Inner Control 
 mh_druid_innercontrol_desc: Increase your max Stamina amount
 mh_druidclass_description: "Probably op as shit but hey what can I do when I make a class that's able to fly :D"
+mh_sphere_saveload: Sphere of memories 

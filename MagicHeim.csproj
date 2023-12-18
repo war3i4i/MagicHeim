@@ -12,6 +12,8 @@
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>preview</LangVersion>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>KG.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,9 +39,6 @@
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="API\API.cs" />
-        <Compile Include="CheatCommands.cs" />
-        <Compile Include="CustomMapPins.cs" />
-        <Compile Include="ExpConfigs.cs" />
         <Compile Include="Helpers\ClassAnimationReplace.cs" />
         <Compile Include="Helpers\SkillCastHelper.cs" />
         <Compile Include="ClassesDatabase\ClassesDatabase.cs" />
@@ -50,16 +49,18 @@
         <Compile Include="ClassesDatabase\Classes\Warrior.cs" />
         <Compile Include="ClassManager.cs" />
         <Compile Include="GlobalUsings.cs" />
-        <Compile Include="Helpers\Utils.cs" />
-        <Compile Include="KillHook.cs" />
-        <Compile Include="MagicTomes.cs" />
+        <Compile Include="Items_Structures\MagicTomes.cs" />
+        <Compile Include="Items_Structures\MH_Altar.cs" />
+        <Compile Include="Items_Structures\SaveLoadTome.cs" />
         <Compile Include="Managers\AnimationSpeedManager.cs" />
         <Compile Include="Managers\ItemManager.cs" />
         <Compile Include="Managers\LocalizationManager.cs" />
-        <Compile Include="MH_Altar.cs" />
         <Compile Include="MH_Definitions\MH_ClassDefinition.cs" />
         <Compile Include="MH_Definitions\MH_Skill.cs" />
-        <Compile Include="PossibleSkillFixes.cs" />
+        <Compile Include="Misc\CustomMapPins.cs" />
+        <Compile Include="Misc\ExpConfigs.cs" />
+        <Compile Include="Misc\KillHook.cs" />
+        <Compile Include="Misc\PossibleSkillFixes.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_AspeedBuff.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_BodyOfPoison.cs" />
         <Compile Include="SkillsDatabase\DruidSkills\Druid_Connection.cs" />
@@ -144,12 +145,15 @@
         <Compile Include="SkillsDatabase\MageSkills\Mage_EnergyBlast.cs" />
         <Compile Include="SkillsDatabase\SkillsDatabase.cs" />
         <Compile Include="Managers\ServerSync.cs" />
+        <Compile Include="Utils\CheatCommands.cs" />
+        <Compile Include="Utils\Utils.cs" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Asset\magicheim" />
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
+        <None Include="KG.snk" />
         <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
@@ -166,104 +170,254 @@
     </ItemGroup>
     <ItemGroup>
       <Reference Include="0Harmony">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\0Harmony.dll</HintPath>
+        <HintPath>Libs\0Harmony.dll</HintPath>
       </Reference>
       <Reference Include="assembly_guiutils">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\assembly_guiutils.dll</HintPath>
+        <HintPath>Libs\assembly_guiutils.dll</HintPath>
       </Reference>
       <Reference Include="assembly_postprocessing">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\assembly_postprocessing.dll</HintPath>
+        <HintPath>Libs\assembly_postprocessing.dll</HintPath>
       </Reference>
       <Reference Include="assembly_utils">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\assembly_utils.dll</HintPath>
+        <HintPath>Libs\assembly_utils.dll</HintPath>
       </Reference>
       <Reference Include="assembly_valheim">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\assembly_valheim.dll</HintPath>
+        <HintPath>Libs\assembly_valheim.dll</HintPath>
       </Reference>
       <Reference Include="Backpacks">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\BackpacksAPI.dll</HintPath>
+        <HintPath>Libs\BackpacksAPI.dll</HintPath>
       </Reference>
       <Reference Include="BepInEx">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\BepInEx.dll</HintPath>
+        <HintPath>Libs\BepInEx.dll</HintPath>
       </Reference>
       <Reference Include="fastJSON">
-        <HintPath>..\..\Marketplace\Libs\fastJSON.dll</HintPath>
+        <HintPath>Libs\fastJSON.dll</HintPath>
       </Reference>
       <Reference Include="Groups">
-        <HintPath>..\..\Marketplace\Libs\GroupsAPI.dll</HintPath>
+        <HintPath>Libs\GroupsAPI.dll</HintPath>
       </Reference>
       <Reference Include="ItemDataManager">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\ItemDataManager.dll</HintPath>
+        <HintPath>Libs\ItemDataManager.dll</HintPath>
       </Reference>
       <Reference Include="MagicHeimUnityCode">
         <HintPath>Asset\MagicHeimUnityCode.dll</HintPath>
       </Reference>
       <Reference Include="Mono.Cecil">
-        <HintPath>..\..\..\SteamLibrary\steamapps\common\Valheim\BepInEx\core\Mono.Cecil.dll</HintPath>
+        <HintPath>Libs\Mono.Cecil.dll</HintPath>
       </Reference>
       <Reference Include="MonoMod.Utils">
-        <HintPath>..\..\Marketplace\Libs\MonoMod.Utils.dll</HintPath>
+        <HintPath>Libs\MonoMod.Utils.dll</HintPath>
+      </Reference>
+      <Reference Include="netstandard">
+        <HintPath>Libs\netstandard.dll</HintPath>
       </Reference>
       <Reference Include="System" />
       <Reference Include="ui_lib">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\ui_lib.dll</HintPath>
+        <HintPath>Libs\ui_lib.dll</HintPath>
       </Reference>
       <Reference Include="Unity.InputSystem">
-        <HintPath>..\..\..\SteamLibrary\steamapps\common\Valheim\valheim_Data\Managed\Unity.InputSystem.dll</HintPath>
+        <HintPath>Libs\Unity.InputSystem.dll</HintPath>
       </Reference>
       <Reference Include="Unity.TextMeshPro">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\Unity.TextMeshPro.dll</HintPath>
+        <HintPath>Libs\Unity.TextMeshPro.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\UnityEngine.dll</HintPath>
+        <HintPath>Libs\UnityEngine.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AccessibilityModule">
+        <HintPath>Libs\UnityEngine.AccessibilityModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AIModule">
+        <HintPath>Libs\UnityEngine.AIModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AndroidJNIModule">
+        <HintPath>Libs\UnityEngine.AndroidJNIModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.AnimationModule">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\UnityEngine.AnimationModule.dll</HintPath>
+        <HintPath>Libs\UnityEngine.AnimationModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.AssetBundleModule">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\UnityEngine.AssetBundleModule.dll</HintPath>
+        <HintPath>Libs\UnityEngine.AssetBundleModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.AudioModule">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\UnityEngine.AudioModule.dll</HintPath>
+        <HintPath>Libs\UnityEngine.AudioModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ClothModule">
+        <HintPath>Libs\UnityEngine.ClothModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ClusterInputModule">
+        <HintPath>Libs\UnityEngine.ClusterInputModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ClusterRendererModule">
+        <HintPath>Libs\UnityEngine.ClusterRendererModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.CoreModule">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\UnityEngine.CoreModule.dll</HintPath>
+        <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.CrashReportingModule">
+        <HintPath>Libs\UnityEngine.CrashReportingModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.DirectorModule">
+        <HintPath>Libs\UnityEngine.DirectorModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.DSPGraphModule">
+        <HintPath>Libs\UnityEngine.DSPGraphModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.GameCenterModule">
+        <HintPath>Libs\UnityEngine.GameCenterModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.GIModule">
+        <HintPath>Libs\UnityEngine.GIModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.GridModule">
+        <HintPath>Libs\UnityEngine.GridModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.HotReloadModule">
+        <HintPath>Libs\UnityEngine.HotReloadModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.ImageConversionModule">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\UnityEngine.ImageConversionModule.dll</HintPath>
+        <HintPath>Libs\UnityEngine.ImageConversionModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.IMGUIModule">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\UnityEngine.IMGUIModule.dll</HintPath>
+        <HintPath>Libs\UnityEngine.IMGUIModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.InputLegacyModule">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\UnityEngine.InputLegacyModule.dll</HintPath>
+        <HintPath>Libs\UnityEngine.InputLegacyModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.InputModule">
-        <HintPath>..\..\..\SteamLibrary\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.InputModule.dll</HintPath>
+        <HintPath>Libs\UnityEngine.InputModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.JSONSerializeModule">
+        <HintPath>Libs\UnityEngine.JSONSerializeModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.LocalizationModule">
+        <HintPath>Libs\UnityEngine.LocalizationModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.ParticleSystemModule">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\UnityEngine.ParticleSystemModule.dll</HintPath>
+        <HintPath>Libs\UnityEngine.ParticleSystemModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.PerformanceReportingModule">
+        <HintPath>Libs\UnityEngine.PerformanceReportingModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.Physics2DModule">
+        <HintPath>Libs\UnityEngine.Physics2DModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.PhysicsModule">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\UnityEngine.PhysicsModule.dll</HintPath>
+        <HintPath>Libs\UnityEngine.PhysicsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ProfilerModule">
+        <HintPath>Libs\UnityEngine.ProfilerModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule">
+        <HintPath>Libs\UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ScreenCaptureModule">
+        <HintPath>Libs\UnityEngine.ScreenCaptureModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.SharedInternalsModule">
+        <HintPath>Libs\UnityEngine.SharedInternalsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.SpriteMaskModule">
+        <HintPath>Libs\UnityEngine.SpriteMaskModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.SpriteShapeModule">
+        <HintPath>Libs\UnityEngine.SpriteShapeModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.StreamingModule">
+        <HintPath>Libs\UnityEngine.StreamingModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.SubstanceModule">
+        <HintPath>Libs\UnityEngine.SubstanceModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.SubsystemsModule">
+        <HintPath>Libs\UnityEngine.SubsystemsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TerrainModule">
+        <HintPath>Libs\UnityEngine.TerrainModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TerrainPhysicsModule">
+        <HintPath>Libs\UnityEngine.TerrainPhysicsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TextCoreModule">
+        <HintPath>Libs\UnityEngine.TextCoreModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TextRenderingModule">
+        <HintPath>Libs\UnityEngine.TextRenderingModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TilemapModule">
+        <HintPath>Libs\UnityEngine.TilemapModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TLSModule">
+        <HintPath>Libs\UnityEngine.TLSModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.UI">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\UnityEngine.UI.dll</HintPath>
+        <HintPath>Libs\UnityEngine.UI.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.UIElementsModule">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\UnityEngine.UIElementsModule.dll</HintPath>
+        <HintPath>Libs\UnityEngine.UIElementsModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.UIElementsNativeModule">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\UnityEngine.UIElementsNativeModule.dll</HintPath>
+        <HintPath>Libs\UnityEngine.UIElementsNativeModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.UIModule">
-        <HintPath>..\..\ValheimEnchantmentSystem\Libs\UnityEngine.UIModule.dll</HintPath>
+        <HintPath>Libs\UnityEngine.UIModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UmbraModule">
+        <HintPath>Libs\UnityEngine.UmbraModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UNETModule">
+        <HintPath>Libs\UnityEngine.UNETModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityAnalyticsModule">
+        <HintPath>Libs\UnityEngine.UnityAnalyticsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityConnectModule">
+        <HintPath>Libs\UnityEngine.UnityConnectModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityCurlModule">
+        <HintPath>Libs\UnityEngine.UnityCurlModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityTestProtocolModule">
+        <HintPath>Libs\UnityEngine.UnityTestProtocolModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
+        <HintPath>Libs\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+        <HintPath>Libs\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestModule">
+        <HintPath>Libs\UnityEngine.UnityWebRequestModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+        <HintPath>Libs\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+        <HintPath>Libs\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.VehiclesModule">
+        <HintPath>Libs\UnityEngine.VehiclesModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.VFXModule">
+        <HintPath>Libs\UnityEngine.VFXModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.VideoModule">
-        <HintPath>..\..\..\SteamLibrary\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.VideoModule.dll</HintPath>
+        <HintPath>Libs\UnityEngine.VideoModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.VirtualTexturingModule">
+        <HintPath>Libs\UnityEngine.VirtualTexturingModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.VRModule">
+        <HintPath>Libs\UnityEngine.VRModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.WindModule">
+        <HintPath>Libs\UnityEngine.WindModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.XRModule">
+        <HintPath>Libs\UnityEngine.XRModule.dll</HintPath>
       </Reference>
       <Reference Include="YamlDotNet, Version=13.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-        <HintPath>..\packages\YamlDotNet.13.7.1\lib\net45\YamlDotNet.dll</HintPath>
+        <HintPath>..\packages\YamlDotNet.13.7.1\lib\net47\YamlDotNet.dll</HintPath>
       </Reference>
     </ItemGroup>
     

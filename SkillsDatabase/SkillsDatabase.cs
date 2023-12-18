@@ -10,7 +10,12 @@ public static class SkillsDatabase
 
     public static bool TryGetSkillDefinition(string skillID, out MH_Skill skill)
     {
-        if (GLOBAL_SkillDefinitions.TryGetValue(skillID.GetStableHashCode(), out skill))
+        return TryGetSkillDefinition(skillID.GetStableHashCode(), out skill);
+    }
+    
+    public static bool TryGetSkillDefinition(int skillID, out MH_Skill skill)
+    {
+        if (GLOBAL_SkillDefinitions.TryGetValue(skillID, out skill))
         {
             return true;
         }

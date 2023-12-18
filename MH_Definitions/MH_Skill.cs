@@ -18,7 +18,7 @@ public abstract class MH_Skill
 
     protected readonly MH_SkillDefinition _definition = new();
     public MH_SkillDefinition Definition => _definition;
-    public virtual string Name => Localization.instance.Localize(_definition.Name);
+    public string Name => Localization.instance.Localize(_definition.Name);
     public string Animation => _definition.Animation;
     public float AnimationTime => _definition.AnimationTime;
     public int Key => _definition.Key;
@@ -31,40 +31,15 @@ public abstract class MH_Skill
     public float Value => this.CalculateSkillValue();
     public int MaxLevel => _definition.MaxLevel.Value;
 
-    public string RequiredItemToUpgrade => _definition.RequiredItemFirstHalfToUpgrade != null
-        ? _definition.RequiredItemFirstHalfToUpgrade.Value
-        : string.Empty;
-
-    public int RequiredItemAmountToUpgrade => _definition.RequiredItemFirstHalfAmountToUpgrade != null
-        ? _definition.RequiredItemFirstHalfAmountToUpgrade.Value
-        : 0;
-
-    public float RequiredItemAmountToUpgrade_Step => _definition.RequiredItemFirstHalfAmountToUpgrade_Step != null
-        ? _definition.RequiredItemFirstHalfAmountToUpgrade_Step.Value
-        : 0;
-
-    public string RequiredItemToUpgradeSecondHalf => _definition.RequiredItemSecondHalfToUpgrade != null
-        ? _definition.RequiredItemSecondHalfToUpgrade.Value
-        : string.Empty;
-
-    public int RequiredItemAmountToUpgradeSecondHalf => _definition.RequiredItemSecondHalfAmountToUpgrade != null
-        ? _definition.RequiredItemSecondHalfAmountToUpgrade.Value
-        : 0;
-
-    public float RequiredItemAmountToUpgradeSecondHalf_Step =>
-        _definition.RequiredItemSecondHalfAmountToUpgrade_Step != null
-            ? _definition.RequiredItemSecondHalfAmountToUpgrade_Step.Value
-            : 0;
-
-    public string RequiredItemToUpgradeFinal => _definition.RequiredItemFinalToUpgrade != null
-        ? _definition.RequiredItemFinalToUpgrade.Value
-        : string.Empty;
-
-    public int RequiredItemAmountToUpgradeFinal => _definition.RequiredItemFinalAmountToUpgrade != null
-        ? _definition.RequiredItemFinalAmountToUpgrade.Value
-        : 0;
-
-
+    public string RequiredItemToUpgrade => _definition.RequiredItemFirstHalfToUpgrade != null ? _definition.RequiredItemFirstHalfToUpgrade.Value : string.Empty;
+    public int RequiredItemAmountToUpgrade => _definition.RequiredItemFirstHalfAmountToUpgrade?.Value ?? 0;
+    public float RequiredItemAmountToUpgrade_Step => _definition.RequiredItemFirstHalfAmountToUpgrade_Step?.Value ?? 0;
+    public string RequiredItemToUpgradeSecondHalf => _definition.RequiredItemSecondHalfToUpgrade != null ? _definition.RequiredItemSecondHalfToUpgrade.Value : string.Empty;
+    public int RequiredItemAmountToUpgradeSecondHalf => _definition.RequiredItemSecondHalfAmountToUpgrade?.Value ?? 0;
+    public float RequiredItemAmountToUpgradeSecondHalf_Step => _definition.RequiredItemSecondHalfAmountToUpgrade_Step?.Value ?? 0;
+    public string RequiredItemToUpgradeFinal => _definition.RequiredItemFinalToUpgrade != null ? _definition.RequiredItemFinalToUpgrade.Value : string.Empty;
+    public int RequiredItemAmountToUpgradeFinal => _definition.RequiredItemFinalAmountToUpgrade?.Value ?? 0;
+    
     public int AbilityStartLevel => _definition.AbilityStartLevel.Value;
 
     public string ExternalDescription()
@@ -94,46 +69,33 @@ public abstract class MH_Skill
         Player p = Player.m_localPlayer;
         CostType costType = _costType;
         float cost = this.CalculateSkillManacost();
-        if (costType == CostType.Eitr)
+        switch (costType)
         {
-            if (!p.HaveEitr(cost))
-            {
+            case CostType.Eitr when !p.HaveEitr(cost):
                 Hud.instance.EitrBarEmptyFlash();
                 return false;
-            }
-
-            p.UseEitr(cost);
-            return true;
-        }
-
-        if (costType == CostType.Stamina)
-        {
-            if (!p.HaveStamina(cost))
-            {
+            case CostType.Eitr:
+                p.UseEitr(cost);
+                return true;
+            case CostType.Stamina when !p.HaveStamina(cost):
                 Hud.instance.StaminaBarEmptyFlash();
                 return false;
-            }
-
-            p.UseStamina(cost);
-            return true;
-        }
-        if (costType == CostType.Health)
-        {
-            if (!p.HaveHealth(cost))
-            {
+            case CostType.Stamina:
+                p.UseStamina(cost);
+                return true;
+            case CostType.Health when !p.HaveHealth(cost):
                 Hud.instance.FlashHealthBar();
                 return false;
-            }
-
-            p.UseHealth(cost);
-            return true;
+            case CostType.Health:
+                p.UseHealth(cost);
+                return true;
+            case CostType.None:
+            default:
+                return true;
         }
-
-        return true;
     }
 
-
-    protected float _Internal_Cooldown;
+    private float _Internal_Cooldown;
     private float _Internal_Cooldown_Max;
     private Coroutine _Internal_Cooldown_Coroutine;
 

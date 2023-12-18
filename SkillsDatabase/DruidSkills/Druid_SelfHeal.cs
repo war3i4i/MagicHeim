@@ -63,7 +63,7 @@ public sealed class Druid_SelfHeal : MH_Skill
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetScene_Awake_Patch
-    {
+    { 
         [UsedImplicitly]
         static void Postfix(ZNetScene __instance)
         {
@@ -77,6 +77,8 @@ public sealed class Druid_SelfHeal : MH_Skill
         if (!Player.m_localPlayer) return;
         Player p = Player.m_localPlayer;
         UnityEngine.Object.Instantiate(Prefab, p.transform);
+        p.Heal(this.CalculateSkillValue());
+        StartCooldown(this.CalculateSkillCooldown());
     }
 
     public override bool CanExecute()

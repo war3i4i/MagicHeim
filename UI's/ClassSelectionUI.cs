@@ -1,4 +1,5 @@
-﻿using MagicHeim.MH_Enums;
+﻿using ItemDataManager;
+using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
 using UnityEngine.Video;
 
@@ -116,9 +117,7 @@ public static class ClassSelectionUI
     private static void AcceptClass()
     {
         AUsrc.Play();
-        ConfirmationUI.Show($"Are you sure want to become a {SelectedClass}",
-            "On class change you will lose all current class progress (Level, Exp, Skills)",
-            AcceptClassInternal);
+        ConfirmationUI.Show($"Are you sure want to become a {SelectedClass}", "On class change you will lose all current class progress (Level, Exp, Skills)", AcceptClassInternal);
     }
 
     private static void AcceptClassInternal()
@@ -131,8 +130,7 @@ public static class ClassSelectionUI
         Player player = Player.m_localPlayer;
         if (!player) return;
         ClassManager.SetClass(SelectedClass);
-        UnityEngine.Object.Instantiate(ClassesDatabase.ClassesDatabase.GetClassDefinition(SelectedClass).OnSelect_VFX,
-            Player.m_localPlayer.transform.position, Quaternion.identity);
+        UnityEngine.Object.Instantiate(ClassesDatabase.ClassesDatabase.GetClassDefinition(SelectedClass).OnSelect_VFX, Player.m_localPlayer.transform.position, Quaternion.identity);
         Hide();
     }
 

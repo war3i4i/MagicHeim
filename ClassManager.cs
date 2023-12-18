@@ -16,62 +16,32 @@ public static class ClassManager
     private const string _savedSkillPoints = "MH_SkillPoints"; 
     private const string _savedPanel = "MH_Panel";
 
-
-    private static Class _currentClass = Class.None;
-    public static Action<string, int> OnCharacterKill = MonsterKilled;
-    private static MH_ClassDefinition _currentClassDefinition;
-
-    public static MH_ClassDefinition CurrentClassDef
-    {
-        get { return _currentClassDefinition; }
-    }
-
-    private static int _currentLevel = 1;
-    private static long _currentExp;
-    private static int _skillPoints;
-
-
-    public static Class CurrentClass
-    {
-        get { return _currentClass; }
-        set { _currentClass = value; }
-    }
-
-    public static int Level
-    {
-        get { return _currentLevel; }
-        private set { _currentLevel = value; }
-    }
-
-    public static long EXP
-    {
-        get { return _currentExp; }
-        set { _currentExp = value; }
-    }
-
-    public static int SkillPoints
-    {
-        get { return _skillPoints; }
-        set { _skillPoints = value; }
-    }
+    public static readonly Action<string, int> OnCharacterKill = MonsterKilled;
+    public static MH_ClassDefinition CurrentClassDef { get; private set; }
+    public static Class CurrentClass { get; private set; } = Class.None;
+    public static int Level { get; private set; } = 1; 
+    public static long EXP { get; private set; }
+    public static int SkillPoints { get; private set; }
 
     public static void SetClass(Class newClass)
     {
-        _currentClass = newClass;
-        _currentClassDefinition.Reset();
-        _currentClassDefinition = ClassesDatabase.ClassesDatabase.GetClassDefinition(_currentClass);
-        _currentClassDefinition.Reset();
-        SkillPanelUI.Show(_currentClassDefinition);
+        CurrentClass = newClass;
         SkillPoints = Exp_Configs.SkillpointsPerLevel.Value;
         Level = 1;
         EXP = 0;
+        SkillPanelUI.Hide();
+        CurrentClassDef?.Reset();
+        if (CurrentClass == Class.None) return;
+        CurrentClassDef = ClassesDatabase.ClassesDatabase.GetClassDefinition(CurrentClass);
+        CurrentClassDef?.Reset();
+        SkillPanelUI.Show(CurrentClassDef);
     }
 
     public static void ResetSkills()
     {
         SkillPoints = Level * Exp_Configs.SkillpointsPerLevel.Value;
         SkillPanelUI.Reset();
-        _currentClassDefinition.Reset();
+        CurrentClassDef?.Reset();
         SaveAll(); 
     }
 
@@ -138,20 +108,81 @@ public static class ClassManager
         return result;
     }
 
+    public class SaveLoad : ISerializableParameter
+    {
+        public Class Class;
+        public int Level;
+        public long EXP;
+        public int SkillPoints;
+        public string SkillsData;
+        public string PanelData;
+        public void Serialize(ref ZPackage pkg)
+        {
+            pkg.Write((int)Class);
+            pkg.Write(Level);
+            pkg.Write(EXP);
+            pkg.Write(SkillPoints);
+            pkg.Write(SkillsData != null);
+            if (SkillsData != null)
+                pkg.Write(SkillsData);
+            pkg.Write(PanelData != null);
+            if (PanelData != null)
+                pkg.Write(PanelData);
+        }
+
+        public void Deserialize(ref ZPackage pkg)
+        {
+            Class = (Class)pkg.ReadInt();
+            Level = pkg.ReadInt();
+            EXP = pkg.ReadLong();
+            SkillPoints = pkg.ReadInt();
+            if (pkg.ReadBool())
+                SkillsData = pkg.ReadString();
+            if (pkg.ReadBool())
+                PanelData = pkg.ReadString();
+        }
+    }
+    
+    public static SaveLoad GetSaveData()
+    {
+        SaveLoad save = new()
+        {
+            Class = CurrentClass,
+            Level = Level,
+            EXP = EXP,
+            PanelData = SkillPanelUI.Serialize(),
+            SkillPoints = SkillPoints
+        };
+        if (CurrentClassDef != null)
+        {
+            Dictionary<int, MH_Skill> skills = CurrentClassDef.GetSkills();
+            string data = "";
+            foreach (KeyValuePair<int, MH_Skill> skill in skills)
+            {
+                if (skill.Value.Level <= 0) continue;
+                int spellCD = Mathf.Max(0, (int)skill.Value.GetCooldown());
+                if (spellCD > 0)
+                    data += skill.Key + ":" + skill.Value.Level + ":" + spellCD + ";";
+                else
+                    data += skill.Key + ":" + skill.Value.Level + ";";
+            }
+            data = data.TrimEnd(';');
+            save.SkillsData = data;
+        }
+        return save;
+    }
+    
     private static void SaveAll()
     {
         Player p = Player.m_localPlayer;
         if (!p) return;
-        //class
-        p.m_customData[_savedClass] = _currentClass.ToString();
-        //level
-        p.m_customData[_savedLevel] = _currentLevel.ToString();
-        //exp
-        p.m_customData[_savedExp] = _currentExp.ToString();
-        //skills data
-        if (_currentClassDefinition != null)
+        p.m_customData[_savedClass] = CurrentClass.ToString();
+        p.m_customData[_savedLevel] = Level.ToString();
+        p.m_customData[_savedExp] = EXP.ToString();
+        p.m_customData[_savedPanel] = SkillPanelUI.Serialize();
+        if (CurrentClassDef != null)
         {
-            Dictionary<int, MH_Skill> skills = _currentClassDefinition.GetSkills();
+            Dictionary<int, MH_Skill> skills = CurrentClassDef.GetSkills();
             string data = "";
             foreach (KeyValuePair<int, MH_Skill> skill in skills)
             {
@@ -165,22 +196,19 @@ public static class ClassManager
 
             data = data.TrimEnd(';');
             p.m_customData[_savedData] = data;
-            p.m_customData[_savedSkillPoints] = _skillPoints.ToString();
+            p.m_customData[_savedSkillPoints] = SkillPoints.ToString();
         }
         else
         {
             if (p.m_customData.ContainsKey(_savedData)) p.m_customData.Remove(_savedData);
         }
-
-        //layout
-        p.m_customData[_savedPanel] = SkillPanelUI.Serialize();
     }
 
 
     private static void LoadPlayerSkillData(string data)
     {
         if (data == null) return;
-        Dictionary<int, MH_Skill> classSkills = _currentClassDefinition.GetSkills();
+        Dictionary<int, MH_Skill> classSkills = CurrentClassDef.GetSkills();
         string[] split = data.Split(';');
         foreach (string s in split)
         {
@@ -217,6 +245,21 @@ public static class ClassManager
             SaveAll();
         }
     }
+    
+    public static void Load(SaveLoad data)
+    {
+        CurrentClass = data.Class;
+        SkillPoints = data.SkillPoints;
+        Level = data.Level;
+        EXP = data.EXP;
+        SkillPanelUI.Hide();
+        CurrentClassDef?.Reset();
+        if (CurrentClass == Class.None) return;
+        CurrentClassDef = ClassesDatabase.ClassesDatabase.GetClassDefinition(CurrentClass);
+        CurrentClassDef.Reset();
+        LoadPlayerSkillData(data.SkillsData);
+        SkillPanelUI.Show(CurrentClassDef, data.PanelData);
+    }
 
     [HarmonyPatch(typeof(Player), nameof(Player.OnSpawned))]
     static class PlayerLoad
@@ -225,48 +268,24 @@ public static class ClassManager
         {
             Player p = Player.m_localPlayer;
             if (!p) return;
-            _currentClass = Class.None;
+            CurrentClass = Class.None;
             Level = 0;
             EXP = 0;
             InitLevelSystem();
-            string SkillsData = null;
-            string PanelData = null;
-            if (p.m_customData.ContainsKey(_savedClass))
-            {
-                CurrentClass = (Class)Enum.Parse(typeof(Class), p.m_customData[_savedClass]);
-            }
-
-            if (p.m_customData.ContainsKey(_savedLevel))
-            {
-                Level = int.Parse(p.m_customData[_savedLevel]);
-            }
-
-            if (p.m_customData.ContainsKey(_savedExp))
-            {
-                EXP = long.Parse(p.m_customData[_savedExp]);
-            }
-
-            if (p.m_customData.ContainsKey(_savedData))
-            {
-                SkillsData = p.m_customData[_savedData];
-            }
-
-            if (p.m_customData.ContainsKey(_savedPanel))
-            { 
-                PanelData = p.m_customData[_savedPanel];
-            }
-
-            if (p.m_customData.ContainsKey(_savedSkillPoints))
-            {
-                SkillPoints = int.Parse(p.m_customData[_savedSkillPoints]);
-            }
-
-            SkillPanelUI.Hide();
-            if (_currentClass == Class.None) return;
-            _currentClassDefinition = ClassesDatabase.ClassesDatabase.GetClassDefinition(_currentClass);
-            _currentClassDefinition.Reset();
-            LoadPlayerSkillData(SkillsData);
-            SkillPanelUI.Show(_currentClassDefinition, PanelData);
+            SaveLoad save = new();
+            if (p.m_customData.TryGetValue(_savedClass, out var value))
+                save.Class = (Class)Enum.Parse(typeof(Class), value);
+            if (p.m_customData.TryGetValue(_savedLevel, out var value1))
+                save.Level = int.Parse(value1);
+            if (p.m_customData.TryGetValue(_savedExp, out var value2))
+                save.EXP = long.Parse(value2);
+            if (p.m_customData.TryGetValue(_savedData, out var value3))
+                save.SkillsData = value3;
+            if (p.m_customData.TryGetValue(_savedPanel, out var value4))
+                save.PanelData = value4;
+            if (p.m_customData.TryGetValue(_savedSkillPoints, out var value5))
+                save.SkillPoints = int.Parse(value5);
+            Load(save);
         }
     }
  
@@ -319,14 +338,14 @@ public static class ClassManager
         {
             if (Level >= Exp_Configs.MaxLevel.Value) break;
             long expForLevel = GetExpForLevel(Level);
-            if (expForLevel > exp + _currentExp)
+            if (expForLevel > exp + EXP)
             {
                 EXP += exp;
                 exp = 0;
             }
             else
             {
-                exp -= expForLevel - _currentExp;
+                exp -= expForLevel - EXP;
                 EXP = 0;
                 Level++;
                 SkillPoints += Exp_Configs.SkillpointsPerLevel.Value;

@@ -70,7 +70,7 @@ public sealed class Mage_WaveOfFlame : MH_Skill
         }
     }
 
-    public static int Script_Layermask2 =
+    public static readonly int Script_Layermask2 =
         LayerMask.GetMask("Default", "character", "character_noenv", "character_net", "character_ghost", "piece",
             "piece_nonsolid", "terrain", "static_solid");
 

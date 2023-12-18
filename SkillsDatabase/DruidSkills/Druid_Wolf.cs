@@ -62,17 +62,20 @@ public sealed class Druid_Wolf : MH_Skill
             "Leveling Step", 1,
             "Leveling Step");
 
-        _definition.ExternalValues = new()
-        {
+        _definition.ExternalValues =
+        [
             MagicHeim.config($"{_definition._InternalName}",
-                "MIN LVL Attack Speed", 1f,  "Attack Speed amount (Min Lvl)"),
+                "MIN LVL Attack Speed", 1f, "Attack Speed amount (Min Lvl)"),
+
             MagicHeim.config($"{_definition._InternalName}",
                 "MAX LVL Attack Speed", 10f, "Attack Speed amount (Max Lvl)"),
+
             MagicHeim.config($"{_definition._InternalName}",
                 "MIN LVL Movement Speed", 1f, "Movement Speed amount (Min Lvl)"),
+
             MagicHeim.config($"{_definition._InternalName}",
                 "MAX LVL Movement Speed", 10f, "Movement Speed amount (Max Lvl)")
-        };
+        ];
         
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Wolf_Icon");
         _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_Wolf.mp4";

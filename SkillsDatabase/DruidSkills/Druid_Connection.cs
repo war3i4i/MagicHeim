@@ -75,7 +75,7 @@ public sealed class Druid_Connection : MH_Skill
         }
     }
 
-    public static int Script_Layermask = LayerMask.GetMask("character", "character_noenv", "character_net", "character_ghost", "piece", "piece_nonsolid", "terrain");
+    public static readonly int Script_Layermask = LayerMask.GetMask("character", "character_noenv", "character_net", "character_ghost", "piece", "piece_nonsolid", "terrain");
     
     public override void Execute(Func<bool> Cond)
     {
@@ -239,7 +239,7 @@ public sealed class Druid_Connection : MH_Skill
         public override void OnDamaged(HitData hit, Character attacker)
         {
             float reduction = 0.9f;
-            if (!this.m_character.IsPlayer())
+            if (!m_character.IsPlayer())
             {
                 reduction = 0.5f;
             }
@@ -249,7 +249,7 @@ public sealed class Druid_Connection : MH_Skill
         public override void ModifyAttack(Skills.SkillType skill, ref HitData hitData)
         {
             float mult = 1.1f;
-            if (!this.m_character.IsPlayer())
+            if (!m_character.IsPlayer())
             {
                 mult = 1.5f;
             }

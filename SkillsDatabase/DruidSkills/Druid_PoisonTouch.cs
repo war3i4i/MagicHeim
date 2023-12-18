@@ -25,11 +25,11 @@ public sealed class Druid_PoisonTouch : MH_Skill
             "Required Level To Learn",
             1, "Required Level");
 
-        _definition.ExternalValues = new()
-        {
+        _definition.ExternalValues =
+        [
             MagicHeim.config($"{_definition._InternalName}", "MIN Lvl Chance", 10f, "Chance"),
             MagicHeim.config($"{_definition._InternalName}", "MAX Lvl Chance", 100f, "Chance")
-        };
+        ];
         
         
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_PoisonTouch_Icon");

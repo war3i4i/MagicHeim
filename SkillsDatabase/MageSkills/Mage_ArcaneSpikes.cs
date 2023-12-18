@@ -96,7 +96,7 @@ public sealed class Mage_ArcaneSpikes : MH_Skill
         private void OnTriggerEnter(Collider other)
         {
             if (!znv.IsOwner()) return;
-            if (other.TryGetComponent<Character>(out Character c))
+            if (other.TryGetComponent(out Character c))
             {
                 if (!list.Contains(c))
                 {

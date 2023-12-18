@@ -63,13 +63,13 @@ public sealed class Druid_ElderPower : MH_Skill
             "Leveling Step", 1,
             "Leveling Step");
         
-        _definition.ExternalValues = new()
-        {
+        _definition.ExternalValues =
+        [
             MagicHeim.config($"{_definition._InternalName}", "MIN Lvl HP", 50f, "HP"),
             MagicHeim.config($"{_definition._InternalName}", "MAX Lvl HP", 300f, "HP"),
             MagicHeim.config($"{_definition._InternalName}", "MIN Lvl AMOUNT", 2f, "HP"),
-            MagicHeim.config($"{_definition._InternalName}", "MAX Lvl AMOUNT", 10f, "HP"),
-        };
+            MagicHeim.config($"{_definition._InternalName}", "MAX Lvl AMOUNT", 10f, "HP")
+        ];
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_ElderPower_Icon");
         _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_ElderPower.mp4";

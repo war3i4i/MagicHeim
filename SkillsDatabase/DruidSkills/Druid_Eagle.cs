@@ -115,7 +115,7 @@ public sealed class Druid_Eagle : MH_Skill
         private void OnTriggerEnter(Collider other)
         {
             if (!znv.IsOwner()) return;
-            if (other.TryGetComponent<Character>(out Character c))
+            if (other.TryGetComponent(out Character c))
             {
                 if (list.Add(c) && Utils.IsEnemy(c) && c.m_nview.IsValid())
                 {
@@ -241,6 +241,8 @@ public sealed class Druid_Eagle : MH_Skill
         }
     }*/
     
+    private DateTime LastRevewal = DateTime.Now;
+    
         private IEnumerator EagleForm()
     {
         var manacost = this.CalculateSkillManacost(); 
@@ -266,13 +268,10 @@ public sealed class Druid_Eagle : MH_Skill
             var pos = go.transform.position;
             var fwd = GameCamera.instance.transform.forward;
             float mod = ZInput.GetButton("Run") || ZInput.GetButton("JoyRun") ? 10f : 6f;
-            if (ZInput.GetButton("Forward") || ZInput.GetJoyLeftStickY() < 0)
+            if (ZInput.GetButton("Jump"))
             {
-                pos += fwd * (mod * Time.deltaTime);
-            }
-            else if (ZInput.GetButton("Backward") || ZInput.GetJoyLeftStickY() > 0)
-            {
-                pos -= fwd * (mod * Time.deltaTime); 
+                go.transform.rotation = Quaternion.LookRotation(go.transform.up + go.transform.forward * 2f);
+                pos.y += mod * Time.deltaTime;
             }
             else
             if (ZInput.GetButton("Crouch"))
@@ -281,10 +280,38 @@ public sealed class Druid_Eagle : MH_Skill
                 pos.y -= mod * Time.deltaTime;
             }
             else
-            if (ZInput.GetButton("Jump"))
+            if (ZInput.GetButton("Forward") || ZInput.GetJoyLeftStickY() < 0)
             {
-                go.transform.rotation = Quaternion.LookRotation(go.transform.up + go.transform.forward * 2f);
-                pos.y += mod * Time.deltaTime;
+                pos += fwd * (mod * Time.deltaTime);
+            }
+            else if (ZInput.GetButton("Backward") || ZInput.GetJoyLeftStickY() > 0)
+            {
+                pos -= fwd * (mod * Time.deltaTime); 
+            }
+          
+            
+            
+            if (Input.GetKeyDown(KeyCode.Mouse1) && Player.m_localPlayer.TakeInput())
+            {
+                int secondsDiff = (DateTime.Now - LastRevewal).Seconds;
+                float groundHeight = ZoneSystem.instance.GetGroundHeight(p.transform.position);
+                float heightDiff = p.transform.position.y - groundHeight;
+                if (heightDiff < 50)
+                {
+                    MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"Go {50 - (int)heightDiff} meters higher");
+                }
+                else
+                {
+                    if (secondsDiff >= 30)
+                    {
+                        UnityEngine.Object.Instantiate(RevealAbility, p.transform.position, Quaternion.identity);
+                        LastRevewal = DateTime.Now;
+                    }
+                    else
+                    {
+                        MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"You can use this ability in {30 - secondsDiff} seconds");
+                    }
+                }
             }
 
             pos.y = pos.y < ZoneSystem.instance.GetGroundHeight(pos) + 1 

@@ -125,7 +125,7 @@ namespace MagicHeim
 
         private static AssetBundle GetAssetBundle(string filename)
         {
-            Assembly execAssembly = Assembly.GetExecutingAssembly();
+            Assembly execAssembly = Assembly.GetExecutingAssembly(); 
             string resourceName = execAssembly.GetManifestResourceNames().Single(str => str.EndsWith(filename));
             using Stream stream = execAssembly.GetManifestResourceStream(resourceName);
             return AssetBundle.LoadFromStream(stream);
@@ -134,7 +134,6 @@ namespace MagicHeim
         
         private void Update()
         {
-          
             TurnOffUIs();
             if (OptionsUI.CurrentChoosenButton >= 0)
             {
@@ -146,7 +145,7 @@ namespace MagicHeim
                 }
             }
 
-            if (OptionsUI.CurrentChoosenButtonAdditional >= 0)
+            if (OptionsUI.CurrentChoosenButtonAdditional >= 0) 
             {
                 foreach (KeyCode key in (KeyCode[])Enum.GetValues(typeof(KeyCode)))
                 {

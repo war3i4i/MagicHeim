@@ -81,7 +81,7 @@ public sealed class Druid_BodyOfPoison : MH_Skill
         static void Prefix(HitData hit)
         {
             if (ClassManager.CurrentClass == Class.None || hit.m_damage.m_poison <= 0f) return;
-            MH_Skill body = ClassManager.CurrentClassDef.GetSkill(Druid_BodyOfPoison.CachedKey);
+            MH_Skill body = ClassManager.CurrentClassDef.GetSkill(CachedKey);
             if (body is { Level: > 0 })
             {
                 float poisonDmg = hit.m_damage.m_poison;
