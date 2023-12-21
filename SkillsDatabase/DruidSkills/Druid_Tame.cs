@@ -18,24 +18,24 @@ public sealed class Druid_Tame : MH_Skill
         _definition.Description = "$mh_druid_tame_desc";
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Manacost", 1f,
+            "MIN Lvl Manacost", 50f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Manacost", 10f,
+            "MAX Lvl Manacost", 50f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Cooldown", 10f,
+            "MIN Lvl Cooldown", 900f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Cooldown", 1f,
+            "MAX Lvl Cooldown", 450f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MinLvlChargeTime = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Charge Time", 10,
+            "MIN Lvl Charge Time", 12,
             "Charge Time amount (Min Lvl)");
         _definition.MaxLvlChargeTime = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Charge Time", 1,
+            "MAX Lvl Charge Time", 6,
             "Charge Time amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
@@ -43,11 +43,11 @@ public sealed class Druid_Tame : MH_Skill
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            32, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 4,
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);

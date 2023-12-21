@@ -16,19 +16,19 @@ public sealed class Druid_PoisonTouch : MH_Skill
             "MIN Lvl Poison Damage", 5f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Poison Damage", 50f,
+            "MAX Lvl Poison Damage", 20f,
             "Value amount (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            "Max Level", 10,
+            "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            6, "Required Level");
 
         _definition.ExternalValues =
         [
-            MagicHeim.config($"{_definition._InternalName}", "MIN Lvl Chance", 10f, "Chance"),
-            MagicHeim.config($"{_definition._InternalName}", "MAX Lvl Chance", 100f, "Chance")
+            MagicHeim.config($"{_definition._InternalName}", "MIN Lvl Chance", 5f, "Chance"),
+            MagicHeim.config($"{_definition._InternalName}", "MAX Lvl Chance", 25f, "Chance")
         ];
         
         
@@ -36,7 +36,7 @@ public sealed class Druid_PoisonTouch : MH_Skill
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 7,
             "Leveling Step"); 
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);

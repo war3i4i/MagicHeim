@@ -14,22 +14,22 @@ public sealed class Druid_InnerControl : MH_Skill
         _definition.Description = "$mh_druid_innercontrol_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Stamina Bonus", 10f,
+            "MIN Stamina Bonus", 5f,
             "Stamina bonus (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Stamina Bonus", 100f,
+            "MAX Stamina Bonus", 50f,
             "Stamina bonus (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
             "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            10, "Required Level");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_InnerControl_Icon");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1, 
+            "Leveling Step", 9, 
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);

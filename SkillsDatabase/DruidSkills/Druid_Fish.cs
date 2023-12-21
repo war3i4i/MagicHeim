@@ -17,17 +17,17 @@ public sealed class Druid_Fish : MH_Skill
         _definition.Description = "$mh_druid_fish_desc";
         CachedKey = _definition.Key;
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Manacost", 10f,
+            "MIN Lvl Manacost", 30f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Manacost", 1f,
+            "MAX Lvl Manacost", 15f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Cooldown", 10f,
+            "MIN Lvl Cooldown", 12f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Cooldown", 1f,
+            "MAX Lvl Cooldown", 3f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
@@ -36,11 +36,11 @@ public sealed class Druid_Fish : MH_Skill
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            40, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 5,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Fish_Icon");
@@ -167,6 +167,13 @@ public sealed class Druid_Fish : MH_Skill
         };
         p.m_collider.enabled = true;
         p.m_animator.SetBool(Wakeup, false);
+        p.m_animator.SetBool(Character.s_inWater, false);
+        p.StartCoroutine(isWaterNoRoutine(p));
+    }
+
+    private static IEnumerator isWaterNoRoutine(Player p)
+    {
+        yield return new WaitForSecondsRealtime(1f);
         p.m_animator.SetBool(Character.s_inWater, false);
     }
 

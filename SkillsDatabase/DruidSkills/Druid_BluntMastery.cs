@@ -23,12 +23,12 @@ public sealed class Druid_BluntMastery : MH_Skill
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            18, "Required Level");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_BluntMastery_Icon");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 7,
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);

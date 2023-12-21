@@ -14,23 +14,23 @@ public sealed class Druid_BodyOfPoison : MH_Skill
         _definition.Description = "$mh_druid_bodyofpoison_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Heal Percent", 25f,
+            "MIN Lvl Heal Percent", 5f,
             "Percentage (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Heal Percent", 150f,
+            "MAX Lvl Heal Percent", 25f,
             "Percentage (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            "Max Level", 10,
+            "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn", 
-            1, "Required Level");
+            30, "Required Level");
         
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_BodyOfPoison_Icon");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 5,
             "Leveling Step"); 
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);

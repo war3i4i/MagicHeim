@@ -39,14 +39,14 @@ public sealed class Druid_Wolf : MH_Skill
             "MIN Lvl Manacost", 10f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Manacost", 1f,
+            "MAX Lvl Manacost", 5f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Cooldown", 10f,
+            "MIN Lvl Cooldown", 12f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Cooldown", 10f,
+            "MAX Lvl Cooldown", 3f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
@@ -55,26 +55,26 @@ public sealed class Druid_Wolf : MH_Skill
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            40, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 5,
             "Leveling Step");
 
         _definition.ExternalValues =
         [
             MagicHeim.config($"{_definition._InternalName}",
-                "MIN LVL Attack Speed", 1f, "Attack Speed amount (Min Lvl)"),
+                "MIN LVL Attack Speed", 10f, "Attack Speed amount (Min Lvl)"),
 
             MagicHeim.config($"{_definition._InternalName}",
-                "MAX LVL Attack Speed", 10f, "Attack Speed amount (Max Lvl)"),
+                "MAX LVL Attack Speed", 20f, "Attack Speed amount (Max Lvl)"),
 
             MagicHeim.config($"{_definition._InternalName}",
-                "MIN LVL Movement Speed", 1f, "Movement Speed amount (Min Lvl)"),
+                "MIN LVL Movement Speed", 20f, "Movement Speed amount (Min Lvl)"),
 
             MagicHeim.config($"{_definition._InternalName}",
-                "MAX LVL Movement Speed", 10f, "Movement Speed amount (Max Lvl)")
+                "MAX LVL Movement Speed", 40f, "Movement Speed amount (Max Lvl)")
         ];
         
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Wolf_Icon");
@@ -202,12 +202,19 @@ public sealed class Druid_Wolf : MH_Skill
         p.m_zanim.m_animator = p.m_visual.GetComponent<Animator>();
         p.m_visEquipment.m_visual = p.m_visual;
         p.GetComponent<FootStep>().m_feet = new[]
-        {
+        { 
             global::Utils.FindChild(p.m_visual.transform, "LeftFoot"),
             global::Utils.FindChild(p.m_visual.transform, "RightFoot")
         };
         p.m_collider.enabled = true;
         p.m_animator.SetBool(Wakeup, false);
+        p.m_animator.SetBool(Character.s_inWater, false);
+        p.StartCoroutine(isWaterNoRoutine(p));
+    }
+
+    private static IEnumerator isWaterNoRoutine(Player p)
+    {
+        yield return new WaitForSecondsRealtime(1f);
         p.m_animator.SetBool(Character.s_inWater, false);
     }
 

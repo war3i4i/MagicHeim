@@ -1,4 +1,5 @@
-﻿using MagicHeim.UI_s;
+﻿using JetBrains.Annotations;
+using MagicHeim.UI_s;
 
 namespace MagicHeim;
 
@@ -8,8 +9,6 @@ static class ZNetScene_Awake_Patch
     static void Postfix(ZNetScene __instance)
     {
         __instance.m_namedPrefabs[MagicHeim.MH_Altar.name.GetStableHashCode()] = MagicHeim.MH_Altar;
-        List<GameObject> hammer = __instance.GetPrefab("Hammer").GetComponent<ItemDrop>().m_itemData.m_shared.m_buildPieces.m_pieces;
-        if (!hammer.Contains(MagicHeim.MH_Altar)) hammer.Add(MagicHeim.MH_Altar);
     }
 }
 
@@ -92,6 +91,21 @@ static class Piece_CanBeRemoved_Patch
         {
             MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "Debug Mode Please");
             __result = false;
+        }
+    }
+}
+
+[HarmonyPatch(typeof(PieceTable), nameof(PieceTable.UpdateAvailable))]
+static class PieceTable_UpdateAvailable_Patch
+{
+    [UsedImplicitly] 
+    private static void Postfix(PieceTable __instance)
+    {
+        if (__instance.name != "_HammerPieceTable") return;
+        List<Piece> avaliablePieces = __instance.m_availablePieces[0];
+        if (Utils.SpecialDebug)
+        {
+            avaliablePieces.Add(MagicHeim.MH_Altar.GetComponent<Piece>());
         }
     }
 }

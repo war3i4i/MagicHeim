@@ -20,7 +20,7 @@ public sealed class Druid_StaminaSphere : MH_Skill
             "Armor Bonus amount (Min Lvl)");
 
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Stamina Regen (Per Second)", 25f,
+            "MAX Lvl Stamina Regen (Per Second)", 20f,
             "Armor Bonus amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
@@ -50,10 +50,10 @@ public sealed class Druid_StaminaSphere : MH_Skill
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            50, "Required Level");
  
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 3,
+            "Leveling Step", 2,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_StaminaSphere_Icon");

@@ -17,19 +17,19 @@ public sealed class Druid_HealingBonus : MH_Skill
             "MIN Lvl Healing Bonus", 10f,
             "Healing bonus percent (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Healing Bonus", 100f,
+            "MAX Lvl Healing Bonus", 50f,
             "Healing bonus percent (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
             "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            48, "Required Level");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_HealingBonus_Icon");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1, 
+            "Leveling Step", 3, 
             "Leveling Step");
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);

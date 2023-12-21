@@ -21,18 +21,18 @@ public sealed class Druid_Eclipse : MH_Skill
         _definition.Animation = ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.TwoHandedSummon];
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Damage", 1f,
+            "MIN Lvl Damage", 15f,
             "Damage amount (Min Lvl)");
         
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Damage", 10f,
+            "MAX Lvl Damage", 30f,
             "Damage amount (Max Lvl)");
         
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
             "MIN Lvl Manacost", 10f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Manacost", 1f,
+            "MAX Lvl Manacost", 5f,
             "Manacost amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
@@ -41,24 +41,24 @@ public sealed class Druid_Eclipse : MH_Skill
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            58, "Required Level");
         
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 2,
             "Leveling Step");
         
         _definition.MinLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Tick Speed", 1f,
+            "MIN Lvl Tick Speed", 2f,
             "Tick Speed (Min Lvl)");
         
         _definition.MaxLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Tick Speed", 0.5f,
+            "MAX Lvl Tick Speed", 1f,
             "Tick Speed (Max Lvl)");
 
         _definition.ExternalValues =
         [
             MagicHeim.config($"{_definition._InternalName}", "MIN LVl max targets", 1f, "Max targets per tick"),
-            MagicHeim.config($"{_definition._InternalName}", "MAX Lvl max target", 4f, "Max targets per tick")
+            MagicHeim.config($"{_definition._InternalName}", "MAX Lvl max target", 3f, "Max targets per tick")
         ];
         
 

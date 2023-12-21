@@ -24,31 +24,31 @@ public sealed class Druid_ElderPower : MH_Skill
         _definition.Description = "$mh_druid_elderpower_desc";
         
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Damage", 1f,
+            "MIN Lvl Damage", 10f,
             "Value amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Damage", 10f,
+            "MAX Lvl Damage", 30f,
             "Value amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Manacost", 1f,
+            "MIN Lvl Manacost", 45f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Manacost", 10f,
+            "MAX Lvl Manacost", 30f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Cooldown", 10f,
+            "MIN Lvl Cooldown", 120f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Cooldown", 1f,
+            "MAX Lvl Cooldown", 60f,
             "Cooldown amount (Max Lvl)");
         
         _definition.MinLvlDuration = MagicHeim.config($"{_definition._InternalName}", 
             "MIN Lvl Duration", 5f,
             "Duration amount (Min Lvl)");
         _definition.MaxLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Duration", 15f,
+            "MAX Lvl Duration", 12f,
             "Duration amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
@@ -56,11 +56,11 @@ public sealed class Druid_ElderPower : MH_Skill
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            25, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 5,
             "Leveling Step");
         
         _definition.ExternalValues =

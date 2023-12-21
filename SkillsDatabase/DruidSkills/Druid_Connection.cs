@@ -28,14 +28,14 @@ public sealed class Druid_Connection : MH_Skill
             "Healing amount max hp percent (Min Lvl)");
         
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Healing", 8f,
+            "MAX Lvl Healing", 5f,
             "Healing amount max hp percent (Max Lvl)");
         
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Manacost", 10f,
+            "MIN Lvl Manacost", 16f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Manacost", 1f,
+            "MAX Lvl Manacost", 8f,
             "Manacost amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
@@ -44,11 +44,11 @@ public sealed class Druid_Connection : MH_Skill
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            35, "Required Level");
         
         
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 4,
             "Leveling Step");
         
 
@@ -205,7 +205,7 @@ public sealed class Druid_Connection : MH_Skill
                 periodic = 1f;
                 target.m_seman.AddStatusEffect("SE_DruidConnection_Buff".GetStableHashCode(), true);
                 float maxHP = target.GetMaxHealth();
-                float healAmount = maxHP * healingPercent;
+                float healAmount = maxHP * healingPercent / 100f;
                 target.Heal(healAmount);
             } 
             p.UseEitr(useMana); 

@@ -15,25 +15,25 @@ public sealed class Druid_SelfHeal : MH_Skill
         _definition.Description = "$mh_druid_selfheal_desc";
 
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Heal", 1f,
+            "MIN Lvl Heal", 10f,
             "Heal amount (Min Lvl)");
 
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Heal", 10f,
+            "MAX Lvl Heal", 50f,
             "Heal amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Manacost", 1f,
+            "MIN Lvl Manacost", 10f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Manacost", 10f,
+            "MAX Lvl Manacost", 40f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Cooldown", 10f,
+            "MIN Lvl Cooldown", 60f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Cooldown", 1f,
+            "MAX Lvl Cooldown", 30f,
             "Cooldown amount (Max Lvl)");
 
 
@@ -44,10 +44,10 @@ public sealed class Druid_SelfHeal : MH_Skill
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            2, "Required Level");
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 6,
             "Leveling Step");
 
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_SelfHeal_Icon");

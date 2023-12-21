@@ -18,17 +18,17 @@ public sealed class Druid_Exchange : MH_Skill
         CachedKey = _definition.Key;
         
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Manacost", 1f,
+            "MIN Lvl Manacost", 10f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Manacost", 10f,
+            "MAX Lvl Manacost", 30f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Cooldown", 10f,
+            "MIN Lvl Cooldown", 45f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Cooldown", 1f,
+            "MAX Lvl Cooldown", 15f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
@@ -37,11 +37,11 @@ public sealed class Druid_Exchange : MH_Skill
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            14, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 6,
             "Leveling Step");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Exchange_Icon");
         _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_Exchange.mp4";

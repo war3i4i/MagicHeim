@@ -12,7 +12,7 @@ namespace MagicHeim
     {
         private const string GUID = "kg.magicheim";
         private const string PluginName = "MagicHeim"; 
-        private const string PluginVersion = "1.2.6";
+        private const string PluginVersion = "1.3.0";
         public static MagicHeim _thistype;
         private readonly ConfigSync configSync = new(GUID) { DisplayName = PluginName, MinimumRequiredVersion = PluginVersion, CurrentVersion = PluginVersion, ModRequired = true, IsLocked = true};
         public static AssetBundle asset; 
@@ -73,7 +73,7 @@ namespace MagicHeim
             DelayedReload(MH_SyncedConfig);
         }
         
-        [HarmonyPatch(typeof(FejdStartup), nameof(FejdStartup.Start))]
+        /*[HarmonyPatch(typeof(FejdStartup), nameof(FejdStartup.Start))]
         private static class FejdStartup_Awake_Patch
         {
             [UsedImplicitly]
@@ -91,7 +91,9 @@ namespace MagicHeim
                 ZNet.SetServer(true, false, false, name, "", world);
                 __instance.LoadMainScene();
             }
-        }
+        }*/
+        
+        
 
         private static IEnumerator DelayedReloadRoutine(ConfigFile config)
         {

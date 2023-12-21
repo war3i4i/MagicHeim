@@ -19,7 +19,7 @@ public sealed class Druid_ManaFlow : MH_Skill
             "MAX Lvl Eitr Bonus", 100f,
             "Value amount (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            "Max Level", 10,
+            "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
@@ -28,7 +28,7 @@ public sealed class Druid_ManaFlow : MH_Skill
         _definition.ExternalValues =
         [
             MagicHeim.config($"{_definition._InternalName}", "MIN Lvl HP Bonus", 10f, "HP Bonus"),
-            MagicHeim.config($"{_definition._InternalName}", "MAX Lvl HP Bonus", 100f, "HP Bonus")
+            MagicHeim.config($"{_definition._InternalName}", "MAX Lvl HP Bonus", 50f, "HP Bonus")
         ];
         
         
@@ -38,7 +38,7 @@ public sealed class Druid_ManaFlow : MH_Skill
         Level = 1;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 8,
             "Leveling Step"); 
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);

@@ -17,20 +17,20 @@ public sealed class Druid_FoodKnowledge_Health : MH_Skill
             "MIN Lvl Percent", 5f,
             "Percentage (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Percent", 100f,
+            "MAX Lvl Percent", 25f,
             "Percentage (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            "Max Level", 10,
+            "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn", 
-            1, "Required Level");
+            20, "Required Level");
         
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_FoodKnowledge_Health_Icon");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 5,
             "Leveling Step"); 
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -94,20 +94,20 @@ public sealed class Druid_FoodKnowledge_Stamina : MH_Skill
             "MIN Lvl Percent", 5f,
             "Percentage (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Percent", 100f,
+            "MAX Lvl Percent", 25f,
             "Percentage (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            "Max Level", 10,
+            "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            35, "Required Level");
         
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_FoodKnowledge_Stamina_Icon");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 3,
             "Leveling Step"); 
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);
@@ -171,20 +171,20 @@ public sealed class Druid_FoodKnowledge_Eitr : MH_Skill
             "MIN Lvl Percent", 5f,
             "Percentage (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Percent", 100f,
+            "MAX Lvl Percent", 25f,
             "Percentage (Max Lvl)");
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
-            "Max Level", 10,
+            "Max Level", 7,
             "Max Skill Level");
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            50, "Required Level");
         
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_FoodKnowledge_Eitr_Icon");
         CachedKey = _definition.Key;
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 2,
             "Leveling Step"); 
 
         this.InitRequiredItemFirstHalf("Wood", 10, 1.88f);

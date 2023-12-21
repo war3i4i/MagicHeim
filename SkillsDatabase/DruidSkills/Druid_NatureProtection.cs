@@ -17,10 +17,10 @@ public sealed class Druid_NatureProtection : MH_Skill
         _definition.Description = "$mh_druid_natureprotection_desc";
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Manacost", 1f,
+            "MIN Lvl Manacost", 100f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Manacost", 10f,
+            "MAX Lvl Manacost", 75f,
             "Manacost amount (Max Lvl)");
         
         _definition.MinLvlDuration = MagicHeim.config($"{_definition._InternalName}",
@@ -28,14 +28,14 @@ public sealed class Druid_NatureProtection : MH_Skill
             "Duration amount (Min Lvl)");
         
         _definition.MaxLvlDuration = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Duration", 15f,
+            "MAX Lvl Duration", 10f,
             "Duration amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Cooldown", 10f,
+            "MIN Lvl Cooldown", 400f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Cooldown", 1f,
+            "MAX Lvl Cooldown", 240f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
@@ -44,10 +44,10 @@ public sealed class Druid_NatureProtection : MH_Skill
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            12, "Required Level");
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 7,
             "Leveling Step");
 
 

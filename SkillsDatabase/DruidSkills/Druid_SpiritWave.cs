@@ -20,24 +20,24 @@ public sealed class Druid_SpiritWave : MH_Skill
                 ClassAnimationReplace.MH_Animation.TwoHandedProjectile];
         _definition.AnimationTime = 0.8f;
         _definition.MinLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Damage", 1f,
+            "MIN Lvl Damage", 10f,
             "Damage amount (Min Lvl)");
         _definition.MaxLvlValue = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Damage", 10f,
+            "MAX Lvl Damage", 50f,
             "Damage amount (Max Lvl)");
 
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Manacost", 1f,
+            "MIN Lvl Manacost", 20f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Manacost", 10f,
+            "MAX Lvl Manacost", 30f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Cooldown", 10f,
+            "MIN Lvl Cooldown", 90f,
             "Cooldown amount (Min Lvl)");
         _definition.MaxLvlCooldown = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Cooldown", 1f,
+            "MAX Lvl Cooldown", 50f,
             "Cooldown amount (Max Lvl)");
 
         _definition.MaxLevel = MagicHeim.config($"{_definition._InternalName}",
@@ -46,11 +46,11 @@ public sealed class Druid_SpiritWave : MH_Skill
 
         _definition.RequiredLevel = MagicHeim.config($"{_definition._InternalName}",
             "Required Level To Learn",
-            1, "Required Level");
+            4, "Required Level");
 
 
         _definition.LevelingStep = MagicHeim.config($"{_definition._InternalName}",
-            "Leveling Step", 1,
+            "Leveling Step", 6,
             "Leveling Step");
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_SpiritWave_Icon");
         _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_SpiritWave.mp4";
