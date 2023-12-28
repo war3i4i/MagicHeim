@@ -17,10 +17,10 @@ public sealed class Druid_Fish : MH_Skill
         _definition.Description = "$mh_druid_fish_desc";
         CachedKey = _definition.Key;
         _definition.MinLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MIN Lvl Manacost", 30f,
+            "MIN Lvl Manacost NEW", 15f,
             "Manacost amount (Min Lvl)");
         _definition.MaxLvlManacost = MagicHeim.config($"{_definition._InternalName}",
-            "MAX Lvl Manacost", 15f,
+            "MAX Lvl Manacost NEW", 5f,
             "Manacost amount (Max Lvl)");
 
         _definition.MinLvlCooldown = MagicHeim.config($"{_definition._InternalName}",

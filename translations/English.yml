@@ -149,5 +149,5 @@ mh_druid_healingbonus: Life Perception
 mh_druid_healingbonus_desc: Increases the amount of health you get from healing
 mh_druid_innercontrol: Inner Control 
 mh_druid_innercontrol_desc: Increase your max Stamina amount
-mh_druidclass_description: "Probably op as shit but hey what can I do when I make a class that's able to fly :D"
+mh_druidclass_description: "Druid is a class that uses nature magic to heal allies and damage enemies.\nDruid can also enchant his weapon with nature damage.\nPretty mobile in combat but requires preparations ( Few skills need to be charged ).\nIrreplaceable in group fights.\nHas a lot of Area damage and can handle big group of enemies at once."
 mh_sphere_saveload: Sphere of memories 

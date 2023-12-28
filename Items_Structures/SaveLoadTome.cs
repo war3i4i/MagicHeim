@@ -16,7 +16,7 @@ public static class SaveLoadTome
         MH_SaveLoad_Item.Prefab.GetComponent<ItemDrop>().m_itemData.Data().GetOrCreate<MH_SaveLoad>().Save();
     }
 
-    private class MH_SaveLoad : ItemData
+    public class MH_SaveLoad : ItemData
     {
         [SerializeField] public string OwnerName = "";
         [SerializeField] public long OwnerID = 0;
@@ -28,6 +28,13 @@ public static class SaveLoadTome
             Data = data;
             OwnerName = ownerName;
             OwnerID = ownerID;
+            Save();
+        }
+
+        public void SaveCurrent()
+        {
+            Initialized = true;
+            AssignData(Game.instance.m_playerProfile.m_playerName, Game.instance.m_playerProfile.m_playerID, ClassManager.GetSaveData());
             Save();
         }
     }
@@ -97,8 +104,7 @@ public static class SaveLoadTome
                         {
                             if (!Player.m_localPlayer.m_inventory.ContainsItem(saveload.Item)) return;
                             if (ClassManager.CurrentClass != Class.None && ClassManager.CurrentClassDef != null && !ClassManager.CurrentClassDef.CanChangeClass()) return;
-                            saveload.Initialized = true;
-                            saveload.AssignData(Game.instance.m_playerProfile.m_playerName, Game.instance.m_playerProfile.m_playerID, ClassManager.GetSaveData());
+                            saveload.SaveCurrent();
                             ClassManager.SetClass(currentClass);
                             UnityEngine.Object.Instantiate(ZNetScene.instance.GetPrefab("fx_Potion_frostresist"), Player.m_localPlayer.transform.position, Quaternion.identity);
                         });

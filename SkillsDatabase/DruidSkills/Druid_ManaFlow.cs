@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using MagicHeim.MH_Enums;
 using MagicHeim.MH_Interfaces;
+using Logger = MagicHeim_Logger.Logger;
 
 namespace MagicHeim.SkillsDatabase.DruidSkills;
 

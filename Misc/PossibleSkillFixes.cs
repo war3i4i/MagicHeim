@@ -208,24 +208,8 @@ public class PossibleSkillFixes
             matcher.Set(OpCodes.Callvirt, replace);
             return matcher.Instructions();
         }
-    } 
-    
-    [HarmonyPatch] 
-    private static class InventoryGui_ShowHide
-    { 
-        [HarmonyTargetMethods] 
-        private static IEnumerable<MethodInfo> Methods()
-        {
-            yield return AccessTools.Method(typeof(InventoryGui), nameof(InventoryGui.Show));
-            yield return AccessTools.Method(typeof(InventoryGui), nameof(InventoryGui.Hide));
-        }
-
-        [UsedImplicitly]
-        private static bool Prefix()
-        {
-            return !TextInput.IsVisible();
-        }
     }
+  
     
     [HarmonyPatch(typeof(Character),nameof(Character.IsFlying))]
     private static class Character_IsFlying_Patch

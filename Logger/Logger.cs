@@ -1,6 +1,6 @@
 ﻿namespace MagicHeim_Logger;
 
-public static class Logger
+public static class Logger 
 {
     public static void Log(object obj, ConsoleColor color = ConsoleColor.DarkYellow)
     {

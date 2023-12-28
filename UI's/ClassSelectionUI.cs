@@ -117,9 +117,13 @@ public static class ClassSelectionUI
     private static void AcceptClass()
     {
         AUsrc.Play();
-        ConfirmationUI.Show($"Are you sure want to become a {SelectedClass}", "On class change you will lose all current class progress (Level, Exp, Skills)", AcceptClassInternal);
+        string additionalText = ClassManager.CurrentClass != Class.None && !Player.m_localPlayer.m_customData.ContainsKey(_130DRUIDUPDATE) ?  "\n<color=#00FFFF>You will get sphere of memories that can be used to return to your previous class, level and skills</color>" : "";
+        ConfirmationUI.Show($"Are you sure want to become a {SelectedClass}", "On class change you will lose all current class progress (Level, Exp, Skills)"+additionalText, AcceptClassInternal);
     }
 
+
+    private const string _130DRUIDUPDATE = "MH_DRUID_130_UPDATE";
+    
     private static void AcceptClassInternal()
     {
         if (SelectedClass == Class.None) return;
@@ -129,6 +133,20 @@ public static class ClassSelectionUI
         }
         Player player = Player.m_localPlayer;
         if (!player) return;
+
+        if (!player.m_customData.ContainsKey(_130DRUIDUPDATE) && ClassManager.CurrentClass != Class.None)
+        {
+            GameObject saveload = UnityEngine.Object.Instantiate(ZNetScene.instance.GetPrefab("MH_Sphere_SaveLoad"), player.transform.position, Quaternion.identity);
+            saveload.GetComponent<ItemDrop>().m_itemData.Data().Get<SaveLoadTome.MH_SaveLoad>().SaveCurrent();
+            if (player.m_inventory.CanAddItem(saveload))
+            {
+                player.m_inventory.AddItem(saveload.GetComponent<ItemDrop>().m_itemData);
+                ZNetScene.instance.Destroy(saveload);
+            }
+        }
+        
+        player.m_customData[_130DRUIDUPDATE] = "+";
+         
         ClassManager.SetClass(SelectedClass);
         UnityEngine.Object.Instantiate(ClassesDatabase.ClassesDatabase.GetClassDefinition(SelectedClass).OnSelect_VFX, Player.m_localPlayer.transform.position, Quaternion.identity);
         Hide();
@@ -189,7 +207,7 @@ public static class ClassSelectionUI
             GameObject skillPreview = UnityEngine.Object.Instantiate(SkillPreviewElement, SkillPreviewTransform);
             skillPreview.name = skill.Value.Name;
             skillPreview.transform.Find("Icon").GetComponent<Image>().sprite = skill.Value.Icon;
-            if (skill.Value.Video != null)
+            /*if (skill.Value.Video != null)
             {
                 skillPreview.GetComponent<UIInputHandler>().m_onLeftClick = _ =>
                 {
@@ -199,14 +217,14 @@ public static class ClassSelectionUI
                     SkillVideo.url = skill.Value.Video;
                     SkillVideo.Play();
                 };
-            }
+            }*/
 
             skillPreview.GetComponent<UIInputHandler>().m_onPointerEnter = _ =>
             {
                 LOADING.gameObject.SetActive(false);
                 SkillDescription.text = skill.Value.Description;
-                if (skill.Value.Video != null)
-                    SkillDescription.text += "\n\n<color=#00FF00>Click to watch video</color>";
+                /*if (skill.Value.Video != null)
+                    SkillDescription.text += "\n\n<color=#00FF00>Click to watch video</color>";*/
             };
             skillPreview.GetComponent<UIInputHandler>().m_onPointerExit = _ =>
             {

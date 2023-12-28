@@ -8,11 +8,11 @@ namespace MagicHeim
     [BepInPlugin(GUID, PluginName, PluginVersion)]
     [BepInDependency("org.bepinex.plugins.groups", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInIncompatibility("org.bepinex.plugins.valheim_plus")]
-    public partial class MagicHeim : BaseUnityPlugin
+    public class MagicHeim : BaseUnityPlugin
     {
         private const string GUID = "kg.magicheim";
         private const string PluginName = "MagicHeim"; 
-        private const string PluginVersion = "1.3.0";
+        private const string PluginVersion = "1.3.2";
         public static MagicHeim _thistype;
         private readonly ConfigSync configSync = new(GUID) { DisplayName = PluginName, MinimumRequiredVersion = PluginVersion, CurrentVersion = PluginVersion, ModRequired = true, IsLocked = true};
         public static AssetBundle asset; 
@@ -192,28 +192,29 @@ namespace MagicHeim
                 ConfirmationUI.Hide(); 
                 Menu.instance?.OnClose();
             }
-        }
+        } 
         
         [HarmonyPatch(typeof(AudioMan), nameof(AudioMan.Awake))]
         private static class AudioMan_Awake_Patch
-        {
+        { 
             private static void Postfix(AudioMan __instance)
             {
+                var SFXgroup = __instance.m_masterMixer.FindMatchingGroups("SFX")[0];
                 ClassSelectionUI.AUsrc = Chainloader.ManagerObject.AddComponent<AudioSource>();
                 ClassSelectionUI.AUsrc.clip = asset.LoadAsset<AudioClip>("MH_Click");
                 ClassSelectionUI.AUsrc.reverbZoneMix = 0;
                 ClassSelectionUI.AUsrc.spatialBlend = 0;
-                ClassSelectionUI.AUsrc.bypassListenerEffects = true;
+                ClassSelectionUI.AUsrc.bypassListenerEffects = true; 
                 ClassSelectionUI.AUsrc.bypassEffects = true; 
                 ClassSelectionUI.AUsrc.volume = 0.8f;
-                ClassSelectionUI.AUsrc.outputAudioMixerGroup = __instance.m_masterMixer.outputAudioMixerGroup;
+                ClassSelectionUI.AUsrc.outputAudioMixerGroup = SFXgroup;
                 foreach (GameObject allAsset in asset.LoadAllAssets<GameObject>())
                 {
                     if(allAsset.GetComponentInChildren<ZSFX>()) MagicHeim_Logger.Logger.Log($"Found {allAsset.name} with zsfx");
 
                     foreach (AudioSource audioSource in allAsset.GetComponentsInChildren<AudioSource>(true))
                     {
-                        audioSource.outputAudioMixerGroup = __instance.m_masterMixer.outputAudioMixerGroup;
+                        audioSource.outputAudioMixerGroup = SFXgroup;
                     }
                 }
             }
