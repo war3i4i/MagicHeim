@@ -157,8 +157,7 @@ public sealed class Mage_RandomStrike : MH_Skill
             rot.y = 0;
             p.transform.rotation = Quaternion.LookRotation(rot);
             StartCooldown(this.CalculateSkillCooldown());
-            p.m_zanim.SetTrigger(
-                ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon]);
+            p.m_zanim.SetTrigger(ClassAnimationReplace.MH_AnimationNames[ClassAnimationReplace.MH_Animation.MageSummon]);
             p.StartCoroutine(DelayExplosion(target));
         }
         else

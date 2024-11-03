@@ -203,7 +203,7 @@ public sealed class Druid_Fish : MH_Skill
             m_ttl = 0;
         }
 
-        public override void ModifySpeed(float baseSpeed, ref float speed)
+        public override void ModifySpeed(float baseSpeed, ref float speed, Character character, Vector3 dir)
         {
             speed *= 8f;
         }

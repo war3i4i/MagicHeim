@@ -268,7 +268,7 @@ public sealed class Druid_Wolf : MH_Skill
             mspeed = (int)skillLevel;
         }
 
-        public override void ModifySpeed(float baseSpeed, ref float speed)
+        public override void ModifySpeed(float baseSpeed, ref float speed, Character character, Vector3 dir)
         {
             speed *= (1 + mspeed / 100f);
         }

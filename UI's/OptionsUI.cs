@@ -95,8 +95,8 @@ public static class OptionsUI
         }
     }
 
-
-    public class MH_Settings : Fishlabs.Valheim.SettingsBase
+ 
+    public class MH_Settings : Valheim.SettingsGui.SettingsBase
     {
         public override void FixBackButtonNavigation(Button backButton) { }
         public override void FixOkButtonNavigation(Button okButton) { }

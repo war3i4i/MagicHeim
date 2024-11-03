@@ -11,16 +11,17 @@ namespace MagicHeim
     public class MagicHeim : BaseUnityPlugin
     {
         private const string GUID = "kg.magicheim";
-        private const string PluginName = "MagicHeim"; 
-        private const string PluginVersion = "1.3.2";
+        private const string PluginName = "MagicHeim";
+        private const string PluginVersion = "1.3.3";
         public static MagicHeim _thistype;
         private readonly ConfigSync configSync = new(GUID) { DisplayName = PluginName, MinimumRequiredVersion = PluginVersion, CurrentVersion = PluginVersion, ModRequired = true, IsLocked = true};
-        public static AssetBundle asset; 
+        public static AssetBundle asset;
+        public static AssetBundle asset_addition;
         public static GameObject MH_Altar;
-        public static ConfigFile MH_SyncedConfig;  
-        private static FileSystemWatcher FSW;
- 
-        private void Awake() 
+        public static ConfigFile MH_SyncedConfig;
+        private static FileSystemWatcher FSW;  
+  
+        private void Awake()  
         {
             Localizer.Load(); 
             _thistype = this; 
@@ -39,6 +40,7 @@ namespace MagicHeim
             }
 
             asset = GetAssetBundle("magicheim");
+            asset_addition = GetAssetBundle("mh_addition");
             SkillsDatabase.SkillsDatabase.Init();
             ClassesDatabase.ClassesDatabase.Init();
             ClassSelectionUI.Init();
@@ -47,8 +49,7 @@ namespace MagicHeim
             MagicTomes.Init();
             ClassAnimationReplace.InitAnimations();
             MH_Altar = asset.LoadAsset<GameObject>("MH_Altar");
-            CustomMapPins.RegisterCustomPin(MH_Altar, MH_Altar.GetComponent<Piece>().m_name,
-                MH_Altar.GetComponent<Piece>().m_icon);
+            CustomMapPins.RegisterCustomPin(MH_Altar, MH_Altar.GetComponent<Piece>().m_name, MH_Altar.GetComponent<Piece>().m_icon);
             MH_Altar.AddComponent<MH_Altar>();
             Exp_Configs.Init();
 

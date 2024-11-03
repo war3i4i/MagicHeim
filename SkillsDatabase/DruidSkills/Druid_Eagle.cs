@@ -47,7 +47,9 @@ public sealed class Druid_Eagle : MH_Skill
         
         _definition.Icon = MagicHeim.asset.LoadAsset<Sprite>("Druid_Eagle_Icon");
         _definition.Video = "https://kg.sayless.eu/skills/MH_Druid_Eagle.mp4";
-        Eagle_Prefab = MagicHeim.asset.LoadAsset<GameObject>("Druid_Eagle_Prefab");
+        Eagle_Prefab = MagicHeim.asset_addition.LoadAsset<GameObject>("DRAGONRIDE");
+        
+        
         Eagle_Explosion = MagicHeim.asset.LoadAsset<GameObject>("Druid_Eagle_Explosion");
         RevealAbility = MagicHeim.asset.LoadAsset<GameObject>("Druid_Eagle_Reveal");
         RevealAbility_Character = MagicHeim.asset.LoadAsset<GameObject>("Druid_Eagle_Reveal_Icon");
@@ -55,6 +57,9 @@ public sealed class Druid_Eagle : MH_Skill
         RevealAbility_Character.AddComponent<BillboardObject>();
     }
 
+    
+
+    
     private static readonly Dictionary<string, GameObject> ObjectToTrophy = new();
     
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
@@ -66,6 +71,13 @@ public sealed class Druid_Eagle : MH_Skill
             __instance.m_namedPrefabs[Eagle_Prefab.name.GetStableHashCode()] = Eagle_Prefab;
             __instance.m_namedPrefabs[Eagle_Explosion.name.GetStableHashCode()] = Eagle_Explosion;
             __instance.m_namedPrefabs[RevealAbility.name.GetStableHashCode()] = RevealAbility;
+
+
+            Eagle_Prefab.GetComponentInChildren<SkinnedMeshRenderer>(true).materials = ZNetScene.instance.GetPrefab("Dragon")
+                .GetComponentInChildren<SkinnedMeshRenderer>(true).materials;
+
+            Eagle_Prefab.transform.Find("Dragon").localScale = Vector3.one * 0.15f;
+            
             foreach (CharacterDrop prefab in __instance.m_prefabs.Where(c => c.GetComponent<CharacterDrop>()).Select(c => c.GetComponent<CharacterDrop>()))
             {
                 if (prefab.m_drops.Count <= 0) continue;

@@ -152,7 +152,7 @@ static class ItemDrop__Patch
 }
 
 [HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetTooltip), typeof(ItemDrop.ItemData), typeof(int),
-    typeof(bool), typeof(float))]
+    typeof(bool), typeof(float), typeof(int))]
 public class GetTooltipPatch
 {
     public static void Postfix(ItemDrop.ItemData item, bool crafting, ref string __result)
